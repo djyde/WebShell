@@ -3,7 +3,7 @@
 //  WebShell
 //
 //  Created by Randy on 15/12/19.
-//  Copyright © 2015年 RandyLu. All rights reserved.
+//  Copyright © 2015 RandyLu. All rights reserved.
 //
 
 import Cocoa
@@ -24,17 +24,20 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
         "launchingText": "Launching...",
         
         // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
-        "height": 640,
-        "width": 1000,
+        "minHeight": 640,
+        "minWidth": 1000,
         
         "showLoadingBar": true
         
     ]
     
     var firstLoadingStarted = false
+    var firstAppear = true
     
     override func viewDidAppear() {
-        initWindow()
+        if(firstAppear){
+            initWindow()
+        }
     }
     
     override func viewDidLoad() {
@@ -58,11 +61,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     
     func initWindow(){
         
+        firstAppear = false
+        
         // set window size
         var frame: NSRect = mainWindow.frame
         
-        let WIDTH: CGFloat = CGFloat(SETTINGS["width"] as! Int),
-            HEIGHT: CGFloat = CGFloat(SETTINGS["height"] as! Int)
+        let WIDTH: CGFloat = CGFloat(SETTINGS["minWidth"] as! Int),
+            HEIGHT: CGFloat = CGFloat(SETTINGS["minHeight"] as! Int)
         
         frame.size.width = WIDTH
         frame.size.height = HEIGHT

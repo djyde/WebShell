@@ -2,25 +2,26 @@
 //  AppDelegate.swift
 //  WebShell
 //
-//  Created by 卢涛南 on 15/12/19.
-//  Copyright © 2015年 RandyLu. All rights reserved.
+//  Created by Randy on 15/12/19.
+//  Copyright © 2015 RandyLu. All rights reserved.
 //
 
 import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
-
-
+    
+    var mainWindow: NSWindow!
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
+        mainWindow = NSApplication.sharedApplication().windows[0] 
     }
-
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+    
+    func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if(!flag){
+            mainWindow!.makeKeyAndOrderFront(self)
+        }
+        return true
     }
-
-
 }
 
