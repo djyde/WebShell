@@ -29,7 +29,9 @@ let SETTINGS: [String: Any]  = [
     
     // Note that the window  min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
     "height": 640,
-    "width": 1000
+    "width": 1000,
+
+    "showLoadingBar": true
 ]
 ```
 

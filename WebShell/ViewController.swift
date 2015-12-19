@@ -13,7 +13,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
 
     @IBOutlet var mainWindow: NSView!
     @IBOutlet weak var mainWebview: WebView!
-    @IBOutlet weak var loadingStatusField: NSTextField!
+    @IBOutlet weak var loadingBar: NSProgressIndicator!
+    @IBOutlet weak var launchingLabel: NSTextField!
     
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
@@ -23,7 +24,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
         
         // Note that the window  min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
         "height": 640,
-        "width": 1000
+        "width": 1000,
+        
+        "showLoadingBar": true
     ]
     
     var firstLoadingStarted = false
@@ -34,6 +37,11 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(!(SETTINGS["showLoadingBar"] as? Bool)!){
+            // hide the loading bar
+            loadingBar.hidden = true
+        }
         
         loadUrl((SETTINGS["url"] as? String)!)
     }
@@ -57,7 +65,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     
     func loadUrl(url: String){
         
-        loadingStatusField.hidden = true
+        loadingBar.stopAnimation(self)
         
         let URL = NSURL(string: url)
         mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
@@ -66,16 +74,19 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     
     func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
         // loading start
+        loadingBar.startAnimation(self)
+        
         if(!firstLoadingStarted){
             firstLoadingStarted = true
-            loadingStatusField.hidden = false
+            launchingLabel.hidden = false
         }
         
     }
     
     func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
-        if(!loadingStatusField.hidden){
-            loadingStatusField.hidden = true
+        loadingBar.stopAnimation(self)
+        if(!launchingLabel.hidden){
+            launchingLabel.hidden = true
         }
     }
 
