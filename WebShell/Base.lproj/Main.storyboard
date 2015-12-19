@@ -99,18 +99,33 @@
                                 <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                                     <nil key="identifier"/>
                                 </webPreferences>
+                                <connections>
+                                    <outlet property="frameLoadDelegate" destination="XfG-lQ-9wD" id="qU6-JS-OJO"/>
+                                </connections>
                             </webView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Drc-ZF-efH">
+                                <rect key="frame" x="468" y="312" width="64" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Loading..." id="wCo-wz-dOz">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Drc-ZF-efH" firstAttribute="centerX" secondItem="hmw-jr-NE4" secondAttribute="centerX" id="6r2-bw-kdD"/>
                             <constraint firstItem="hmw-jr-NE4" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="BLT-xn-xQJ"/>
                             <constraint firstAttribute="trailing" secondItem="hmw-jr-NE4" secondAttribute="trailing" id="RyK-bx-Bzh"/>
                             <constraint firstItem="hmw-jr-NE4" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="a7m-2m-OwF"/>
                             <constraint firstItem="hmw-jr-NE4" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="e2e-5z-Mxt"/>
                             <constraint firstItem="hmw-jr-NE4" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="kIb-eY-gmS"/>
+                            <constraint firstItem="Drc-ZF-efH" firstAttribute="centerY" secondItem="hmw-jr-NE4" secondAttribute="centerY" id="mru-JP-7bm"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="loadingStatusField" destination="Drc-ZF-efH" id="4xY-5C-OpB"/>
                         <outlet property="mainWebview" destination="hmw-jr-NE4" id="QFr-gH-tAs"/>
                         <outlet property="mainWindow" destination="m2S-Jp-Qdl" id="TDZ-2t-Gaw"/>
                     </connections>

@@ -9,11 +9,11 @@
 import Cocoa
 import WebKit
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, WebFrameLoadDelegate {
 
     @IBOutlet var mainWindow: NSView!
     @IBOutlet weak var mainWebview: WebView!
-    
+    @IBOutlet weak var loadingStatusField: NSTextField!
     
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
@@ -25,6 +25,8 @@ class ViewController: NSViewController {
         "height": 640,
         "width": 1000
     ]
+    
+    var firstLoadingStarted = false
     
     override func viewDidAppear() {
         initWindow()
@@ -54,11 +56,28 @@ class ViewController: NSViewController {
     }
     
     func loadUrl(url: String){
+        
+        loadingStatusField.hidden = true
+        
         let URL = NSURL(string: url)
         mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
+        
     }
-
-
+    
+    func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
+        // loading start
+        if(!firstLoadingStarted){
+            firstLoadingStarted = true
+            loadingStatusField.hidden = false
+        }
+        
+    }
+    
+    func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
+        if(!loadingStatusField.hidden){
+            loadingStatusField.hidden = true
+        }
+    }
 
 }
 
