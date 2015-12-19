@@ -19,14 +19,16 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-        "url": "https://jsfiddle.net",
+        "url": "http://jsfiddle.net",
         "title": "WebShell",
+        "launchingText": "Launching...",
         
-        // Note that the window  min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
+        // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
         "height": 640,
         "width": 1000,
         
         "showLoadingBar": true
+        
     ]
     
     var firstLoadingStarted = false
@@ -38,12 +40,20 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initSettings()
+        
+        loadUrl((SETTINGS["url"] as? String)!)
+    }
+    
+    func initSettings(){
+        
+        // controll the progress bar
         if(!(SETTINGS["showLoadingBar"] as? Bool)!){
-            // hide the loading bar
             loadingBar.hidden = true
         }
         
-        loadUrl((SETTINGS["url"] as? String)!)
+        // set launching text
+        launchingLabel.stringValue = (SETTINGS["launchingText"] as? String)!
     }
     
     func initWindow(){
@@ -73,7 +83,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     }
     
     func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
-        // loading start
         loadingBar.startAnimation(self)
         
         if(!firstLoadingStarted){
