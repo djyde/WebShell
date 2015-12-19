@@ -35,4 +35,8 @@ let SETTINGS: [String: Any]  = [
 
 ##### STEP2:
 
+WIP...
 
+# License
+
+MIT License
