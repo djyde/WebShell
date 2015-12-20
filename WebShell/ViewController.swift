@@ -10,7 +10,7 @@ import Cocoa
 import WebKit
 import Foundation
 
-class ViewController: NSViewController, WebFrameLoadDelegate {
+class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
 
     @IBOutlet var mainWindow: NSView!
     @IBOutlet weak var mainWebview: WebView!
@@ -20,7 +20,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-        "url": "http://jsbin.com",
+        "url": "http://baidu.com",
         "title": "WebShell",
         "launchingText": "Launching...",
         
@@ -31,6 +31,15 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
         "showLoadingBar": true
         
     ]
+    
+    func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
+        // You could custom the JavaScript alert behavior here
+        let alert = NSAlert.init()
+        alert.addButtonWithTitle("OK") // message box button text
+        alert.messageText = "Message" // message box title
+        alert.informativeText = message
+        alert.runModal()
+    }
     
     var firstLoadingStarted = false
     var firstAppear = true
@@ -43,6 +52,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mainWebview.UIDelegate = self
         
         addObservers()
         
@@ -133,11 +144,5 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
             launchingLabel.hidden = true
         }
     }
-    
-    override func performKeyEquivalent(theEvent: NSEvent) -> Bool {
-        print(theEvent.characters)
-        return true
-    }
-
 }
 
