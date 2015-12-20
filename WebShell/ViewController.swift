@@ -21,7 +21,10 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     let SETTINGS: [String: Any]  = [
         
         "url": "http://baidu.com",
+        
         "title": "WebShell",
+        "useDocumentTitle": true,
+        
         "launchingText": "Launching...",
         
         // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
@@ -128,6 +131,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
     }
     
+    
+    // webview settings
     func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
         loadingBar.startAnimation(self)
         
@@ -140,8 +145,15 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     
     func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
         loadingBar.stopAnimation(self)
+        
         if(!launchingLabel.hidden){
             launchingLabel.hidden = true
+        }
+    }
+    
+    func webView(sender: WebView!, didReceiveTitle title: String!, forFrame frame: WebFrame!) {
+        if(SETTINGS["useDocumentTitle"] as! Bool){
+            mainWindow.window?.title = title
         }
     }
 }
