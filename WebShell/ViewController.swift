@@ -20,7 +20,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-        "url": "http://jsfiddle.net",
+        "url": "http://jsbin.com",
         "title": "WebShell",
         "launchingText": "Launching...",
         
@@ -132,6 +132,11 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
         if(!launchingLabel.hidden){
             launchingLabel.hidden = true
         }
+    }
+    
+    override func performKeyEquivalent(theEvent: NSEvent) -> Bool {
+        print(theEvent.characters)
+        return true
     }
 
 }
