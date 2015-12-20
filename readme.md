@@ -1,6 +1,6 @@
 # WebShell
 
-WebShell is an OS X WebView shell, which help you easily bring the Web APPs to native OS X app.
+WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
 
 ## Quick Start
 
@@ -27,11 +27,11 @@ Finally click the `run` button to run the app.
 
 ## Demo
 
-- [JS Bin]()
+- [JS Bin](https://github.com/djyde/WebShell/releases/download/untagged-26c400bf436fb0f55e9b/JSBin.zip)
 
 ## Document
 
-For more detail configurations, please see [document](https://github.com/djyde/WebShell/wiki/How-to-build-a-WebShell-app)
+For more detail configurations, please see [document](https://github.com/djyde/WebShell/wiki/How-to-build-a-WebShell-based-application)
 
 ## Who's using WebShell
 
