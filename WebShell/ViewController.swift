@@ -8,6 +8,7 @@
 
 import Cocoa
 import WebKit
+import Foundation
 
 class ViewController: NSViewController, WebFrameLoadDelegate {
 
@@ -43,9 +44,38 @@ class ViewController: NSViewController, WebFrameLoadDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addObservers()
+        
         initSettings()
         
         loadUrl((SETTINGS["url"] as? String)!)
+    }
+    
+    func addObservers(){
+        
+        // add menu action observers
+        let observers = ["goHome", "reload", "copyUrl"]
+        
+        for observer in observers{
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString(observer), name: observer, object: nil)
+        }
+    }
+    
+    func goHome(){
+        loadUrl((SETTINGS["url"] as? String)!)
+    }
+    
+    func reload(){
+        let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
+        loadUrl(currentUrl)
+    }
+    
+    func copyUrl(){
+        let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
+        let clipboard: NSPasteboard = NSPasteboard.generalPasteboard()
+        clipboard.clearContents()
+        
+        clipboard.setString(currentUrl, forType: NSStringPboardType)
     }
     
     func initSettings(){

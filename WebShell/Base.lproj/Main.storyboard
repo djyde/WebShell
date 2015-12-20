@@ -49,6 +49,32 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Control" id="Ca3-nV-juN">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Control" id="qkf-xU-qKS">
+                                    <items>
+                                        <menuItem title="Home" keyEquivalent="H" id="fWh-O7-fkt">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="goHome:" target="Voe-Tx-rLC" id="v60-sm-Go5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Reload" keyEquivalent="R" id="ynQ-Ma-mpv">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="reload:" target="Voe-Tx-rLC" id="6qi-i1-yDo"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="7ie-IE-K6N"/>
+                                        <menuItem title="Copy current URL" id="F42-Mv-oVO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="copyUrl:" target="Voe-Tx-rLC" id="lTh-k1-YH6"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>

@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Foundation
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -14,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mainWindow: NSWindow!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        mainWindow = NSApplication.sharedApplication().windows[0] 
+        mainWindow = NSApplication.sharedApplication().windows[0]
     }
     
     func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -22,6 +23,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             mainWindow!.makeKeyAndOrderFront(self)
         }
         return true
+    }
+    
+    @IBAction func goHome(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().postNotificationName("goHome", object: nil)
+    }
+    @IBAction func reload(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().postNotificationName("reload", object: nil)
+    }
+    @IBAction func copyUrl(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().postNotificationName("copyUrl", object: nil)
     }
 }
 
