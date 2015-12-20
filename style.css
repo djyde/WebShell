@@ -1,0 +1,37 @@
+@import 'normalize.css';
+
+#container{
+  padding-top: 128px;
+  text-align: center;
+  font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  
+  .title{
+    font-size: 3.6em;
+    font-weight: lighter;
+  }
+
+  .sub-title{
+    font-size: 1.4em;
+    font-weight: 200;
+  }
+
+  .btn{
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #7D7D7D;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .8em;
+    padding-bottom: .8em;
+    border-radius: 2px;
+    font-weight: bold;
+    margin-top: 5em;
+    transition: .2s all;
+
+    &:hover{
+      background-color: #000;
+    }
+  }
+}
