@@ -28,8 +28,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         "launchingText": "Launching...",
         
         // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
-        "minHeight": 640,
-        "minWidth": 1000,
+        "initialWindowHeight": 640,
+        "initialWindowWidth": 1000,
         
         "showLoadingBar": true
         
@@ -110,8 +110,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // set window size
         var frame: NSRect = mainWindow.frame
         
-        let WIDTH: CGFloat = CGFloat(SETTINGS["minWidth"] as! Int),
-            HEIGHT: CGFloat = CGFloat(SETTINGS["minHeight"] as! Int)
+        let WIDTH: CGFloat = CGFloat(SETTINGS["initialWindowWidth"] as! Int),
+            HEIGHT: CGFloat = CGFloat(SETTINGS["initialWindowHeight"] as! Int)
         
         frame.size.width = WIDTH
         frame.size.height = HEIGHT
