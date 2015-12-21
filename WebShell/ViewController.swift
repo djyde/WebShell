@@ -94,7 +94,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     func reload(){
         let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
         loadUrl(currentUrl)
-        makeNotification("Reloading")
     }
     
     func copyUrl(){
