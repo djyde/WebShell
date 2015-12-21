@@ -8,13 +8,15 @@
 
 import Cocoa
 import Foundation
+import NotificationCenter
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
     var mainWindow: NSWindow!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         mainWindow = NSApplication.sharedApplication().windows[0]
     }
     
@@ -23,6 +25,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             mainWindow!.makeKeyAndOrderFront(self)
         }
         return true
+    }
+
+    func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+    return true
     }
     
     @IBAction func goHome(sender: AnyObject) {

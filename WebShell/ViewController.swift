@@ -20,9 +20,10 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-        "url": "http://baidu.com",
+//        "url": "http://baidu.com",
+        "url": "https://www.wdgwv.com/localNotificationExample", // Basic Notification sender thing. (local notifications ofc).
         
-        "title": "WebShell",
+        "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String, // App name is nicer."WebShell",
         "useDocumentTitle": true,
         
         "launchingText": "Launching...",
@@ -44,6 +45,16 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         alert.runModal()
     }
     
+    func makeNotification (message: NSString) {
+        let notification:NSUserNotification = NSUserNotification() // Set up Notification
+        notification.title = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as? String // Use App name!
+        notification.informativeText = message as String // Message = string
+        notification.soundName = NSUserNotificationDefaultSoundName // Default sound
+        notification.deliveryDate = NSDate(timeIntervalSinceNow: 0) // Now!
+        let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
+        notificationcenter!.scheduleNotification(notification) // Pushing to notification centre
+    }
+
     var firstLoadingStarted = false
     var firstAppear = true
     
@@ -82,6 +93,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     func reload(){
         let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
         loadUrl(currentUrl)
+        makeNotification("Reloading")
     }
     
     func copyUrl(){
@@ -120,6 +132,24 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         // set window title
         mainWindow.window!.title = SETTINGS["title"] as! String
+        
+        // Injecting javascript (via jsContext)
+        let jsContext = mainWebview.mainFrame.javaScriptContext
+
+        // Add Notification Support
+        jsContext.evaluateScript("function Notification (myMessage){Notification.note(myMessage)}Notification.length=1;Notification.permission = 'granted';Notification.requestPermission = function (callback) { if (typeof callback === 'function') { callback(); return true } else { return true } };window.Notification=Notification;")
+        let myNofification: @convention(block) (NSString!) -> Void = { (message:NSString!) in
+            self.makeNotification(message)
+        }
+        jsContext.objectForKeyedSubscript("Notification").setObject(unsafeBitCast(myNofification, AnyObject.self), forKeyedSubscript:"note")
+        
+        // Add console.log ;)
+        jsContext.evaluateScript("var console = { log: function () { var message = ''; for (var i = 0; i < arguments.length; i++) { message += arguments[i] + ' ' }; console.print(message) } };")
+        let logFunction: @convention(block) (NSString!) -> Void = { (message:NSString!) in
+            print("JS: \(message)")
+        }
+        jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
+        
     }
     
     func loadUrl(url: String){
@@ -157,4 +187,3 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
     }
 }
-
