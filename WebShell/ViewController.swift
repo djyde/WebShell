@@ -10,6 +10,7 @@
 import Cocoa
 import WebKit
 import Foundation
+import AppKit
 
 class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
 
@@ -21,8 +22,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-        "url": "http://baidu.com",
-//        "url": "https://www.wdgwv.com/localNotificationExample", // Basic Notification sender thing. (local notifications ofc). (can be used for testing)
+//        "url": "http://baidu.com",
+        "url": "https://www.wdgwv.com/localNotificationExample", // Basic Notification sender thing. (local notifications ofc). (can be used for testing)
         
         "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String, // App name is nicer."WebShell",
         "useDocumentTitle": true,
@@ -32,6 +33,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
         "initialWindowHeight": 640,
         "initialWindowWidth": 1000,
+        
+        // Open target=_blank in a new screen?
+        "openInNewScreen": false,
         
         "showLoadingBar": true
         
@@ -78,7 +82,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     func addObservers(){
-        
         // add menu action observers
         let observers = ["goHome", "reload", "copyUrl"]
         
@@ -105,7 +108,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     func initSettings(){
-        
         // controll the progress bar
         if(!(SETTINGS["showLoadingBar"] as? Bool)!){
             loadingBar.hidden = true
@@ -150,10 +152,28 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
         jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
         
+        // Add support for target=_blank
+        // Fake window.app Library.
+        jsContext.evaluateScript("var app={};");
+        
+        // _blank external
+        let openInBrowser: @convention(block) (NSString!) -> Void = { (url:NSString!) in
+            NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
+        }
+        
+        // _blank internal
+        let openNow: @convention(block) (NSString!) -> Void = { (url:NSString!) in
+            self.loadUrl((url as String))
+        }
+        // _blank external
+        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, AnyObject.self), forKeyedSubscript:"openExternal")
+        
+        // _blank internal
+        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
+
     }
     
     func loadUrl(url: String){
-        
         loadingBar.stopAnimation(self)
         
         let URL = NSURL(string: url)
@@ -170,7 +190,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
             firstLoadingStarted = true
             launchingLabel.hidden = false
         }
-        
     }
     
     func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
@@ -178,6 +197,15 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         if(!launchingLabel.hidden){
             launchingLabel.hidden = true
+        }
+        
+        // Hack URL's if settings is set.
+        if((SETTINGS["openInNewScreen"] as? Bool) != false){
+            // _blank to external
+            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function(){app.openExternal(this.href);})}}");
+        }else{
+            // _blank to internal
+            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function(){app.openInternal(this.href);})}}");
         }
     }
     
