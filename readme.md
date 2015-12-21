@@ -35,7 +35,7 @@ Finally click the `run` button to run the app.
 
 - [JS Bin](https://github.com/djyde/WebShell/releases/download/untagged-26c400bf436fb0f55e9b/JSBin.zip) ([Chinese Mirror](http://7mnoy7.com1.z0.glb.clouddn.com/JSBin.zip))
 
-- [StackEdit](http://7mnoy7.com1.z0.glb.clouddn.com/github/StackEdit.zip)
+- [StackEdit](http://7mnoy7.com1.z0.glb.clouddn.com/github/StackEdit.zip) - A markdown editor
 
 ## Document
 
