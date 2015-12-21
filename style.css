@@ -16,6 +16,11 @@
     font-weight: 200;
   }
 
+  h4{
+    font-size: 1.4em;
+    font-weight: 200;
+  }
+
   .btn{
     display: inline-block;
     text-decoration: none;
@@ -27,11 +32,28 @@
     padding-bottom: .8em;
     border-radius: 2px;
     font-weight: bold;
-    margin-top: 5em;
+    margin-top: 4em;
     transition: .2s all;
 
     &:hover{
       background-color: #000;
     }
+  }
+
+  #show-cases{
+    img{
+      margin: 1.5em;
+    }
+
+    .sub-title{
+      margin: 0;
+      margin-top: 3em;
+    }
+  }
+
+  #footer{
+    font-size: .8em;
+    padding: .8em;
+    color: gray;
   }
 }
