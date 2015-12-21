@@ -5,6 +5,7 @@
 //  Created by Randy on 15/12/19.
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
+//  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
 
 import Cocoa
 import Foundation
@@ -16,6 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var mainWindow: NSWindow!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // Add Notification center to the app delegate.
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         mainWindow = NSApplication.sharedApplication().windows[0]
     }
@@ -28,7 +30,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
 
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
-    return true
+        // We (i) want Notifications support
+        return true
     }
     
     @IBAction func goHome(sender: AnyObject) {

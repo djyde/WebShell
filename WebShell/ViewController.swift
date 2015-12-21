@@ -5,6 +5,7 @@
 //  Created by Randy on 15/12/19.
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
+//  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
 
 import Cocoa
 import WebKit
@@ -20,8 +21,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
-//        "url": "http://baidu.com",
-        "url": "https://www.wdgwv.com/localNotificationExample", // Basic Notification sender thing. (local notifications ofc).
+        "url": "http://baidu.com",
+//        "url": "https://www.wdgwv.com/localNotificationExample", // Basic Notification sender thing. (local notifications ofc). (can be used for testing)
         
         "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String, // App name is nicer."WebShell",
         "useDocumentTitle": true,
