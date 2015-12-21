@@ -41,6 +41,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                                        <menuItem title="Close" keyEquivalent="w" id="E0V-gE-2XR">
+                                            <connections>
+                                                <action selector="performClose:" target="Ady-hI-5gd" id="pTe-th-gPN"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Quit WebShell" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
