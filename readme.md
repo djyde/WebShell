@@ -4,6 +4,10 @@
 
 WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
 
+## Requirements
+
+- Xcode 7+ (Swift 2.0+ support)
+
 ## Quick Start
 
 ```bash
