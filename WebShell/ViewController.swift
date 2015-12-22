@@ -134,43 +134,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         // set window title
         mainWindow.window!.title = SETTINGS["title"] as! String
-        
-        // Injecting javascript (via jsContext)
-        let jsContext = mainWebview.mainFrame.javaScriptContext
-
-        // Add Notification Support
-        jsContext.evaluateScript("function Notification (myMessage){Notification.note(myMessage)}Notification.length=1;Notification.permission = 'granted';Notification.requestPermission = function (callback) { if (typeof callback === 'function') { callback(); return true } else { return true } };window.Notification=Notification;")
-        let myNofification: @convention(block) (NSString!) -> Void = { (message:NSString!) in
-            self.makeNotification(message)
-        }
-        jsContext.objectForKeyedSubscript("Notification").setObject(unsafeBitCast(myNofification, AnyObject.self), forKeyedSubscript:"note")
-        
-        // Add console.log ;)
-        jsContext.evaluateScript("var console = { log: function () { var message = ''; for (var i = 0; i < arguments.length; i++) { message += arguments[i] + ' ' }; console.print(message) } };")
-        let logFunction: @convention(block) (NSString!) -> Void = { (message:NSString!) in
-            print("JS: \(message)")
-        }
-        jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
-        
-        // Add support for target=_blank
-        // Fake window.app Library.
-        jsContext.evaluateScript("var app={};");
-        
-        // _blank external
-        let openInBrowser: @convention(block) (NSString!) -> Void = { (url:NSString!) in
-            NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
-        }
-        
-        // _blank internal
-        let openNow: @convention(block) (NSString!) -> Void = { (url:NSString!) in
-            self.loadUrl((url as String))
-        }
-        // _blank external
-        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, AnyObject.self), forKeyedSubscript:"openExternal")
-        
-        // _blank internal
-        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
-
     }
     
     func loadUrl(url: String){
@@ -179,6 +142,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         let URL = NSURL(string: url)
         mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
         
+        self.injectWebhooks()
     }
     
     
@@ -198,20 +162,123 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         if(!launchingLabel.hidden){
             launchingLabel.hidden = true
         }
-        
-        // Hack URL's if settings is set.
-        if((SETTINGS["openInNewScreen"] as? Bool) != false){
-            // _blank to external
-            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function(){app.openExternal(this.href);})}}");
-        }else{
-            // _blank to internal
-            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function(){app.openInternal(this.href);})}}");
-        }
+
+        // Webhooks
+        self.injectWebhooks();
     }
     
     func webView(sender: WebView!, didReceiveTitle title: String!, forFrame frame: WebFrame!) {
         if(SETTINGS["useDocumentTitle"] as! Bool){
             mainWindow.window?.title = title
         }
+    }
+    
+    func injectWebhooks() {
+        // Hack URL's if settings is set.
+        if((SETTINGS["openInNewScreen"] as? Bool) != false){
+            // _blank to external
+            mainWebview.mainFrame.javaScriptContext.evaluateScript(
+                // JavaScript -> Select all <a href='...' target='_blank'>
+                "var links=document.querySelectorAll('a');" +
+                    "for(var i=0;i<links.length;i++){" +
+                    "  if(links[i].target==='_blank'){" +
+                    "    links[i].addEventListener('click',function () {" +
+                    "      app.openExternal(this.href);" +
+                    "    })" +
+                    "  }" +
+                "}"
+            )
+        } else {
+            // _blank to internal
+            mainWebview.mainFrame.javaScriptContext.evaluateScript(
+                // JavaScript -> Select all <a href='...' target='_blank'>
+                "var links=document.querySelectorAll('a');" +
+                    "for(var i=0;i<links.length;i++){" +
+                    "  if(links[i].target==='_blank'){" +
+                    "    links[i].addEventListener('click',function () {" +
+                    "      app.openInternal(this.href);" +
+                    "    })" +
+                    "  }" +
+                "}"
+            )
+        }
+        
+        // Injecting javascript (via jsContext)
+        let jsContext = mainWebview.mainFrame.javaScriptContext
+        
+        // Add Notification Support
+        jsContext.evaluateScript(
+            "function Notification (myMessage){" +
+            "  Notification.note(myMessage)" +
+            "}" +
+            "Notification.length=1;" +
+            "Notification.permission = 'granted';" +
+            "Notification.requestPermission = function (callback) {" +
+            "  if (typeof callback === 'function') {" +
+            "    callback();" +
+            "    return true" +
+            "  } else {" +
+            "    return true" +
+            "  }" +
+            "};" +
+            "window.Notification=Notification;"
+        )
+        let myNofification: @convention(block) (NSString!) -> Void = { (message:NSString!) in
+            self.makeNotification(message)
+        }
+        jsContext.objectForKeyedSubscript("Notification").setObject(unsafeBitCast(myNofification, AnyObject.self), forKeyedSubscript:"note")
+        
+        // Add console.log ;)
+        jsContext.evaluateScript(
+            // Add Console.log (and console.error, and console.warn)
+            "var console = {" +
+            "  log: function () {" +
+            "    var message = '';" +
+            "    for (var i = 0; i < arguments.length; i++) {" +
+            "      message += arguments[i] + ' '" +
+            "    };" +
+            "    console.print(message)" +
+            "  }," +
+            "  warn: function () {" +
+            "    var message = '';" +
+            "    for (var i = 0; i < arguments.length; i++) {" +
+            "      message += arguments[i] + ' '" +
+            "    };" +
+            "    console.print(message)" +
+            "  }," +
+            "  error: function () {" +
+            "    var message = '';" +
+            "    for (var i = 0; i < arguments.length; i++) {" +
+            "      message += arguments[i] + ' '" +
+            "    };" +
+            "    console.print(message)" +
+            "  }" +
+            "};"
+        )
+        let logFunction: @convention(block) (NSString!) -> Void = { (message:NSString!) in
+            print("JS: \(message)")
+        }
+        jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
+        
+        // Add support for target=_blank
+        jsContext.evaluateScript(
+            // Fake window.app Library.
+            "var app={};"
+        );
+        
+        // _blank external
+        let openInBrowser: @convention(block) (NSString!) -> Void = { (url:NSString!) in
+            NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
+        }
+        
+        // _blank internal
+        let openNow: @convention(block) (NSString!) -> Void = { (url:NSString!) in
+            self.loadUrl((url as String))
+        }
+        // _blank external
+        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, AnyObject.self), forKeyedSubscript:"openExternal")
+        
+        // _blank internal
+        jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
     }
 }
