@@ -1,0 +1,63 @@
+<style type="text/css" media="all">
+	button {
+		text-align: left;
+	}
+</style>
+<script type="text/javascript">
+// Fixing JSLint error
+if (!Notification in window) {window.Notification = {}}
+
+// Testing
+function notify0() {
+  new Notification('Notify #0', {
+    body: 'Body',
+    icon: 'https://www.wdgwv.com/logo.png'
+  })
+}
+function notify1() {
+  new Notification('Notify #1', {
+    icon: 'https://www.wdgwv.com/logo.png'
+  })
+}
+
+function notify2() {
+  new Notification('Notify #2', {
+    body: 'Hi!'
+  })
+}
+
+function notify3() {
+  new Notification('Notify #3', 'Body!')
+}
+
+function notify4() {
+  new Notification('Notify #4')
+}
+</script>
+
+<button onclick="notify0();"><pre>function notify0() {
+  new Notification('Notify #0', {
+    body: 'Body',
+    icon: 'https://www.wdgwv.com/logo.png'
+  });
+}</pre><br />[Correct usage]</button><br /><br />
+
+<button onclick="notify1();"><pre>function notify1() {
+  new Notification('Notify #1', {
+    icon: 'https://www.wdgwv.com/logo.png'
+  });
+}</pre><br />[No body, uses 'Webshell' as title]</button><br /><br />
+
+<button onclick="notify2();"><pre>function notify2() {
+  new Notification('Notify #2', {
+    body: 'Hi!'
+  });
+}</pre><br />[No icon, 'displays with WebShell icon']</button><br /><br />
+
+<button onclick="notify3();"><pre>function notify3() {
+  new Notification('Notify #3', 'Body!');
+}</pre><br />[Alternative use]</button><br /><br />
+
+<button onclick="notify4();"><pre>function notify4() {
+  new Notification('Notify #4');
+}</pre><br />[Also Correct usage]</button><br /><br />
