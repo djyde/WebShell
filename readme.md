@@ -1,5 +1,3 @@
-# WebShell
-
 <p align="center">
   <img src="http://7mnoy7.com1.z0.glb.clouddn.com/webshell/logo.png?imageView/2/w/128" />
 </p>
