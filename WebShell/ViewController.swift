@@ -116,7 +116,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         frame.size.width = WIDTH
         frame.size.height = HEIGHT
         
-        mainWindow.frame = frame
+        mainWindow.window?.setFrame(frame, display: true)
         
         // set window title
         mainWindow.window!.title = SETTINGS["title"] as! String
