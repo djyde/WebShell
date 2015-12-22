@@ -6,6 +6,7 @@
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
 //  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
+//                  22-DEC-2015, Improvement of Notifications, and open in a new screen.
 
 import Cocoa
 import WebKit
@@ -22,13 +23,17 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     // TODO: configure your app here
     let SETTINGS: [String: Any]  = [
         
+        // Url to browse to.
         "url": "https://www.google.com",
         
-        "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String, // App name is nicer."WebShell",
+        "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
+        
+        // Do you want to use the docuent title?
         "useDocumentTitle": true,
         
-        "launchingText": "Launching...",
-        
+        // Multilanguage loading text!
+        "launchingText": NSLocalizedString("Launching...",comment:"Launching..."),
+
         // Note that the window min height is 640 and min width is 1000 by default. You could change it in Main.storyboard
         "initialWindowHeight": 640,
         "initialWindowWidth": 1000,
@@ -36,8 +41,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // Open target=_blank in a new screen?
         "openInNewScreen": false,
         
+        // Do you want a loading bar?
         "showLoadingBar": true
-        
     ]
     
     func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
@@ -131,6 +136,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         let URL = NSURL(string: url)
         mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
         
+        // Inject Webhooks
         self.injectWebhooks()
     }
     
@@ -152,7 +158,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
             launchingLabel.hidden = true
         }
 
-        // Webhooks
+        // Inject Webhooks
         self.injectWebhooks();
     }
     
