@@ -223,7 +223,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
         
         // Add Battery!
-        // Not fully working right now.
+        // (Not fully working right now.)
         jsContext.evaluateScript("navigator.battery = {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}}")
         jsContext.evaluateScript("navigator.getBattery = function() { return {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}, then:function(call){return call(navigator.battery)}}}")
         
@@ -276,7 +276,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
             AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
         } else {
-            // Flash multiple times..
             let time:NSArray = (data as String).componentsSeparatedByString(",")
             for(var i = 0; i < time.count; i++) {
                 var timeAsInt = NSNumberFormatter().numberFromString(time[i] as! String)
