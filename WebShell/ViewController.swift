@@ -12,6 +12,7 @@ import Cocoa
 import WebKit
 import Foundation
 import AppKit
+import AudioToolbox
 
 class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
 
@@ -220,6 +221,17 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         // _blank internal
         jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
+        
+        // Add Battery!
+        // (Not fully working right now.)
+        jsContext.evaluateScript("navigator.battery = {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}}")
+        jsContext.evaluateScript("navigator.getBattery = function() { return {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}, then:function(call){return call(navigator.battery)}}}")
+        
+        //navigator.vibrate
+        let vibrateNow: @convention(block) (NSString!) -> Void = { (data:NSString!) in
+            self.flashScreen(data)
+        }
+        jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, AnyObject.self), forKeyedSubscript:"vibrate")
     }
     
     
@@ -257,5 +269,23 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         notificationCount++
         
         NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
+    }
+    
+    func flashScreen (data: NSString) {
+        print(data)
+        if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
+            AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
+        } else {
+            let time:NSArray = (data as String).componentsSeparatedByString(",")
+            for(var i = 0; i < time.count; i++) {
+                var timeAsInt = NSNumberFormatter().numberFromString(time[i] as! String)
+                timeAsInt = Int(timeAsInt!)/100
+                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(timeAsInt!), target: self, selector: Selector("flashScreenNow"), userInfo: nil, repeats: false)
+            }
+        }
+    }
+    
+    func flashScreenNow() {
+        AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
     }
 }
