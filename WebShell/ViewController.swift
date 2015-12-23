@@ -42,7 +42,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         "openInNewScreen": false,
         
         // Do you want a loading bar?
-        "showLoadingBar": true
+        "showLoadingBar": true,
+        
+        "consoleSupport": false
     ]
     
     func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
@@ -192,11 +194,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         // Add console.log ;)
         // Add Console.log (and console.error, and console.warn)
-        jsContext.evaluateScript("var console = {log: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},warn: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},error: function () {var message = '';for (var i = 0; i < arguments.length; i++){message += arguments[i] + ' '};console.print(message)}};")
-        let logFunction: @convention(block) (NSString!) -> Void = { (message:NSString!) in
-            print("JS: \(message)")
+        if(SETTINGS["consoleSupport"] as! Bool){
+            jsContext.evaluateScript("var console = {log: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},warn: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},error: function () {var message = '';for (var i = 0; i < arguments.length; i++){message += arguments[i] + ' '};console.print(message)}};")
+            let logFunction: @convention(block) (NSString!) -> Void = { (message:NSString!) in
+                print("JS: \(message)")
+            }
+            jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
         }
-        jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
         
         // Add support for target=_blank
         // Fake window.app Library.
