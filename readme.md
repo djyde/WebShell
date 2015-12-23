@@ -22,7 +22,7 @@ WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to 
 
 ```bash
 
-$ git clone https://github.com/djyde/WebShell.git
+$ git clone https://github.com/djyde/WebShell.git APP_NAME
 
 $ cd APP_NAME && open WebShell.xcodeproj
 
@@ -40,6 +40,10 @@ let SETTINGS: [String: Any]  = [
 ```
 
 Finally click the `run` button to run the app.
+
+## Bonus Features
+
+- Standard [Notification API](https://developer.mozilla.org/en-US/docs/Web/API/notification) support
 
 ## Demo
 

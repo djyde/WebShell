@@ -26,6 +26,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if(!flag){
             mainWindow!.makeKeyAndOrderFront(self)
         }
+        // clear badge
+        NSApplication.sharedApplication().dockTile.badgeLabel = ""
+        NSNotificationCenter.defaultCenter().postNotificationName("clearNotificationCount", object: nil)
         return true
     }
 
