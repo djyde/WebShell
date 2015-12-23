@@ -45,6 +45,8 @@ Finally click the `run` button to run the app.
 
 - Standard [Notification API](https://developer.mozilla.org/en-US/docs/Web/API/notification) support
 
+- Standar [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) support
+
 ## Demo
 
 - [JS Bin](https://github.com/djyde/WebShell/releases/download/untagged-2dcb9795b04eb54e8b45/JSBin.zip) ([Chinese Mirror](http://7mnoy7.com1.z0.glb.clouddn.com/github/JSBin.zip))
