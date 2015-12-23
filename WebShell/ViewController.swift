@@ -79,7 +79,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     
     func addObservers(){
         // add menu action observers
-        let observers = ["goHome", "reload", "copyUrl"]
+        let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount"]
         
         for observer in observers{
             NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString(observer), name: observer, object: nil)
@@ -222,6 +222,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
     }
     
+    
+    var notificationCount = 0
+    
+    func clearNotificationCount(){
+        notificationCount = 0
+    }
+    
     func makeNotification (title: NSString, message: NSString, icon: NSString) {
         let notification:NSUserNotification = NSUserNotification() // Set up Notification
 
@@ -246,5 +253,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
         notificationcenter!.scheduleNotification(notification) // Pushing to notification centre
+        
+        notificationCount++
+        
+        NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
     }
 }
