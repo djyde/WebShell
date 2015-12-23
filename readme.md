@@ -41,6 +41,10 @@ let SETTINGS: [String: Any]  = [
 
 Finally click the `run` button to run the app.
 
+## Bonus Features
+
+- Standard [Notification API](https://developer.mozilla.org/en-US/docs/Web/API/notification) support
+
 ## Demo
 
 - [JS Bin](https://github.com/djyde/WebShell/releases/download/untagged-2dcb9795b04eb54e8b45/JSBin.zip) ([Chinese Mirror](http://7mnoy7.com1.z0.glb.clouddn.com/github/JSBin.zip))

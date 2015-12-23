@@ -28,7 +28,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
         
-        // Do you want to use the docuent title?
+        // Do you want to use the document title?
         "useDocumentTitle": true,
         
         // Multilanguage loading text!
