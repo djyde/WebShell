@@ -45,7 +45,7 @@ Finally click the `run` button to run the app.
 
 - Standard [Notification API](https://developer.mozilla.org/en-US/docs/Web/API/notification) support
 
-- Standar [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) support
+- Standard [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) support
 
 ## Demo
 
