@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="9531"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -299,6 +298,31 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Window" id="71M-2z-NLE">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Window" systemMenu="window" id="sgJ-mx-Spd">
+                                    <items>
+                                        <menuItem title="Minimize" keyEquivalent="m" id="cKZ-bA-Hcf">
+                                            <connections>
+                                                <action selector="performMiniaturize:" target="Ady-hI-5gd" id="KB8-sA-ZCC"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Zoom" id="aSx-R8-PeF">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="performZoom:" target="Ady-hI-5gd" id="fNU-nf-0vt"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Oyj-6x-QkF"/>
+                                        <menuItem title="Bring All to Front" id="N4R-FC-3p1">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="arrangeInFront:" target="Ady-hI-5gd" id="1sY-xr-dtd"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>
@@ -338,7 +362,6 @@
                         <subviews>
                             <webView translatesAutoresizingMaskIntoConstraints="NO" id="hmw-jr-NE4">
                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
-                                <animations/>
                                 <webPreferences key="preferences" defaultFontSize="16" defaultFixedFontSize="13" minimumFontSize="0">
                                     <nil key="identifier"/>
                                 </webPreferences>
@@ -348,11 +371,9 @@
                             </webView>
                             <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="3Au-oC-VEd">
                                 <rect key="frame" x="10" y="614" width="16" height="16"/>
-                                <animations/>
                             </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1wx-8i-Jol">
                                 <rect key="frame" x="406" y="300" width="189" height="41"/>
-                                <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Launching..." id="y40-R0-LYw">
                                     <font key="font" metaFont="system" size="34"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -370,7 +391,6 @@
                             <constraint firstItem="hmw-jr-NE4" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="kIb-eY-gmS"/>
                             <constraint firstItem="1wx-8i-Jol" firstAttribute="centerX" secondItem="hmw-jr-NE4" secondAttribute="centerX" id="uFu-Sr-ung"/>
                         </constraints>
-                        <animations/>
                     </view>
                     <connections>
                         <outlet property="launchingLabel" destination="1wx-8i-Jol" id="Fju-U1-weU"/>
