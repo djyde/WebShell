@@ -32,11 +32,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         return true
     }
 
+    // @wdg Add Notification Support
+    // Issue: #2
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
         // We (i) want Notifications support
         return true
     }
     
+    // @wdg Add 'click' on notification support
+    // Issue: 26
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
         // Open window if user clicked on notification!
         mainWindow!.makeKeyAndOrderFront(self)

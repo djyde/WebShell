@@ -126,6 +126,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         frame.size.width = WIDTH
         frame.size.height = HEIGHT
         
+        // @froge-xyz Fixed initial window size
+        // Issue: #1
         mainWindow.window?.setFrame(frame, display: true)
         
         // set window title
@@ -170,6 +172,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     // @wdg: Enable file uploads.
+    // Issue: #29
     func webView(sender: WebView!, runOpenPanelForFileButtonWithResultListener resultListener: WebOpenPanelResultListener!, allowMultipleFiles: Bool) {
         // Init panel with options
         let panel = NSOpenPanel()
@@ -210,7 +213,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     func injectWebhooks() {
-        // Hack URL's if settings is set.
+        // @wdg Hack URL's if settings is set.
+        // Issue: #5
         if((SETTINGS["openInNewScreen"] as? Bool) != false){
             // _blank to external
             // JavaScript -> Select all <a href='...' target='_blank'>
@@ -224,7 +228,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // Injecting javascript (via jsContext)
         let jsContext = mainWebview.mainFrame.javaScriptContext
         
-        // Add Notification Support
+        // @wdg Add Notification Support
+        // Issue: #2
         jsContext.evaluateScript("function Notification(myTitle, options){if(typeof options === 'object'){var body,icon,tag;if (typeof options['body'] !== 'undefined'){body=options['body']}if (typeof options['icon'] !== 'undefined'){Notification.note(myTitle, body, options['icon'])}else{Notification.note(myTitle, body)}}else{if(typeof options === 'string'){Notification.note(myTitle, options)}else{Notification.note(myTitle)}}}Notification.length=1;Notification.permission='granted';Notification.requestPermission=function(callback){if(typeof callback === 'function'){callback();return true}else{return true}};window.Notification=Notification;")
         let myNofification: @convention(block) (NSString!, NSString?, NSString?) -> Void = { (title:NSString!, message:NSString?, icon:NSString?) in
             self.makeNotification(title, message: message!, icon: icon!)
@@ -241,7 +246,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
             jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
         }
         
-        // Add support for target=_blank
+        // @wdg Add support for target=_blank
+        // Issue: #5
         // Fake window.app Library.
         jsContext.evaluateScript("var app={};");
         
@@ -279,6 +285,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         notificationCount = 0
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func makeNotification (title: NSString, message: NSString, icon: NSString) {
         let notification:NSUserNotification = NSUserNotification() // Set up Notification
 
@@ -309,6 +317,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func flashScreen (data: NSString) {
         print(data)
         if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
@@ -323,6 +333,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func flashScreenNow() {
         AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
     }
