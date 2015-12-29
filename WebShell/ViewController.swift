@@ -126,6 +126,16 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         frame.size.width = WIDTH
         frame.size.height = HEIGHT
         
+        // @wdg Fixed screen position (now it centers)
+        // Issue: #19
+        // Note: do not use HEIGHT, WIDTH for some strange reason the window will be positioned 25px from bottom!
+        let ScreenHeight:CGFloat = (NSScreen.mainScreen()?.frame.size.width)!,
+            WindowHeight:CGFloat = CGFloat(SETTINGS["initialWindowWidth"] as! Int), // do not use HEIGHT!
+            ScreenWidth:CGFloat  = (NSScreen.mainScreen()?.frame.size.height)!,
+            WindowWidth:CGFloat  = CGFloat(SETTINGS["initialWindowHeight"] as! Int) // do not use WIDTH!
+        frame.origin.x = (ScreenHeight/2 - WindowHeight/2)
+        frame.origin.y = (ScreenWidth/2  - WindowWidth/2)
+        
         // @froge-xyz Fixed initial window size
         // Issue: #1
         mainWindow.window?.setFrame(frame, display: true)
