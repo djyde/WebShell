@@ -5,8 +5,7 @@
 //  Created by Randy on 15/12/19.
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
-//  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
-//                  22-DEC-2015, Improvement of Notifications, and open in a new screen.
+//  Wesley de Groot (@wdg), Added Notification and console.log Support
 
 import Cocoa
 import WebKit
@@ -131,6 +130,11 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         // set window title
         mainWindow.window!.title = SETTINGS["title"] as! String
+        
+        // Force some preferences before loading...
+        mainWebview.preferences.javaScriptEnabled = true
+        mainWebview.preferences.javaScriptCanOpenWindowsAutomatically = true
+        mainWebview.preferences.plugInsEnabled = true
     }
     
     func loadUrl(url: String){
