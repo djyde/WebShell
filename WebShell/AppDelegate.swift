@@ -5,7 +5,7 @@
 //  Created by Randy on 15/12/19.
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
-//  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
+//  Wesley de Groot (@wdg), Added Notification and console.log Support
 
 import Cocoa
 import Foundation
@@ -32,11 +32,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         return true
     }
 
+    // @wdg Add Notification Support
+    // Issue: #2
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
         // We (i) want Notifications support
         return true
     }
     
+    // @wdg Add 'click' on notification support
+    // Issue: 26
+    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
+        // Open window if user clicked on notification!
+        mainWindow!.makeKeyAndOrderFront(self)
+    }
+
     @IBAction func goHome(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().postNotificationName("goHome", object: nil)
     }
@@ -47,4 +56,3 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSNotificationCenter.defaultCenter().postNotificationName("copyUrl", object: nil)
     }
 }
-

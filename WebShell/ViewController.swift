@@ -5,8 +5,7 @@
 //  Created by Randy on 15/12/19.
 //  Copyright © 2015 RandyLu. All rights reserved.
 //
-//  Wesley de Groot 21-DEC-2015, Added Notification and console.log Support
-//                  22-DEC-2015, Improvement of Notifications, and open in a new screen.
+//  Wesley de Groot (@wdg), Added Notification and console.log Support
 
 import Cocoa
 import WebKit
@@ -127,10 +126,27 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         frame.size.width = WIDTH
         frame.size.height = HEIGHT
         
+        // @wdg Fixed screen position (now it centers)
+        // Issue: #19
+        // Note: do not use HEIGHT, WIDTH for some strange reason the window will be positioned 25px from bottom!
+        let ScreenHeight:CGFloat = (NSScreen.mainScreen()?.frame.size.width)!,
+            WindowHeight:CGFloat = CGFloat(SETTINGS["initialWindowWidth"] as! Int), // do not use HEIGHT!
+            ScreenWidth:CGFloat  = (NSScreen.mainScreen()?.frame.size.height)!,
+            WindowWidth:CGFloat  = CGFloat(SETTINGS["initialWindowHeight"] as! Int) // do not use WIDTH!
+        frame.origin.x = (ScreenHeight/2 - WindowHeight/2)
+        frame.origin.y = (ScreenWidth/2  - WindowWidth/2)
+        
+        // @froge-xyz Fixed initial window size
+        // Issue: #1
         mainWindow.window?.setFrame(frame, display: true)
         
         // set window title
         mainWindow.window!.title = SETTINGS["title"] as! String
+        
+        // Force some preferences before loading...
+        mainWebview.preferences.javaScriptEnabled = true
+        mainWebview.preferences.javaScriptCanOpenWindowsAutomatically = true
+        mainWebview.preferences.plugInsEnabled = true
     }
     
     func loadUrl(url: String){
@@ -165,6 +181,41 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         self.injectWebhooks();
     }
     
+    // @wdg: Enable file uploads.
+    // Issue: #29
+    func webView(sender: WebView!, runOpenPanelForFileButtonWithResultListener resultListener: WebOpenPanelResultListener!, allowMultipleFiles: Bool) {
+        // Init panel with options
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = allowMultipleFiles
+        panel.canChooseDirectories = false
+        panel.canCreateDirectories = false
+        panel.canChooseFiles = true
+        
+        // On clicked on ok then...
+        panel.beginWithCompletionHandler { (result) -> Void in
+            // User clicked OK
+            if result == NSFileHandlingPanelOKButton {
+                
+                // make the upload qeue named 'uploadQeue'
+                let uploadQeue:NSMutableArray = NSMutableArray()
+                for (var i=0; i<panel.URLs.count; i++)
+                {
+                    // Add to upload qeue, needing relativePath.
+                    uploadQeue.addObject(panel.URLs[i].relativePath!)
+                }
+            
+                if (panel.URLs.count == 1) {
+                    // One file
+                    resultListener.chooseFilename(String(uploadQeue[0]))
+                } else {
+                    // Multiple files
+                    resultListener.chooseFilenames(uploadQeue as [AnyObject])
+                }
+            }
+        }
+
+    }
+    
     func webView(sender: WebView!, didReceiveTitle title: String!, forFrame frame: WebFrame!) {
         if(SETTINGS["useDocumentTitle"] as! Bool){
             mainWindow.window?.title = title
@@ -172,7 +223,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     func injectWebhooks() {
-        // Hack URL's if settings is set.
+        // @wdg Hack URL's if settings is set.
+        // Issue: #5
         if((SETTINGS["openInNewScreen"] as? Bool) != false){
             // _blank to external
             // JavaScript -> Select all <a href='...' target='_blank'>
@@ -186,7 +238,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // Injecting javascript (via jsContext)
         let jsContext = mainWebview.mainFrame.javaScriptContext
         
-        // Add Notification Support
+        // @wdg Add Notification Support
+        // Issue: #2
         jsContext.evaluateScript("function Notification(myTitle, options){if(typeof options === 'object'){var body,icon,tag;if (typeof options['body'] !== 'undefined'){body=options['body']}if (typeof options['icon'] !== 'undefined'){Notification.note(myTitle, body, options['icon'])}else{Notification.note(myTitle, body)}}else{if(typeof options === 'string'){Notification.note(myTitle, options)}else{Notification.note(myTitle)}}}Notification.length=1;Notification.permission='granted';Notification.requestPermission=function(callback){if(typeof callback === 'function'){callback();return true}else{return true}};window.Notification=Notification;")
         let myNofification: @convention(block) (NSString!, NSString?, NSString?) -> Void = { (title:NSString!, message:NSString?, icon:NSString?) in
             self.makeNotification(title, message: message!, icon: icon!)
@@ -203,7 +256,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
             jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript:"print")
         }
         
-        // Add support for target=_blank
+        // @wdg Add support for target=_blank
+        // Issue: #5
         // Fake window.app Library.
         jsContext.evaluateScript("var app={};");
         
@@ -241,6 +295,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         notificationCount = 0
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func makeNotification (title: NSString, message: NSString, icon: NSString) {
         let notification:NSUserNotification = NSUserNotification() // Set up Notification
 
@@ -271,6 +327,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func flashScreen (data: NSString) {
         print(data)
         if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
@@ -285,6 +343,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
     }
     
+    // @wdg Add Notification Support
+    // Issue: #2
     func flashScreenNow() {
         AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
     }
