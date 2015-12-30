@@ -11,6 +11,7 @@
 		25B2225D1C25328E00F848B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B2225C1C25328E00F848B7 /* ViewController.swift */; };
 		25B2225F1C25328E00F848B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25B2225E1C25328E00F848B7 /* Assets.xcassets */; };
 		25B222621C25328E00F848B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25B222601C25328E00F848B7 /* Main.storyboard */; };
+		32FB8FB51C3460D7005B222F /* Battery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FB8FB41C3460D7005B222F /* Battery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		25B2225E1C25328E00F848B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25B222611C25328E00F848B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		25B222631C25328E00F848B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		32FB8FB41C3460D7005B222F /* Battery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Battery.swift; sourceTree = "<group>"; };
 		6E3733301C2890A600CE0058 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,6 +57,7 @@
 			children = (
 				25B2225A1C25328E00F848B7 /* AppDelegate.swift */,
 				25B2225C1C25328E00F848B7 /* ViewController.swift */,
+				32FB8FB41C3460D7005B222F /* Battery.swift */,
 				25B2225E1C25328E00F848B7 /* Assets.xcassets */,
 				25B222601C25328E00F848B7 /* Main.storyboard */,
 				25B222631C25328E00F848B7 /* Info.plist */,
@@ -131,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32FB8FB51C3460D7005B222F /* Battery.swift in Sources */,
 				25B2225D1C25328E00F848B7 /* ViewController.swift in Sources */,
 				25B2225B1C25328E00F848B7 /* AppDelegate.swift in Sources */,
 			);

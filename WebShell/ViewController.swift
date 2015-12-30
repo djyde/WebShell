@@ -12,6 +12,7 @@ import WebKit
 import Foundation
 import AppKit
 import AudioToolbox
+import IOKit.ps
 
 class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
 
@@ -74,7 +75,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         
         initSettings()
         
-        loadUrl((SETTINGS["url"] as? String)!)
+        goHome()
     }
     
     func addObservers(){
@@ -141,7 +142,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         mainWindow.window?.setFrame(frame, display: true)
         
         // set window title
-        mainWindow.window!.title = SETTINGS["title"] as! String
+        mainWindow.window?.title = SETTINGS["title"] as! String
         
         // Force some preferences before loading...
         mainWebview.preferences.javaScriptEnabled = true
@@ -223,20 +224,20 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     }
     
     func injectWebhooks() {
+        // Injecting javascript (via jsContext)
+        let jsContext = mainWebview.mainFrame.javaScriptContext
+        
         // @wdg Hack URL's if settings is set.
         // Issue: #5
         if((SETTINGS["openInNewScreen"] as? Bool) != false){
             // _blank to external
             // JavaScript -> Select all <a href='...' target='_blank'>
-            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openExternal(this.href);})}}")
+            jsContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openExternal(this.href);})}}")
         } else {
             // _blank to internal
             // JavaScript -> Select all <a href='...' target='_blank'>
-            mainWebview.mainFrame.javaScriptContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openInternal(this.href);})}}")
+            jsContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openInternal(this.href);})}}")
         }
-        
-        // Injecting javascript (via jsContext)
-        let jsContext = mainWebview.mainFrame.javaScriptContext
         
         // @wdg Add Notification Support
         // Issue: #2
@@ -276,12 +277,12 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // _blank internal
         jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
         
-        // Add Battery!
-        // (Not fully working right now.)
-        jsContext.evaluateScript("navigator.battery = {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}}")
-        jsContext.evaluateScript("navigator.getBattery = function() { return {charging: true, chargingTime:0, dischargingTime:999, level:1, addEventListener:function(val, cal){}, then:function(call){return call(navigator.battery)}}}")
+        // navigator.getBattery()
+        jsContext.objectForKeyedSubscript("navigator").setObject(BatteryManager.self, forKeyedSubscript: "battery")
         
-        //navigator.vibrate
+        jsContext.evaluateScript("window.navigator.getBattery = window.navigator.battery.getBattery;")
+        
+        // navigator.vibrate
         let vibrateNow: @convention(block) (NSString!) -> Void = { (data:NSString!) in
             self.flashScreen(data)
         }
@@ -320,7 +321,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
         
         let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
-        notificationcenter!.scheduleNotification(notification) // Pushing to notification centre
+        notificationcenter?.scheduleNotification(notification) // Pushing to notification centre
         
         notificationCount++
         
