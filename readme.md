@@ -8,6 +8,9 @@
   <a href="https://github.com/djyde/WebShell/issues">
     <img src="http://issuestats.com/github/djyde/WebShell/badge/issue?style=flat-square" />
   </a>
+  <a href="https://gitter.im/djyde/WebShell">
+    <img src="https://badges.gitter.im/djyde/WebShell.svg" />
+  </a>
 </p>
 
 WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
