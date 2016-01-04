@@ -13,8 +13,9 @@ import Foundation
 import AppKit
 import AudioToolbox
 import IOKit.ps
+import Darwin
 
-class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
+class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate {
 
     @IBOutlet var mainWindow: NSView!
     @IBOutlet weak var mainWebview: WebView!
@@ -22,7 +23,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     @IBOutlet weak var launchingLabel: NSTextField!
     
     // TODO: configure your app here
-    let SETTINGS: [String: Any]  = [
+    var SETTINGS: [String: Any]  = [
         
         // Url to browse to.
         "url": "https://www.google.com",
@@ -45,7 +46,12 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         // Do you want a loading bar?
         "showLoadingBar": true,
         
-        "consoleSupport": false
+        // Add console.log support?
+        "consoleSupport": false,
+        
+        // run the app in debug mode?
+        // will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
+        "debugmode": false,
     ]
     
     func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
@@ -59,6 +65,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
 
     var firstLoadingStarted = false
     var firstAppear = true
+    var notificationCount = 0
     
     override func viewDidAppear() {
         if(firstAppear){
@@ -70,15 +77,19 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         super.viewDidLoad()
         
         mainWebview.UIDelegate = self
+        mainWebview.resourceLoadDelegate = self
+        
+        checkSettings()
         
         addObservers()
-        
+
         initSettings()
         
         goHome()
+        
     }
     
-    func addObservers(){
+    func addObservers() {
         // add menu action observers
         let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount"]
         
@@ -87,16 +98,16 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         }
     }
     
-    func goHome(){
+    func goHome() {
         loadUrl((SETTINGS["url"] as? String)!)
     }
     
-    func reload(){
+    func reload () {
         let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
         loadUrl(currentUrl)
     }
     
-    func copyUrl(){
+    func copyUrl() {
         let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
         let clipboard: NSPasteboard = NSPasteboard.generalPasteboard()
         clipboard.clearContents()
@@ -104,7 +115,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         clipboard.setString(currentUrl, forType: NSStringPboardType)
     }
     
-    func initSettings(){
+    func initSettings() {
         // controll the progress bar
         if(!(SETTINGS["showLoadingBar"] as? Bool)!){
             loadingBar.hidden = true
@@ -114,8 +125,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         launchingLabel.stringValue = (SETTINGS["launchingText"] as? String)!
     }
     
-    func initWindow(){
-        
+    func initWindow() {
         firstAppear = false
         
         // set window size
@@ -150,7 +160,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         mainWebview.preferences.plugInsEnabled = true
     }
     
-    func loadUrl(url: String){
+    func loadUrl(url: String) {
         loadingBar.stopAnimation(self)
         
         let URL = NSURL(string: url)
@@ -289,10 +299,121 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
         jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, AnyObject.self), forKeyedSubscript:"vibrate")
     }
     
+    // Quit the app (there must be a better way)
+    func Quit(sender: AnyObject) {
+        exit(0)
+    }
+
+    // Edit contextmenu...
+    func webView(sender: WebView!, contextMenuItemsForElement element: [NSObject : AnyObject]!, var defaultMenuItems: [AnyObject]!) -> [AnyObject]! {
+        // Add debug menu. (if enabled)
+        if (SETTINGS["debugmode"] as! Bool) {
+            let debugMenu = NSMenu(title: "Debug")
+            debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: Selector("_debugNewWindow:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: Selector("_debugDumpArguments:"), keyEquivalent: ""))
+            
+            let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
+            item.submenu = debugMenu
+            
+            defaultMenuItems.append(item)
+        }
+
+        defaultMenuItems.append(NSMenuItem.separatorItem())
+        defaultMenuItems.append(NSMenuItem.init(title: "Quit", action: Selector("Quit:"), keyEquivalent: ""))
+        return defaultMenuItems
+    }
     
-    var notificationCount = 0
+    // Debug: doNothing
+    func _doNothing(Sender: AnyObject) {
+        // _doNothing
+    }
     
-    func clearNotificationCount(){
+    // Debug: Open new window
+    func _debugNewWindow(Sender: AnyObject) {
+        openNewWindow("https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
+    }
+
+    // Debug: Print arguments
+    func _debugDumpArguments(Sender: AnyObject) {
+        print(Process.arguments)
+    }
+
+    // Function to call for the window.open (popup)
+    func openNewWindow(url: String, height: String, width: String) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+
+            // TODO: This one freezes our main window.
+            // TODO: even in the qeue
+            // TODO: Hide this window
+                
+            let task = NSTask()
+            task.launchPath = Process.arguments[0]
+                
+            if (self.SETTINGS["debugmode"] as! Bool) {
+                // With debug mode
+                task.arguments = ["-NSDocumentRevisionsDebugMode", "YES", "-url", url, "-height", height, "-width", width]
+            } else {
+                // Production mode
+                task.arguments = ["-url", url, "-height", height, "-width", width]
+            }
+            
+            print("Running: \(Process.arguments[0]) -url \"\(url)\" second-argument")
+            
+            let pipe = NSPipe()
+            task.standardOutput = pipe
+            task.launch()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            
+            let output: String = String(data: data, encoding: NSUTF8StringEncoding)!
+            print(output)
+            })
+        })
+    }
+
+    // @wdg Override settings via commandline
+    // .... Used for popups, and debug options.
+    func checkSettings() {
+        // Need to overwrite settings?
+        if (Process.argc > 0) {
+            for (var i=1; i<Int(Process.argc); i=i+2) {
+                
+                if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
+                    if ((String(Process.arguments[i+1])) == "YES") {
+                        SETTINGS["debugmode"] = true
+                        SETTINGS["consoleSupport"] = true
+                    }
+                }
+                if ((String(Process.arguments[i])).uppercaseString == "-DEBUG") {
+                    if ((String(Process.arguments[i+1])).uppercaseString == "YES" || (String(Process.arguments[i+1])).uppercaseString == "true") {
+                        SETTINGS["debugmode"] = true
+                        SETTINGS["consoleSupport"] = true
+                    }
+                }
+                
+                if ((String(Process.arguments[i])) == "-dump-args") {
+                    self._debugDumpArguments("")
+                }
+                
+                if ((String(Process.arguments[i])) == "-url") {
+                    SETTINGS["url"] = String(Process.arguments[i+1])
+                }
+                
+                if ((String(Process.arguments[i])) == "-height") {
+                    SETTINGS["initialWindowHeight"] = (Int(Process.arguments[i+1]) > 30) ? Int(Process.arguments[i+1]) : Int(30)
+                }
+
+                if ((String(Process.arguments[i])) == "-width") {
+                    SETTINGS["initialWindowWidth"] = (Int(Process.arguments[i+1]) > 30) ? Int(Process.arguments[i+1]) : Int(30)
+                }
+            }
+        }
+        
+        initWindow()
+    }
+
+    func clearNotificationCount() {
         notificationCount = 0
     }
     
@@ -331,7 +452,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate {
     // @wdg Add Notification Support
     // Issue: #2
     func flashScreen (data: NSString) {
-        print(data)
         if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
             AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
         } else {
