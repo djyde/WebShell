@@ -44,6 +44,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
         // Open window if user clicked on notification!
         mainWindow!.makeKeyAndOrderFront(self)
+
+        // @wdg Clear notification count
+        // Issue: #34
+        NSApplication.sharedApplication().dockTile.badgeLabel = ""
+        NSNotificationCenter.defaultCenter().postNotificationName("clearNotificationCount", object: nil)
     }
 
     @IBAction func goHome(sender: AnyObject) {
