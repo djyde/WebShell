@@ -167,7 +167,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
         
         // Inject Webhooks
-        self.injectWebhooks()
+        self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
+        self.loopThroughiFrames()
     }
     
     
@@ -189,7 +190,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         }
 
         // Inject Webhooks
-        self.injectWebhooks();
+        self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
+        self.loopThroughiFrames()
     }
     
     // @wdg: Enable file uploads.
@@ -232,10 +234,45 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
             mainWindow.window?.title = title
         }
     }
+
+    // @wdg possible fix for the iframes shizzle
+    // Issue: #23 (not fixed)
+    func loopThroughiFrames() {
+        if (mainWebview.subviews.count > 0) {
+            // We've got subViews!
+            
+            if (mainWebview.subviews[0].subviews.count > 0) {
+                // mainWebview.subviews[0] = WebFrameView
+
+                let goodKids = mainWebview.subviews[0].subviews[0]
+                // mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView (= goodKids)
+            
+                var children = goodKids.subviews[0]
+                // mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView.subviews[0] = WebClipView (= children)
+                
+                // We need > 0 subviews here, otherwise don't add them. and the script will continue
+                if children.subviews.count > 0 {
+                    // mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView.subviews[0] = WebClipView.subviews[0] = WebHTMLView
+                    children = goodKids.subviews[0].subviews[0]
+                }
+                
+                // Finally. parsing those good old iframes
+                // We don't check them for iframes, somewhere the fun must be ended.
+                for child in children.subviews {
+                    // mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView.subviews[0] = WebClipView.subviews[0] = WebHTMLView.subviews[x] = WebFrameView (Finally) (name = child)
+                    if(child.isKindOfClass(WebFrameView)) {
+                        let frame:NSView = child
+                        let context:JSContext = frame.webFrame.javaScriptContext
+                    
+                        injectWebhooks(context)
+                    }
+                }
+            }
+        }
+    }
     
-    func injectWebhooks() {
+    func injectWebhooks(jsContext: JSContext!) {
         // Injecting javascript (via jsContext)
-        let jsContext = mainWebview.mainFrame.javaScriptContext
         
         // @wdg Hack URL's if settings is set.
         // Issue: #5
@@ -311,6 +348,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
             let debugMenu = NSMenu(title: "Debug")
             debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: Selector("_debugNewWindow:"), keyEquivalent: ""))
             debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: Selector("_debugDumpArguments:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: Selector("_openURL:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: Selector("_reportThisPage:"), keyEquivalent: ""))
             
             let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
             item.submenu = debugMenu
@@ -320,6 +359,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 
         defaultMenuItems.append(NSMenuItem.separatorItem())
         defaultMenuItems.append(NSMenuItem.init(title: "Quit", action: Selector("Quit:"), keyEquivalent: ""))
+
         return defaultMenuItems
     }
     
@@ -337,14 +377,44 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     func _debugDumpArguments(Sender: AnyObject) {
         print(Process.arguments)
     }
+    
+    func _openURL(Sender: AnyObject) {
+        let msg = NSAlert()
+        msg.addButtonWithTitle("OK")      // 1st button
+        msg.addButtonWithTitle("Cancel")  // 2nd button
+        msg.messageText = "URL"
+        msg.informativeText = "Where you need to go?"
+        
+        let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        txt.stringValue = "http://"
+        
+        msg.accessoryView = txt
+        let response: NSModalResponse = msg.runModal()
+        
+        if (response == NSAlertFirstButtonReturn) {
+            self.loadUrl(txt.stringValue)
+        }
+    }
+    
+    func _reportThisPage(Sender: AnyObject) {
+        let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
+        let host: String = (mainWebview.mainFrame.dataSource?.request.URL?.host)!
+        
+        let issue:String = String("Problem loading \(host)").stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!.stringByReplacingOccurrencesOfString("&", withString: "%26")
+        var body:String = (String("There is a problem loading \(currentUrl)").stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())?.stringByReplacingOccurrencesOfString("&", withString: "%26"))!
+            body.appendContentsOf("%0D%0AThe%20problem%20is%3A%0D%0A...")
+
+        let url:String = "https://github.com/djyde/WebShell/issues/new?title=\(issue)&body=\(body)"
+        
+        NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
+    }
 
     // Function to call for the window.open (popup)
     func openNewWindow(url: String, height: String, width: String) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
 
-            // TODO: This one freezes our main window.
-            // TODO: even in the qeue
+            // TODO: This one freezes our main window, even in the qeue
             // TODO: Hide this window
                 
             let task = NSTask()
@@ -378,13 +448,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         // Need to overwrite settings?
         if (Process.argc > 0) {
             for (var i=1; i<Int(Process.argc); i=i+2) {
-                
                 if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
                     if ((String(Process.arguments[i+1])) == "YES") {
                         SETTINGS["debugmode"] = true
                         SETTINGS["consoleSupport"] = true
                     }
                 }
+
                 if ((String(Process.arguments[i])).uppercaseString == "-DEBUG") {
                     if ((String(Process.arguments[i+1])).uppercaseString == "YES" || (String(Process.arguments[i+1])).uppercaseString == "true") {
                         SETTINGS["debugmode"] = true
@@ -419,7 +489,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     
     // @wdg Add Notification Support
     // Issue: #2
-    func makeNotification (title: NSString, message: NSString, icon: NSString) {
+    func makeNotification(title: NSString, message: NSString, icon: NSString) {
         let notification:NSUserNotification = NSUserNotification() // Set up Notification
 
         // If has no message (title = message)
@@ -451,7 +521,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     
     // @wdg Add Notification Support
     // Issue: #2
-    func flashScreen (data: NSString) {
+    func flashScreen(data: NSString) {
         if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
             AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen);
         } else {
