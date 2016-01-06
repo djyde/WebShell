@@ -73,6 +73,28 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         }
     }
     
+    // @wdg Possible fix for Mavericks
+    // Issue: #18
+    override func awakeFromNib() {
+        if (!NSViewController().respondsToSelector(Selector("viewWillAppear"))) {
+            // OS X 10.9
+            if(firstAppear) {
+                initWindow()
+            }
+
+            mainWebview.UIDelegate = self
+            mainWebview.resourceLoadDelegate = self
+            
+            checkSettings()
+            
+            addObservers()
+            
+            initSettings()
+            
+            goHome()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
