@@ -50,7 +50,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSApplication.sharedApplication().dockTile.badgeLabel = ""
         NSNotificationCenter.defaultCenter().postNotificationName("clearNotificationCount", object: nil)
     }
-
+    @IBAction func printThisPage(sender: AnyObject) {
+        NSNotificationCenter.defaultCenter().postNotificationName("printThisPage", object: nil)
+    }
     @IBAction func goHome(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().postNotificationName("goHome", object: nil)
     }

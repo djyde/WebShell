@@ -40,7 +40,6 @@
 			isa = PBXGroup;
 			children = (
 				25B222591C25328E00F848B7 /* WebShell */,
-				25B222581C25328E00F848B7 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -50,6 +49,7 @@
 				25B222571C25328E00F848B7 /* WebShell.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		25B222591C25328E00F848B7 /* WebShell */ = {
@@ -61,6 +61,7 @@
 				25B2225E1C25328E00F848B7 /* Assets.xcassets */,
 				25B222601C25328E00F848B7 /* Main.storyboard */,
 				25B222631C25328E00F848B7 /* Info.plist */,
+				25B222581C25328E00F848B7 /* Products */,
 			);
 			path = WebShell;
 			sourceTree = "<group>";

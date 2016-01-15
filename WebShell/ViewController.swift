@@ -113,7 +113,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     
     func addObservers() {
         // add menu action observers
-        let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount"]
+        let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount", "printThisPage"]
         
         for observer in observers{
             NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString(observer), name: observer, object: nil)
@@ -346,6 +346,12 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         // _blank internal
         jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript:"openInternal")
         
+        // @wdg Add Print Support
+        // Issue: #39
+        // window.print()
+        let printMe: @convention(block) (NSString?) -> Void = { (url:NSString?) in self.printThisPage() }
+        jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(printMe, AnyObject.self), forKeyedSubscript: "print")
+        
         // navigator.getBattery()
         jsContext.objectForKeyedSubscript("navigator").setObject(BatteryManager.self, forKeyedSubscript: "battery")
         
@@ -372,6 +378,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
             debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: Selector("_debugDumpArguments:"), keyEquivalent: ""))
             debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: Selector("_openURL:"), keyEquivalent: ""))
             debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: Selector("_reportThisPage:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: Selector("printThisPage:"), keyEquivalent: ""))
             
             let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
             item.submenu = debugMenu
@@ -431,6 +438,23 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
     }
 
+    // @wdg Add Print Support
+    // Issue: #39
+    func printThisPage() {
+        let url = mainWebview.mainFrame.dataSource?.request?.URL?.absoluteString
+        
+        let operation:NSPrintOperation = NSPrintOperation.init(view: mainWebview)
+        operation.jobTitle = "Printing \(url!)"
+        
+        // If want to print landscape
+        operation.printInfo.orientation = NSPaperOrientation.Landscape
+        operation.printInfo.scalingFactor = 0.7
+        
+        if operation.runOperation() {
+            print("Printed?")
+        }
+    }
+    
     // Function to call for the window.open (popup)
     func openNewWindow(url: String, height: String, width: String) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
