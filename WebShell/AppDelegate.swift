@@ -26,9 +26,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if(!flag){
             mainWindow!.makeKeyAndOrderFront(self)
         }
+        
         // clear badge
         NSApplication.sharedApplication().dockTile.badgeLabel = ""
-        NSNotificationCenter.defaultCenter().postNotificationName("clearNotificationCount", object: nil)
+        // @wdg Clear notification count
+        // Issue: #34
+        NSUserNotificationCenter.defaultUserNotificationCenter().removeAllDeliveredNotifications()
         return true
     }
 
@@ -40,16 +43,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     // @wdg Add 'click' on notification support
-    // Issue: 26
+    // Issue: #26
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
         // Open window if user clicked on notification!
         mainWindow!.makeKeyAndOrderFront(self)
 
+        // @wdg Clear badge
+        NSApplication.sharedApplication().dockTile.badgeLabel = ""
         // @wdg Clear notification count
         // Issue: #34
-        NSApplication.sharedApplication().dockTile.badgeLabel = ""
-        NSNotificationCenter.defaultCenter().postNotificationName("clearNotificationCount", object: nil)
+        NSUserNotificationCenter.defaultUserNotificationCenter().removeAllDeliveredNotifications()
     }
+    
     @IBAction func printThisPage(sender: AnyObject) {
         NSNotificationCenter.defaultCenter().postNotificationName("printThisPage", object: nil)
     }

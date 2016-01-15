@@ -379,6 +379,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
             debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: Selector("_openURL:"), keyEquivalent: ""))
             debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: Selector("_reportThisPage:"), keyEquivalent: ""))
             debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: Selector("printThisPage:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.separatorItem())
+            debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: Selector("__sendNotifications:"), keyEquivalent: ""))
             
             let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
             item.submenu = debugMenu
@@ -405,6 +407,35 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     // Debug: Print arguments
     func _debugDumpArguments(Sender: AnyObject) {
         print(Process.arguments)
+    }
+    
+    // Debug: Send notifications (10)
+    func __sendNotifications(Sender: AnyObject) {
+        // Minimize app
+        NSApplication.sharedApplication().keyWindow?.miniaturize(self)
+
+        // Fire 10 Notifications
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(05), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(15), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(25), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(35), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(45), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(55), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(65), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(75), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(85), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(95), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+    }
+    
+    // Debug: Send notifications (10): Real sending.
+    func ___sendNotifications() {
+        // Minimize app
+        if (NSApplication.sharedApplication().keyWindow?.miniaturized == false) {
+                    NSApplication.sharedApplication().keyWindow?.miniaturize(self)
+        }
+        
+        // Send Actual notification.
+        makeNotification("Test Notification", message: "Hi!", icon: "https://camo.githubusercontent.com/ee999b2d8fa5413229fdc69e0b53144f02b7b840/687474703a2f2f376d6e6f79372e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f7765627368656c6c2f6c6f676f2e706e673f696d616765566965772f322f772f313238")
     }
     
     func _openURL(Sender: AnyObject) {
