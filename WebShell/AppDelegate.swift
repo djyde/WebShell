@@ -22,6 +22,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         mainWindow = NSApplication.sharedApplication().windows[0]
     }
     
+    // @wdg close app if window closes
+    // Issue: #40
+    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+        return true
+    }
+    
     func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if(!flag){
             mainWindow!.makeKeyAndOrderFront(self)
