@@ -362,6 +362,32 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 			self.flashScreen(data)
 		}
 		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, AnyObject.self), forKeyedSubscript: "vibrate")
+		
+		// @wdg Add localstorage Support
+		// Issue: #25
+		let saveToLocal: @convention(block)(NSString!, NSString!) -> Void = {(key: NSString!, value: NSString!) in
+			let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
+			let newKey = "WSLS:\(host):\(key)"
+			
+            NSUserDefaults.standardUserDefaults().setValue(value, forKey: newKey)
+		}
+        
+        let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
+            let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
+            let newKey = "WSLS:\(host):\(key)"
+            let val = NSUserDefaults.standardUserDefaults().valueForKey(newKey as String)
+            
+            if let myVal = val as? String {
+                return String(myVal)
+            }
+            else{
+                return "null"
+            }
+        }
+        
+		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, AnyObject.self), forKeyedSubscript: "setItem")
+        jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
+		
 	}
 	
 	// Quit the app (there must be a better way)
@@ -381,7 +407,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 			debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: Selector("printThisPage:"), keyEquivalent: ""))
 			debugMenu.addItem(NSMenuItem.separatorItem())
 			debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: Selector("__sendNotifications:"), keyEquivalent: ""))
-			
+			debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: Selector("resetLocalStorage:"), keyEquivalent: ""))
+            
 			let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
 			item.submenu = debugMenu
 			
@@ -395,22 +422,22 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	}
 	
 	// Debug: doNothing
-	func _doNothing(Sender: AnyObject) {
+	func _doNothing(Sender: AnyObject) -> Void {
 		// _doNothing
 	}
 	
 	// Debug: Open new window
-	func _debugNewWindow(Sender: AnyObject) {
+	func _debugNewWindow(Sender: AnyObject) -> Void {
 		openNewWindow("https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
 	}
 	
 	// Debug: Print arguments
-	func _debugDumpArguments(Sender: AnyObject) {
+	func _debugDumpArguments(Sender: AnyObject) -> Void {
 		print(Process.arguments)
 	}
 	
 	// Debug: Send notifications (10)
-	func __sendNotifications(Sender: AnyObject) {
+	func __sendNotifications(Sender: AnyObject) -> Void {
 		// Minimize app
 		NSApplication.sharedApplication().keyWindow?.miniaturize(self)
 		
@@ -428,7 +455,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	}
 	
 	// Debug: Send notifications (10): Real sending.
-	func ___sendNotifications() {
+	func ___sendNotifications() -> Void {
 		// Minimize app
 		if (NSApplication.sharedApplication().keyWindow?.miniaturized == false) {
 			NSApplication.sharedApplication().keyWindow?.miniaturize(self)
@@ -438,7 +465,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		makeNotification("Test Notification", message: "Hi!", icon: "https://camo.githubusercontent.com/ee999b2d8fa5413229fdc69e0b53144f02b7b840/687474703a2f2f376d6e6f79372e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f7765627368656c6c2f6c6f676f2e706e673f696d616765566965772f322f772f313238")
 	}
 	
-	func _openURL(Sender: AnyObject) {
+	func _openURL(Sender: AnyObject) -> Void {
 		let msg = NSAlert()
 		msg.addButtonWithTitle("OK") // 1st button
 		msg.addButtonWithTitle("Cancel") // 2nd button
@@ -456,7 +483,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		}
 	}
 	
-	func _reportThisPage(Sender: AnyObject) {
+	func _reportThisPage(Sender: AnyObject) -> Void {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
 		let host: String = (mainWebview.mainFrame.dataSource?.request.URL?.host)!
 		
@@ -471,7 +498,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	// @wdg Add Print Support
 	// Issue: #39
-	func printThisPage() {
+	func printThisPage() -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.URL?.absoluteString
 		
 		let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
@@ -487,7 +514,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	}
 	
 	// Function to call for the window.open (popup)
-	func openNewWindow(url: String, height: String, width: String) {
+	func openNewWindow(url: String, height: String, width: String) -> Void {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {() -> Void in
 				dispatch_async(dispatch_get_main_queue(), {() -> Void in
 						
@@ -521,7 +548,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	// @wdg Override settings via commandline
 	// .... Used for popups, and debug options.
-	func checkSettings() {
+	func checkSettings() -> Void {
 		// Need to overwrite settings?
 		if (Process.argc > 0) {
 			for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
@@ -560,13 +587,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		initWindow()
 	}
 	
-	func clearNotificationCount() {
+	func clearNotificationCount() -> Void {
 		notificationCount = 0
 	}
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func makeNotification(title: NSString, message: NSString, icon: NSString) {
+	func makeNotification(title: NSString, message: NSString, icon: NSString) -> Void {
 		let notification: NSUserNotification = NSUserNotification() // Set up Notification
 		
 		// If has no message (title = message)
@@ -598,7 +625,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func flashScreen(data: NSString) {
+	func flashScreen(data: NSString) -> Void {
 		if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
 			AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
 		} else {
@@ -613,7 +640,19 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func flashScreenNow() {
+	func flashScreenNow() -> Void {
 		AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
 	}
+	
+	// @wdg Add Localstorage Support
+    // Issue: #25
+    func resetLocalStorage(Sender: AnyObject = "") -> Void {
+        NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+    }
+    
+    func noop(ob: Any...) -> Void {}
+    
+    func delay(delay:Double, _ closure:()->()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
+    }
 }
