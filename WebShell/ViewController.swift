@@ -14,8 +14,9 @@ import AppKit
 import AudioToolbox
 import IOKit.ps
 import Darwin
+import CoreLocation
 
-class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate {
+class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate {
 	
 	@IBOutlet var mainWindow: NSView!
 	@IBOutlet weak var mainWebview: WebView!
@@ -28,9 +29,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		// Url to browse to.
 		"url": "https://www.google.com",
 		
-		"title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
-		
-		// Do you want to use the document title?
+        "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
+        
+		// Do you want to use the document title? (Default: true)
 		"useDocumentTitle": true,
 		
 		// Multilanguage loading text!
@@ -40,18 +41,22 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		"initialWindowHeight": 640,
 		"initialWindowWidth": 1000,
 		
-		// Open target=_blank in a new screen?
+		// Open target=_blank in a new screen? (Default: false)
 		"openInNewScreen": false,
 		
-		// Do you want a loading bar?
+		// Do you want a loading bar? (Default: true)
 		"showLoadingBar": true,
 		
-		// Add console.log support?
+		// Add console.log support? (Default: false)
 		"consoleSupport": false,
 		
-		// run the app in debug mode?
+        // Does the app needs Location support (Default: false)
+        // note: if true, then WebShell always uses location, whenever it is used or not
+        "needLocation": false,
+        
+		// run the app in debug mode? (Default: false)
 		// will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
-		"debugmode": false,
+		"debugmode": false
 	]
 	
 	func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
@@ -66,7 +71,10 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0
-	
+    // @wdg Add location support
+    // Issue: #41
+    let locationManager = CLLocationManager()
+
 	override func viewDidAppear() {
 		if (firstAppear) {
 			initWindow()
@@ -214,6 +222,12 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		// Inject Webhooks
 		self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
 		self.loopThroughiFrames()
+        
+        // @wdg Add location support
+        // Issue: #41
+        if (SETTINGS["needLocation"] as! Bool) {
+            self.websiteWantsLocation()
+        }
 	}
 	
 	// @wdg: Enable file uploads.
