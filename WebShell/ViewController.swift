@@ -227,6 +227,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
         // Issue: #41
         if (SETTINGS["needLocation"] as! Bool) {
             self.websiteWantsLocation()
+        } else {
+            self.locationInjector(false) // Says i don't have a location!
         }
 	}
 	
