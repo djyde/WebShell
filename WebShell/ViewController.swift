@@ -20,8 +20,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	@IBOutlet var mainWindow: NSView!
 	@IBOutlet weak var mainWebview: WebView!
-	@IBOutlet weak var loadingBar: NSProgressIndicator!
 	@IBOutlet weak var launchingLabel: NSTextField!
+	@IBOutlet weak var progressBar: NSProgressIndicator!
 	
 	// TODO: configure your app here
 	var SETTINGS: [String: Any] = [
@@ -29,8 +29,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		// Url to browse to.
 		"url": "https://www.google.com",
 		
-        "title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
-        
+		"title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
+		
 		// Do you want to use the document title? (Default: true)
 		"useDocumentTitle": true,
 		
@@ -50,10 +50,10 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		// Add console.log support? (Default: false)
 		"consoleSupport": false,
 		
-        // Does the app needs Location support (Default: false)
-        // note: if true, then WebShell always uses location, whenever it is used or not
-        "needLocation": false,
-        
+		// Does the app needs Location support (Default: false)
+		// note: if true, then WebShell always uses location, whenever it is used or not
+		"needLocation": false,
+		
 		// run the app in debug mode? (Default: false)
 		// will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
 		"debugmode": false
@@ -71,10 +71,10 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0
-    // @wdg Add location support
-    // Issue: #41
-    let locationManager = CLLocationManager()
-
+	// @wdg Add location support
+	// Issue: #41
+	let locationManager = CLLocationManager()
+	
 	override func viewDidAppear() {
 		if (firstAppear) {
 			initWindow()
@@ -148,7 +148,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	func initSettings() {
 		// controll the progress bar
 		if (!(SETTINGS["showLoadingBar"] as? Bool)!) {
-			loadingBar.hidden = true
+			progressBar.hidden = true // @wdg: Better progress indicator | Issue: #37
 		}
 		
 		// set launching text
@@ -191,8 +191,13 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	}
 	
 	func loadUrl(url: String) {
-		loadingBar.stopAnimation(self)
-		
+        if ((SETTINGS["showLoadingBar"] as? Bool)!) {
+            progressBar.hidden = false
+            progressBar.startAnimation(self)
+            progressBar.maxValue = 100;
+            progressBar.minValue = 1;
+            progressBar.incrementBy(24)
+        }
 		let URL = NSURL(string: url)
 		mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
 		
@@ -204,17 +209,59 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	
 	// webview settings
 	func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
-		loadingBar.startAnimation(self)
+		// @wdg: Better progress indicator | Issue: #37
+		if ((SETTINGS["showLoadingBar"] as? Bool)!) {
+			progressBar.startAnimation(self)
+			progressBar.maxValue = 100;
+			progressBar.minValue = 1;
+			progressBar.incrementBy(24)
+		}
 		
 		if (!firstLoadingStarted) {
 			firstLoadingStarted = true
 			launchingLabel.hidden = false
 		}
 	}
-	
+    
+    // @wdg: Better progress indicator
+    // Issue: #37
+    func webView(sender: WebView!, willPerformClientRedirectToURL URL: NSURL!, delay seconds: NSTimeInterval, fireDate date: NSDate!, forFrame frame: WebFrame!) {
+        if ((SETTINGS["showLoadingBar"] as? Bool)!) {
+            progressBar.hidden = false
+            progressBar.startAnimation(self)
+            progressBar.maxValue = 100;
+            progressBar.minValue = 1;
+            progressBar.incrementBy(24)
+        }
+    }
+    
+    // @wdg: Better progress indicator
+    // Issue: #37
+    func webView(webView: WebView!, decidePolicyForMIMEType type: String!, request: NSURLRequest!, frame: WebFrame!, decisionListener listener: WebPolicyDecisionListener!) {
+        if ((SETTINGS["showLoadingBar"] as? Bool)!) {
+            progressBar.hidden = false
+            progressBar.startAnimation(self)
+            progressBar.maxValue = 100;
+            progressBar.minValue = 1;
+            progressBar.incrementBy(24)
+        }
+    }
+
+    // @wdg: Better progress indicator
+    // Issue: #37
+    func webView(webView: WebView!, didFailLoadWithError error: NSError) {
+        progressBar.incrementBy(50)
+        progressBar.stopAnimation(self)
+        progressBar.hidden = true
+        progressBar.doubleValue=1;
+    }
+    
 	func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
-		loadingBar.stopAnimation(self)
-		
+		// @wdg: Better progress indicator | Issue: #37
+		progressBar.incrementBy(50)
+		progressBar.stopAnimation(self)
+		progressBar.hidden = true // Hide after we're done.
+        progressBar.doubleValue=1;
 		if (!launchingLabel.hidden) {
 			launchingLabel.hidden = true
 		}
@@ -222,14 +269,14 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		// Inject Webhooks
 		self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
 		self.loopThroughiFrames()
-        
-        // @wdg Add location support
-        // Issue: #41
-        if (SETTINGS["needLocation"] as! Bool) {
-            self.websiteWantsLocation()
-        } else {
-            self.locationInjector(false) // Says i don't have a location!
-        }
+		
+		// @wdg Add location support
+		// Issue: #41
+		if (SETTINGS["needLocation"] as! Bool) {
+			self.websiteWantsLocation()
+		} else {
+			self.locationInjector(false) // Says i don't have a location!
+		}
 	}
 	
 	// @wdg: Enable file uploads.
@@ -385,24 +432,24 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 			let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
 			let newKey = "WSLS:\(host):\(key)"
 			
-            NSUserDefaults.standardUserDefaults().setValue(value, forKey: newKey)
+			NSUserDefaults.standardUserDefaults().setValue(value, forKey: newKey)
 		}
-        
-        let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
-            let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
-            let newKey = "WSLS:\(host):\(key)"
-            let val = NSUserDefaults.standardUserDefaults().valueForKey(newKey as String)
-            
-            if let myVal = val as? String {
-                return String(myVal)
-            }
-            else{
-                return "null"
-            }
-        }
-        
+		
+		let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
+			let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
+			let newKey = "WSLS:\(host):\(key)"
+			let val = NSUserDefaults.standardUserDefaults().valueForKey(newKey as String)
+			
+			if let myVal = val as? String {
+				return String(myVal)
+			}
+			else {
+				return "null"
+			}
+		}
+		
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, AnyObject.self), forKeyedSubscript: "setItem")
-        jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
+		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
 		
 	}
 	
@@ -411,106 +458,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		exit(0)
 	}
 	
-	// Edit contextmenu...
-	func webView(sender: WebView!, contextMenuItemsForElement element: [NSObject : AnyObject]!, var defaultMenuItems: [AnyObject]!) -> [AnyObject]! {
-		// Add debug menu. (if enabled)
-		if (SETTINGS["debugmode"] as! Bool) {
-			let debugMenu = NSMenu(title: "Debug")
-			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: Selector("_debugNewWindow:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: Selector("_debugDumpArguments:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: Selector("_openURL:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: Selector("_reportThisPage:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: Selector("printThisPage:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.separatorItem())
-			debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: Selector("__sendNotifications:"), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: Selector("resetLocalStorage:"), keyEquivalent: ""))
-            
-			let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
-			item.submenu = debugMenu
-			
-			defaultMenuItems.append(item)
-		}
-		
-		defaultMenuItems.append(NSMenuItem.separatorItem())
-		defaultMenuItems.append(NSMenuItem.init(title: "Quit", action: Selector("Quit:"), keyEquivalent: ""))
-		
-		return defaultMenuItems
-	}
-	
-	// Debug: doNothing
-	func _doNothing(Sender: AnyObject) -> Void {
-		// _doNothing
-	}
-	
-	// Debug: Open new window
-	func _debugNewWindow(Sender: AnyObject) -> Void {
-		openNewWindow("https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
-	}
-	
-	// Debug: Print arguments
-	func _debugDumpArguments(Sender: AnyObject) -> Void {
-		print(Process.arguments)
-	}
-	
-	// Debug: Send notifications (10)
-	func __sendNotifications(Sender: AnyObject) -> Void {
-		// Minimize app
-		NSApplication.sharedApplication().keyWindow?.miniaturize(self)
-		
-		// Fire 10 Notifications
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(05), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(15), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(25), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(35), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(45), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(55), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(65), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(75), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(85), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-		NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(95), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-	}
-	
-	// Debug: Send notifications (10): Real sending.
-	func ___sendNotifications() -> Void {
-		// Minimize app
-		if (NSApplication.sharedApplication().keyWindow?.miniaturized == false) {
-			NSApplication.sharedApplication().keyWindow?.miniaturize(self)
-		}
-		
-		// Send Actual notification.
-		makeNotification("Test Notification", message: "Hi!", icon: "https://camo.githubusercontent.com/ee999b2d8fa5413229fdc69e0b53144f02b7b840/687474703a2f2f376d6e6f79372e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f7765627368656c6c2f6c6f676f2e706e673f696d616765566965772f322f772f313238")
-	}
-	
-	func _openURL(Sender: AnyObject) -> Void {
-		let msg = NSAlert()
-		msg.addButtonWithTitle("OK") // 1st button
-		msg.addButtonWithTitle("Cancel") // 2nd button
-		msg.messageText = "URL"
-		msg.informativeText = "Where you need to go?"
-		
-		let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
-		txt.stringValue = "http://"
-		
-		msg.accessoryView = txt
-		let response: NSModalResponse = msg.runModal()
-		
-		if (response == NSAlertFirstButtonReturn) {
-			self.loadUrl(txt.stringValue)
-		}
-	}
-	
-	func _reportThisPage(Sender: AnyObject) -> Void {
-		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.URL?.absoluteString)!
-		let host: String = (mainWebview.mainFrame.dataSource?.request.URL?.host)!
-		
-		let issue: String = String("Problem loading \(host)").stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!.stringByReplacingOccurrencesOfString("&", withString: "%26")
-		var body: String = (String("There is a problem loading \(currentUrl)").stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())?.stringByReplacingOccurrencesOfString("&", withString: "%26"))!
-		body.appendContentsOf("%0D%0AThe%20problem%20is%3A%0D%0A...")
-		
-		let url: String = "https://github.com/djyde/WebShell/issues/new?title=\(issue)&body=\(body)"
-		
-		NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
-	}
 	
 	// @wdg Add Print Support
 	// Issue: #39
@@ -561,114 +508,16 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 					})
 			})
 	}
-	
-	// @wdg Override settings via commandline
-	// .... Used for popups, and debug options.
-	func checkSettings() -> Void {
-		// Need to overwrite settings?
-		if (Process.argc > 0) {
-			for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
-				if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
-					if ((String(Process.arguments[i + 1])) == "YES") {
-						SETTINGS["debugmode"] = true
-						SETTINGS["consoleSupport"] = true
-					}
-				}
-				
-				if ((String(Process.arguments[i])).uppercaseString == "-DEBUG") {
-					if ((String(Process.arguments[i + 1])).uppercaseString == "YES" || (String(Process.arguments[i + 1])).uppercaseString == "true") {
-						SETTINGS["debugmode"] = true
-						SETTINGS["consoleSupport"] = true
-					}
-				}
-				
-				if ((String(Process.arguments[i])) == "-dump-args") {
-					self._debugDumpArguments("")
-				}
-				
-				if ((String(Process.arguments[i])) == "-url") {
-					SETTINGS["url"] = String(Process.arguments[i + 1])
-				}
-				
-				if ((String(Process.arguments[i])) == "-height") {
-					SETTINGS["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 30) ? Int(Process.arguments[i + 1]) : Int(30)
-				}
-				
-				if ((String(Process.arguments[i])) == "-width") {
-					SETTINGS["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 30) ? Int(Process.arguments[i + 1]) : Int(30)
-				}
-			}
-		}
-		
-		initWindow()
-	}
-	
-	func clearNotificationCount() -> Void {
-		notificationCount = 0
-	}
-	
-	// @wdg Add Notification Support
-	// Issue: #2
-	func makeNotification(title: NSString, message: NSString, icon: NSString) -> Void {
-		let notification: NSUserNotification = NSUserNotification() // Set up Notification
-		
-		// If has no message (title = message)
-		if (message.isEqualToString("undefined")) {
-			notification.title = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as? String // Use App name!
-			notification.informativeText = title as String // Title   = string
-		} else {
-			notification.title = title as String // Title   = string
-			notification.informativeText = message as String // Message = string
-		}
-		
-		
-		notification.soundName = NSUserNotificationDefaultSoundName // Default sound
-		notification.deliveryDate = NSDate(timeIntervalSinceNow: 0) // Now!
-		notification.actionButtonTitle = "Close"
-		
-		// Notification has a icon, so add it!
-		if (!icon.isEqualToString("undefined")) {
-			notification.contentImage = NSImage(contentsOfURL: NSURL(string: icon as String)!) ;
-		}
-		
-		let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
-		notificationcenter?.scheduleNotification(notification) // Pushing to notification centre
-		
-		notificationCount++
-		
-		NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
-	}
-	
-	// @wdg Add Notification Support
-	// Issue: #2
-	func flashScreen(data: NSString) -> Void {
-		if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
-			AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
-		} else {
-			let time: NSArray = (data as String).componentsSeparatedByString(",")
-			for (var i = 0; i < time.count; i++) {
-				var timeAsInt = NSNumberFormatter().numberFromString(time[i] as! String)
-				timeAsInt = Int(timeAsInt!) / 100
-				NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(timeAsInt!), target: self, selector: Selector("flashScreenNow"), userInfo: nil, repeats: false)
-			}
-		}
-	}
-	
-	// @wdg Add Notification Support
-	// Issue: #2
-	func flashScreenNow() -> Void {
-		AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
-	}
-	
+			
 	// @wdg Add Localstorage Support
-    // Issue: #25
-    func resetLocalStorage(Sender: AnyObject = "") -> Void {
-        NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
-    }
-    
-    func noop(ob: Any...) -> Void {}
-    
-    func delay(delay:Double, _ closure:()->()) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
-    }
+	// Issue: #25
+	func resetLocalStorage(Sender: AnyObject = "") -> Void {
+		NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+	}
+	
+	func noop(ob: Any...) -> Void {}
+	
+	func delay(delay: Double, _ closure: () -> ()) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
+	}
 }
