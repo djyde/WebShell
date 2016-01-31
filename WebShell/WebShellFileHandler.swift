@@ -9,7 +9,11 @@
 import Foundation
 import WebKit
 
+// @wdg: Enable file uploads.
+// Issue: #29
+// This extension will handle up & downloads
 extension ViewController {
+    
     // @wdg: Enable file uploads.
     // Issue: #29
     func webView(sender: WebView!, runOpenPanelForFileButtonWithResultListener resultListener: WebOpenPanelResultListener!, allowMultipleFiles: Bool) {
@@ -44,4 +48,5 @@ extension ViewController {
         }
         
     }
+    
 }
