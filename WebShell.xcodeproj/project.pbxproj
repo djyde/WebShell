@@ -16,6 +16,8 @@
 		6E6055651C5EA1140099AD18 /* WebShellDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055641C5EA1140099AD18 /* WebShellDebug.swift */; };
 		6E6055671C5EA2050099AD18 /* WebShellFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055661C5EA2050099AD18 /* WebShellFileHandler.swift */; };
 		6E6055691C5EA2650099AD18 /* WebShellInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055681C5EA2650099AD18 /* WebShellInjector.swift */; };
+		6E60556B1C5EA5050099AD18 /* WebShellPageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60556A1C5EA5050099AD18 /* WebShellPageActions.swift */; };
+		6E60556D1C5EA5D00099AD18 /* WebShellCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60556C1C5EA5D00099AD18 /* WebShellCore.swift */; };
 		6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */; };
 		6EA8D1591C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */; };
 /* End PBXBuildFile section */
@@ -33,6 +35,8 @@
 		6E6055641C5EA1140099AD18 /* WebShellDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellDebug.swift; sourceTree = "<group>"; };
 		6E6055661C5EA2050099AD18 /* WebShellFileHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellFileHandler.swift; sourceTree = "<group>"; };
 		6E6055681C5EA2650099AD18 /* WebShellInjector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellInjector.swift; sourceTree = "<group>"; };
+		6E60556A1C5EA5050099AD18 /* WebShellPageActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellPageActions.swift; sourceTree = "<group>"; };
+		6E60556C1C5EA5D00099AD18 /* WebShellCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellCore.swift; sourceTree = "<group>"; };
 		6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navigator_geolocation_getCurrentPosition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +100,8 @@
 				6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */,
 				6E6055661C5EA2050099AD18 /* WebShellFileHandler.swift */,
 				6E6055681C5EA2650099AD18 /* WebShellInjector.swift */,
+				6E60556A1C5EA5050099AD18 /* WebShellPageActions.swift */,
+				6E60556C1C5EA5D00099AD18 /* WebShellCore.swift */,
 			);
 			name = "WebShell Core";
 			sourceTree = "<group>";
@@ -171,12 +177,14 @@
 			files = (
 				6E6055671C5EA2050099AD18 /* WebShellFileHandler.swift in Sources */,
 				6E6055621C5EA0870099AD18 /* Notifications.swift in Sources */,
+				6E60556D1C5EA5D00099AD18 /* WebShellCore.swift in Sources */,
 				6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */,
 				32FB8FB51C3460D7005B222F /* Battery.swift in Sources */,
 				6E6055651C5EA1140099AD18 /* WebShellDebug.swift in Sources */,
 				6E6055691C5EA2650099AD18 /* WebShellInjector.swift in Sources */,
 				6EA8D1591C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift in Sources */,
 				25B2225D1C25328E00F848B7 /* ViewController.swift in Sources */,
+				6E60556B1C5EA5050099AD18 /* WebShellPageActions.swift in Sources */,
 				25B2225B1C25328E00F848B7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -161,4 +161,10 @@ extension ViewController {
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
 		
 	}
+    
+    // @wdg Add Localstorage Support
+    // Issue: #25
+    func resetLocalStorage(Sender: AnyObject = "") -> Void {
+        NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+    }
 }
