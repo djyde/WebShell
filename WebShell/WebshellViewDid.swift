@@ -43,7 +43,7 @@ extension ViewController {
         
         mainWebview.UIDelegate = self
         mainWebview.resourceLoadDelegate = self
-        
+
         checkSettings()
         addObservers()
         initSettings()
