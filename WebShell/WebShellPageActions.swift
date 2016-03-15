@@ -86,8 +86,10 @@ extension ViewController {
         frame.origin.y = (ScreenWidth / 2 - WindowWidth / 2)
         
         // @froge-xyz Fixed initial window size
-        // Issue: #1
+        // Issue: #1, #45
         mainWindow.window?.setFrame(frame, display: true)
+        // defims Fixed the initial window size.
+        mainWindow.frame = frame
         
         // set window title
         mainWindow.window?.title = SETTINGS["title"] as! String
