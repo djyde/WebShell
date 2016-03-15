@@ -43,11 +43,11 @@ extension ViewController {
                 }
                 
                 if ((String(Process.arguments[i])) == "-height") {
-                    SETTINGS["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 30) ? Int(Process.arguments[i + 1]) : Int(30)
+                    SETTINGS["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
                 }
                 
                 if ((String(Process.arguments[i])) == "-width") {
-                    SETTINGS["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 30) ? Int(Process.arguments[i + 1]) : Int(30)
+                    SETTINGS["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
                 }
             }
         }
