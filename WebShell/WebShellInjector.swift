@@ -11,9 +11,9 @@ import WebKit
 
 
 /**
-    This extension will catch up with the webhooks!
-    - Note: @wdg: Iframes, Webhooks, and more. (Issue: #23, #5, #2, #35, #38, #39 & More)
-*/
+ This extension will catch up with the webhooks!
+ - Note: @wdg: Iframes, Webhooks, and more. (Issue: #23, #5, #2, #35, #38, #39 & More)
+ */
 extension ViewController {
 	/**
 	 Loop Trough iFrames
@@ -160,11 +160,17 @@ extension ViewController {
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, AnyObject.self), forKeyedSubscript: "setItem")
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
 		
+		// Test...
+		jsContext.evaluateScript("document.body.style='background-color: transparent !important;")
+		
+        // Get window.webshell
+        let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
+		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
 	}
-    
-    // @wdg Add Localstorage Support
-    // Issue: #25
-    func resetLocalStorage(Sender: AnyObject = "") -> Void {
-        NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
-    }
+	
+	// @wdg Add Localstorage Support
+	// Issue: #25
+	func resetLocalStorage(Sender: AnyObject = "") -> Void {
+		NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+	}
 }

@@ -27,7 +27,7 @@ extension ViewController {
             if (firstAppear) {
                 initWindow()
             }
-            
+
             mainWebview.UIDelegate = self
             mainWebview.resourceLoadDelegate = self
             
