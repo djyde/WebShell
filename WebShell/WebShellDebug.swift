@@ -19,7 +19,8 @@ extension ViewController {
     func checkSettings() -> Void {
         // Need to overwrite settings?
         if (Process.argc > 0) {
-            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
+            for i in 1.stride(to: Int(Process.argc), by: 2) {
+//            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
                 if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
                     if ((String(Process.arguments[i + 1])) == "YES") {
                         SETTINGS["debugmode"] = true
@@ -56,29 +57,35 @@ extension ViewController {
     }
     
     // Edit contextmenu...
-    func webView(sender: WebView!, contextMenuItemsForElement element: [NSObject : AnyObject]!, var defaultMenuItems: [AnyObject]!) -> [AnyObject]! {
+    func webView(sender: WebView!, contextMenuItemsForElement element: [NSObject : AnyObject]!, defaultMenuItems: [AnyObject]!) -> [AnyObject]! {
+        var NewMenu:[AnyObject] = [AnyObject]()
+        
         // Add debug menu. (if enabled)
         if (SETTINGS["debugmode"] as! Bool) {
             let debugMenu = NSMenu(title: "Debug")
-            debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: Selector("_debugNewWindow:"), keyEquivalent: ""))
-            debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: Selector("_debugDumpArguments:"), keyEquivalent: ""))
-            debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: Selector("_openURL:"), keyEquivalent: ""))
-            debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: Selector("_reportThisPage:"), keyEquivalent: ""))
-            debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: Selector("printThisPage:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: #selector(ViewController._debugDumpArguments(_:)), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: #selector(ViewController._openURL(_:)), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: #selector(ViewController._reportThisPage(_:)), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: #selector(ViewController._printThisPage(_:)), keyEquivalent: "")) // Stupid swift 2.2 does not look in extensions.
             debugMenu.addItem(NSMenuItem.separatorItem())
-            debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: Selector("__sendNotifications:"), keyEquivalent: ""))
-            debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: Selector("resetLocalStorage:"), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: #selector(ViewController.__sendNotifications(_:)), keyEquivalent: ""))
+            debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: #selector(ViewController.resetLocalStorage(_:)), keyEquivalent: ""))
             
-            let item = NSMenuItem.init(title: "Debug", action: Selector("_doNothing:"), keyEquivalent: "")
+            let item = NSMenuItem.init(title: "Debug", action: #selector(ViewController._doNothing(_:)), keyEquivalent: "")
             item.submenu = debugMenu
             
-            defaultMenuItems.append(item)
+            NewMenu.append(item)
         }
         
-        defaultMenuItems.append(NSMenuItem.separatorItem())
-        defaultMenuItems.append(NSMenuItem.init(title: "Quit", action: Selector("Quit:"), keyEquivalent: ""))
+        NewMenu.append(NSMenuItem.separatorItem())
+        NewMenu.append(NSMenuItem.init(title: "Quit", action: #selector(ViewController._quit(_:)), keyEquivalent: ""))
         
-        return defaultMenuItems
+        return NewMenu
+    }
+    
+    func _quit(Sender: AnyObject) -> Void {
+        exit(0)
     }
     
     // Debug: doNothing
@@ -88,7 +95,7 @@ extension ViewController {
     
     // Debug: Open new window
     func _debugNewWindow(Sender: AnyObject) -> Void {
-        openNewWindow("https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
+        openNewWindow(url: "https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
     }
     
     // Debug: Print arguments
@@ -102,16 +109,16 @@ extension ViewController {
         NSApplication.sharedApplication().keyWindow?.miniaturize(self)
         
         // Fire 10 Notifications
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(05), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(15), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(25), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(35), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(45), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(55), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(65), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(75), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(85), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
-        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(95), target: self, selector: Selector("___sendNotifications"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(05), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(15), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(25), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(35), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(45), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(55), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(65), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(75), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(85), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(95), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
     }
     
     // Debug: Send notifications (10): Real sending.
@@ -156,4 +163,22 @@ extension ViewController {
         NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
     }
 
+    // Stupid swift 2.2 & 3 does not look in extensions.
+    // so we'll copy again...
+    // @wdg Add Print Support
+    // Issue: #39
+    func _printThisPage(Sender: AnyObject? = "") -> Void {
+        let url = mainWebview.mainFrame.dataSource?.request?.URL?.absoluteString
+        
+        let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
+        operation.jobTitle = "Printing \(url!)"
+        
+        // If want to print landscape
+        operation.printInfo.orientation = NSPaperOrientation.Landscape
+        operation.printInfo.scalingFactor = 0.7
+        
+        if operation.runOperation() {
+            print("Printed?")
+        }
+    }
 }

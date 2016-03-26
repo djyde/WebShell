@@ -45,7 +45,7 @@ extension ViewController {
 		let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
 		notificationcenter?.scheduleNotification(notification) // Pushing to notification centre
 		
-		notificationCount++
+		notificationCount += 1
 		
 		NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
 	}
@@ -57,10 +57,10 @@ extension ViewController {
 			AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
 		} else {
 			let time: NSArray = (data as String).componentsSeparatedByString(",")
-			for (var i = 0; i < time.count; i++) {
+			for i in 0 ..< time.count {
 				var timeAsInt = NSNumberFormatter().numberFromString(time[i] as! String)
 				timeAsInt = Int(timeAsInt!) / 100
-				NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(timeAsInt!), target: self, selector: Selector("flashScreenNow"), userInfo: nil, repeats: false)
+				NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(timeAsInt!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
 			}
 		}
 	}

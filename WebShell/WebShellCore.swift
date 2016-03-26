@@ -16,7 +16,7 @@ extension ViewController {
 	}
 	
 	// Function to call for the window.open (popup)
-	func openNewWindow(url: String, height: String, width: String) -> Void {
+    func openNewWindow(url url: String, height: String, width: String) -> Void {
 		// @wdg Replaced NSPipe for NSWorkspace
 		// Issue: #48
 		let ws = NSWorkspace.sharedWorkspace()

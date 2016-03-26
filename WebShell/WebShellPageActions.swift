@@ -10,23 +10,6 @@ import Foundation
 import AppKit
 
 extension ViewController {
-    // @wdg Add Print Support
-    // Issue: #39
-    func printThisPage() -> Void {
-        let url = mainWebview.mainFrame.dataSource?.request?.URL?.absoluteString
-        
-        let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
-        operation.jobTitle = "Printing \(url!)"
-        
-        // If want to print landscape
-        operation.printInfo.orientation = NSPaperOrientation.Landscape
-        operation.printInfo.scalingFactor = 0.7
-        
-        if operation.runOperation() {
-            print("Printed?")
-        }
-    }
-    
     func addObservers() {
         // add menu action observers
         let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount", "printThisPage"]
@@ -114,5 +97,22 @@ extension ViewController {
         // Inject Webhooks
         self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
         self.loopThroughiFrames()
+    }
+    
+    // @wdg Add Print Support
+    // Issue: #39
+    func printThisPage(Sender: AnyObject? = "") -> Void {
+        let url = mainWebview.mainFrame.dataSource?.request?.URL?.absoluteString
+        
+        let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
+        operation.jobTitle = "Printing \(url!)"
+        
+        // If want to print landscape
+        operation.printInfo.orientation = NSPaperOrientation.Landscape
+        operation.printInfo.scalingFactor = 0.7
+        
+        if operation.runOperation() {
+            print("Printed?")
+        }
     }
 }

@@ -22,7 +22,7 @@ extension ViewController {
     // @wdg Possible fix for Mavericks
     // Issue: #18
     override func awakeFromNib() {
-        if (!NSViewController().respondsToSelector(Selector("viewWillAppear"))) {
+        if (!NSViewController().respondsToSelector(#selector(NSViewController.viewWillAppear))) {
             // OS X 10.9
             if (firstAppear) {
                 initWindow()

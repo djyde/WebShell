@@ -160,8 +160,13 @@ extension ViewController {
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, AnyObject.self), forKeyedSubscript: "setItem")
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
 		
-        // Get window.webshell
-        let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
+		// @wdg Support for window.open (popup)
+		// Issue: #21
+		// window.open(URL, name, specs, replace)
+		// ....
+		
+		// Get window.webshell
+		let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
 		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
 	}
 	
@@ -169,5 +174,32 @@ extension ViewController {
 	// Issue: #25
 	func resetLocalStorage(Sender: AnyObject = "") -> Void {
 		NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+	}
+	
+	// @wdg Support for window.open (popup)
+	// Issue: #25
+	func parseWindowOpen(url: String, options: String) -> Void {
+		// We ignore x and y. (initial position on the screen)
+		// Using specifications of W3Schools: http://www.w3schools.com/jsref/met_win_open.asp
+		// "Open a new window called "MsgWindow", and write some text into it" is not (yet) supported!
+		var width = 0
+		var height = 0
+		
+		let options = Array(options.componentsSeparatedByString(","))
+		for i in 0 ..< options.count {
+			var tmp = Array(options[i].componentsSeparatedByString("="))
+			
+			if (tmp[0] == "width") {
+				// width = tmp[1] // Cannot subscript a value of type 'Array<String>'
+				width = 1
+			}
+			if (tmp[0] == "height") {
+				// height = tmp[1] // Cannot subscript a value of type 'Array<String>'
+				height = 1
+			}
+		}
+        
+		// After parsing call
+		openNewWindow(url: url, height: "\(height)", width: "\(width)")
 	}
 }

@@ -31,7 +31,7 @@ extension ViewController {
                 
                 // make the upload qeue named 'uploadQeue'
                 let uploadQeue: NSMutableArray = NSMutableArray()
-                for (var i = 0; i < panel.URLs.count; i++)
+                for i in 0 ..< panel.URLs.count
                 {
                     // Add to upload qeue, needing relativePath.
                     uploadQeue.addObject(panel.URLs[i].relativePath!)
