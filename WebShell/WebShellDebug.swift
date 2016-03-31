@@ -58,7 +58,15 @@ extension ViewController {
     
     // Edit contextmenu...
     func webView(sender: WebView!, contextMenuItemsForElement element: [NSObject : AnyObject]!, defaultMenuItems: [AnyObject]!) -> [AnyObject]! {
-        var NewMenu:[AnyObject] = [AnyObject]()
+        
+        // @wdg Fix contextmenu (problem with the swift 2 update #50)
+        // Issue: #51
+        var NewMenu:[AnyObject]
+        if (SETTINGS["debugmode"] as! Bool) {
+            NewMenu = defaultMenuItems // Enable webinspector etc
+        } else {
+            NewMenu = [AnyObject]()
+        }
         
         // Add debug menu. (if enabled)
         if (SETTINGS["debugmode"] as! Bool) {
