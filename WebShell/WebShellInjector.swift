@@ -162,12 +162,17 @@ extension ViewController {
 		
 		// @wdg Support for window.open (popup)
 		// Issue: #21
+        // openNewWindow(url: "THEURL", height: "0", width: "0")
 		// window.open(URL, name, specs, replace)
-		// ....
-		
+        let windowOpen: @convention(block)(NSString!, NSString?, NSString?, NSString?) -> Void = {(url: NSString!, target: NSString?, specs: NSString?, replace: NSString?) in
+            self.parseWindowOpen(url! as String, options: specs as! String)
+        }
+		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(windowOpen, AnyObject.self), forKeyedSubscript: "open")
+        
 		// Get window.webshell
 		let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
 		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
+        
 	}
 	
 	// @wdg Add Localstorage Support
@@ -182,20 +187,20 @@ extension ViewController {
 		// We ignore x and y. (initial position on the screen)
 		// Using specifications of W3Schools: http://www.w3schools.com/jsref/met_win_open.asp
 		// "Open a new window called "MsgWindow", and write some text into it" is not (yet) supported!
-		var width = 0
-		var height = 0
-		
+		var width = "0"
+		var height = "0"
 		let options = Array(options.componentsSeparatedByString(","))
+        
 		for i in 0 ..< options.count {
 			var tmp = Array(options[i].componentsSeparatedByString("="))
-			
-			if (tmp[0] == "width") {
-				// width = tmp[1] // Cannot subscript a value of type 'Array<String>'
-				width = 1
+            
+			if (tmp[0] == "width" || tmp[0] == " width") {
+				width = tmp[1]
+                print("width=\(tmp[1])")
 			}
-			if (tmp[0] == "height") {
-				// height = tmp[1] // Cannot subscript a value of type 'Array<String>'
-				height = 1
+			if (tmp[0] == "height" || tmp[0] == " height") {
+				height = tmp[1]
+                print("height=\(tmp[1])")
 			}
 		}
         
