@@ -49,5 +49,6 @@ extension ViewController {
         initSettings()
         goHome()
     }
-
+    
+//    println(WebView.stringByEvaluatingJavaScriptFromString("navigator.userAgent"));
 }
