@@ -30,7 +30,8 @@ extension ViewController {
 
             mainWebview.UIDelegate = self
             mainWebview.resourceLoadDelegate = self
-            
+            mainWebview.downloadDelegate = self
+
             checkSettings()
             addObservers()
             initSettings()
@@ -43,12 +44,11 @@ extension ViewController {
         
         mainWebview.UIDelegate = self
         mainWebview.resourceLoadDelegate = self
-
+        mainWebview.downloadDelegate = self
+        
         checkSettings()
         addObservers()
         initSettings()
         goHome()
     }
-    
-//    println(WebView.stringByEvaluatingJavaScriptFromString("navigator.userAgent"));
 }

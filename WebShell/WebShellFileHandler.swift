@@ -49,4 +49,15 @@ extension ViewController {
         
     }
     
+    func downloadWindowForAuthenticationSheet(download: WebDownload!) -> NSWindow! {
+        print("I'd like to download something")
+        print(download)
+        
+        return NSWindow.init()
+    }
+    
+    // Usefull for debugging..
+    func webView(sender: WebView!,mouseDidMoveOverElement elementInformation: [NSObject : AnyObject]!, modifierFlags: Int) {
+        //print("Sender=\(sender)\nEleInfo=\(elementInformation)\nModifier=\(modifierFlags)")
+    }
 }

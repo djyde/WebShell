@@ -18,7 +18,7 @@ import CoreLocation
 
 // @wdg Clean up code base
 // Issue: #43
-class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate {
+class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate, WebDownloadDelegate, NSURLDownloadDelegate {
 
 	@IBOutlet var mainWindow: NSView!
 	@IBOutlet weak var mainWebview: WebView!
@@ -73,6 +73,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		"JSInject": "",
 		
 		// Please paste here the CSS you want to load on a website
-        "CSSInject": ""
+        "CSSInject": "body{background:orange !important;}"
 	]
 }
