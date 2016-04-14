@@ -111,8 +111,8 @@ extension ViewController {
 		mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
 
 		// Inject Webhooks
-		self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
-		self.loopThroughiFrames()
+//		self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
+//		self.loopThroughiFrames()
 	}
 
 	// @wdg Add Print Support

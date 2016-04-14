@@ -173,6 +173,8 @@ extension ViewController {
 		let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
 		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
         
+        _WSInjectJS(jsContext)
+        _WSInjectCSS(jsContext)
 	}
 	
 	// @wdg Add Localstorage Support

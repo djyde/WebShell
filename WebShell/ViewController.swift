@@ -67,6 +67,12 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 
 		// run the app in debug mode? (Default: false)
 		// will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
-		"debugmode": false
+		"debugmode": false,
+		
+		// Please paste here the JavaScript you want to load on a website
+		"JSInject": "alert('x!=y');",
+		
+		// Please paste here the CSS you want to load on a website
+        "CSSInject": "body{background:orange !important;}"
 	]
 }

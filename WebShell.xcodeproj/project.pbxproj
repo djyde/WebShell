@@ -22,6 +22,7 @@
 		6E6055711C5EA6DC0099AD18 /* WebshellViewDid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */; };
 		6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */; };
 		6EA8D1591C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */; };
+		6EFEB6A21CC00FB1001CF349 /* WebShellCustomInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebshellViewDid.swift; sourceTree = "<group>"; };
 		6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navigator_geolocation_getCurrentPosition.swift; sourceTree = "<group>"; };
+		6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellCustomInject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				6E60556C1C5EA5D00099AD18 /* WebShellCore.swift */,
 				6E60556E1C5EA6810099AD18 /* WebViewFunctions.swift */,
 				6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */,
+				6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */,
 			);
 			name = "WebShell Core";
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E6055671C5EA2050099AD18 /* WebShellFileHandler.swift in Sources */,
+				6EFEB6A21CC00FB1001CF349 /* WebShellCustomInject.swift in Sources */,
 				6E6055621C5EA0870099AD18 /* Notifications.swift in Sources */,
 				6E60556D1C5EA5D00099AD18 /* WebShellCore.swift in Sources */,
 				6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */,
