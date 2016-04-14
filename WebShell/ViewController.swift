@@ -75,6 +75,6 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		"JSInject": "",
 		
 		// Please paste here the CSS you want to load on a website
-        "CSSInject": "body{background:orange !important;}"
+        "CSSInject": ""
 	]
 }

@@ -103,9 +103,9 @@ extension ViewController {
 //		NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
 //		NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
 //		NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-//
+
 		if (download) {
-//			lastURL = element["WebElementLinkURL"]! as! NSURL
+			lastURL = element["WebElementLinkURL"]! as! NSURL
 //			NewMenu.append(NSMenuItem.separatorItem())
 //			NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
 //			NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
