@@ -70,9 +70,9 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		"debugmode": false,
 		
 		// Please paste here the JavaScript you want to load on a website
-		"JSInject": "alert('x!=y');",
+		"JSInject": "",
 		
 		// Please paste here the CSS you want to load on a website
-        "CSSInject": "body{background:orange !important;}"
+        "CSSInject": ""
 	]
 }
