@@ -104,7 +104,7 @@ extension ViewController {
 					NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
 				}
 				if (contextMenu["Download"]!) {
-					NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
+					NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
 				}
 			}
 		}
@@ -248,5 +248,10 @@ extension ViewController {
     // Debug: Open new window
     func createNewInstance(Sender: AnyObject) -> Void {
         openNewWindow(url: "\(lastURL)", height: "0", width: "0")
+    }
+    
+    func downloadFileWithURL(Sender: AnyObject) -> Void {
+        let wsDM = WebShelllDownloadManager.init(url: lastURL)
+        wsDM.endDownloadTask()
     }
 }

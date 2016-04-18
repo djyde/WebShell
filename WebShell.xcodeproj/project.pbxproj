@@ -13,6 +13,7 @@
 		25B222621C25328E00F848B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25B222601C25328E00F848B7 /* Main.storyboard */; };
 		32FB8FB51C3460D7005B222F /* Battery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FB8FB41C3460D7005B222F /* Battery.swift */; };
 		6E2DD7DE1CC56209000FA61A /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6E2DD7DD1CC56209000FA61A /* Credits.rtf */; };
+		6E2DD7E01CC56522000FA61A /* WebShelllDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2DD7DF1CC56522000FA61A /* WebShelllDownloadManager.swift */; };
 		6E6055621C5EA0870099AD18 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055611C5EA0870099AD18 /* Notifications.swift */; };
 		6E6055651C5EA1140099AD18 /* WebShellDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055641C5EA1140099AD18 /* WebShellDebug.swift */; };
 		6E6055671C5EA2050099AD18 /* WebShellFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055661C5EA2050099AD18 /* WebShellFileHandler.swift */; };
@@ -35,6 +36,7 @@
 		25B222631C25328E00F848B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		32FB8FB41C3460D7005B222F /* Battery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Battery.swift; sourceTree = "<group>"; };
 		6E2DD7DD1CC56209000FA61A /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		6E2DD7DF1CC56522000FA61A /* WebShelllDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShelllDownloadManager.swift; sourceTree = "<group>"; };
 		6E3733301C2890A600CE0058 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
 		6E6055611C5EA0870099AD18 /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		6E6055641C5EA1140099AD18 /* WebShellDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellDebug.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				6E60556E1C5EA6810099AD18 /* WebViewFunctions.swift */,
 				6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */,
 				6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */,
+				6E2DD7DF1CC56522000FA61A /* WebShelllDownloadManager.swift */,
 			);
 			name = "WebShell Core";
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 				6E60556D1C5EA5D00099AD18 /* WebShellCore.swift in Sources */,
 				6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */,
 				32FB8FB51C3460D7005B222F /* Battery.swift in Sources */,
+				6E2DD7E01CC56522000FA61A /* WebShelllDownloadManager.swift in Sources */,
 				6E6055651C5EA1140099AD18 /* WebShellDebug.swift in Sources */,
 				6E6055711C5EA6DC0099AD18 /* WebshellViewDid.swift in Sources */,
 				6E6055691C5EA2650099AD18 /* WebShellInjector.swift in Sources */,
