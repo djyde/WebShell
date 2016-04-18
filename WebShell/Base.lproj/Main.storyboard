@@ -336,6 +336,12 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WebShell" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menuItem title="Reload" keyEquivalent="R" id="Kjh-6x-uSS">
+                    <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                    <connections>
+                        <action selector="reload:" target="Voe-Tx-rLC" id="hXj-Lk-azX"/>
+                    </connections>
+                </menuItem>
             </objects>
             <point key="canvasLocation" x="49.5" y="-264"/>
         </scene>

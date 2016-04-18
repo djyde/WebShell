@@ -101,7 +101,7 @@ extension ViewController {
 				NewMenu.append(NSMenuItem.separatorItem())
 
 				if (contextMenu["newWindow"]!) {
-					NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
+					NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
 				}
 				if (contextMenu["Download"]!) {
 					NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
@@ -244,4 +244,9 @@ extension ViewController {
 	func reloadPage(Sender: AnyObject) -> Void {
 		mainWebview.reload(Sender)
 	}
+    
+    // Debug: Open new window
+    func createNewInstance(Sender: AnyObject) -> Void {
+        openNewWindow(url: "\(lastURL)", height: "0", width: "0")
+    }
 }
