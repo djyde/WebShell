@@ -79,7 +79,37 @@ extension ViewController {
 		}
 
 		var NewMenu: [AnyObject] = [AnyObject]()
+		let contextMenu = SETTINGS["Contextmenu"] as! [String: Bool]
 
+		// if can back
+		if (contextMenu["BackAndForward"]!) {
+			if (mainWebview.canGoBack) {
+				NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController.goBack(_:)), keyEquivalent: ""))
+			}
+			if (mainWebview.canGoForward) {
+				NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController.goForward(_:)), keyEquivalent: ""))
+			}
+		}
+		if (contextMenu["Reload"]!) {
+			NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController.reloadPage(_:)), keyEquivalent: ""))
+		}
+
+		if (download) {
+			lastURL = element["WebElementLinkURL"]! as! NSURL
+
+			if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
+				NewMenu.append(NSMenuItem.separatorItem())
+
+				if (contextMenu["newWindow"]!) {
+					NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
+				}
+				if (contextMenu["Download"]!) {
+					NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
+				}
+			}
+		}
+
+		NewMenu.append(NSMenuItem.separatorItem())
 		// Add debug menu. (if enabled)
 		if (SETTINGS["debugmode"] as! Bool) {
 			let debugMenu = NSMenu(title: "Debug")
@@ -97,21 +127,9 @@ extension ViewController {
 			item.submenu = debugMenu
 
 			NewMenu.append(item)
+			NewMenu.append(NSMenuItem.separatorItem())
 		}
 
-		// if can back
-//		NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-//		NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-//		NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-
-		if (download) {
-			lastURL = element["WebElementLinkURL"]! as! NSURL
-//			NewMenu.append(NSMenuItem.separatorItem())
-//			NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-//			NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController._doNothing(_:)), keyEquivalent: ""))
-		}
-
-		NewMenu.append(NSMenuItem.separatorItem())
 		NewMenu.append(NSMenuItem.init(title: "Quit", action: #selector(ViewController._quit(_:)), keyEquivalent: ""))
 
 		return NewMenu
@@ -213,5 +231,17 @@ extension ViewController {
 		if operation.runOperation() {
 			print("Printed?")
 		}
+	}
+
+	func goBack(Sender: AnyObject) -> Void {
+		mainWebview.goBack(Sender)
+	}
+
+	func goForward(Sender: AnyObject) -> Void {
+		mainWebview.goForward(Sender)
+	}
+
+	func reloadPage(Sender: AnyObject) -> Void {
+		mainWebview.reload(Sender)
 	}
 }

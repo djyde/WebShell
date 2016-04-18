@@ -75,6 +75,22 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 		"JSInject": "",
 		
 		// Please paste here the CSS you want to load on a website
-        "CSSInject": ""
+        "CSSInject": "",
+        
+        "Contextmenu": [
+            // Enable "Back" & "Forward"
+            "BackAndForward": true,
+        
+            // Enable "Download"
+            "Download": true,
+            
+            // Enable "Reload"
+            "Reload": true,
+            
+            // Enable "Open in a new window"
+            "newWindow": true
+            ],
+        
+        "fake":true
 	]
 }
