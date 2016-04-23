@@ -21,8 +21,8 @@ extension ViewController {
      */
 	internal func _WSInjectJS(jsContext: JSContext!) {
 		// JSInject
-		if (SETTINGS["JSInject"] as! String != "") {
-			jsContext.evaluateScript(SETTINGS["JSInject"] as! String)
+		if (WebShell().Settings["JSInject"] as! String != "") {
+			jsContext.evaluateScript(WebShell().Settings["JSInject"] as! String)
 		}
 	}
 
@@ -37,8 +37,8 @@ extension ViewController {
      */
 	internal func _WSInjectCSS(jsContext: JSContext!) {
 		// CSSInject
-		if (SETTINGS["CSSInject"] as! String != "") {
-            let css:String = (SETTINGS["CSSInject"] as! String)
+		if (WebShell().Settings["CSSInject"] as! String != "") {
+            let css:String = (WebShell().Settings["CSSInject"] as! String)
                                 .stringByReplacingOccurrencesOfString("\n", withString: "")
                                 .stringByReplacingOccurrencesOfString("\r", withString: "")
                                 .stringByReplacingOccurrencesOfString("'", withString: "\\'")

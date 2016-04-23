@@ -20,7 +20,7 @@ extension ViewController {
 	}
 
 	func goHome() {
-		loadUrl((SETTINGS["url"] as? String)!)
+		loadUrl((WebShell().Settings["url"] as? String)!)
 	}
 
 	func reload() {
@@ -38,14 +38,14 @@ extension ViewController {
 
 	func initSettings() {
 		// controll the progress bar
-		if (!(SETTINGS["showLoadingBar"] as? Bool)!) {
+		if (!(WebShell().Settings["showLoadingBar"] as? Bool)!) {
 			progressBar.hidden = true // @wdg: Better progress indicator | Issue: #37
 		}
 
 		// @wdg Add Custom useragent support
 		// Issue: #52
-		if (SETTINGS["useragent"] as! String == "default") {
-			var UA: String = SETTINGS["title"] as! String
+		if (WebShell().Settings["useragent"] as! String == "default") {
+			var UA: String = WebShell().Settings["title"] as! String
 			UA = UA.stringByAppendingString("/")
 			UA = UA.stringByAppendingString(NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String)
 			UA = UA.stringByAppendingString(" based on Safari/AppleWebKit (KHTML, like Gecko)")
@@ -53,13 +53,13 @@ extension ViewController {
 			NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": UA]) // For iOS
 			mainWebview.customUserAgent = UA // For Mac OS X
 		} else {
-			let UA: String = SETTINGS["useragent"] as! String
+			let UA: String = WebShell().Settings["useragent"] as! String
 			NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": UA]) // For iOS
 			mainWebview.customUserAgent = UA // For Mac OS X
 		}
 
 		// set launching text
-		launchingLabel.stringValue = (SETTINGS["launchingText"] as? String)!
+		launchingLabel.stringValue = (WebShell().Settings["launchingText"] as? String)!
 	}
 
 	func initWindow() {
@@ -68,8 +68,8 @@ extension ViewController {
 		// set window size
 		var frame: NSRect = mainWindow.frame
 
-		let WIDTH: CGFloat = CGFloat(SETTINGS["initialWindowWidth"] as! Int),
-			HEIGHT: CGFloat = CGFloat(SETTINGS["initialWindowHeight"] as! Int)
+		let WIDTH: CGFloat = CGFloat(WebShell().Settings["initialWindowWidth"] as! Int),
+			HEIGHT: CGFloat = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int)
 
 		frame.size.width = WIDTH
 		frame.size.height = HEIGHT
@@ -78,9 +78,9 @@ extension ViewController {
 		// Issue: #19
 		// Note: do not use HEIGHT, WIDTH for some strange reason the window will be positioned 25px from bottom!
 		let ScreenHeight: CGFloat = (NSScreen.mainScreen()?.frame.size.width)!,
-			WindowHeight: CGFloat = CGFloat(SETTINGS["initialWindowWidth"] as! Int), // do not use HEIGHT!
+			WindowHeight: CGFloat = CGFloat(WebShell().Settings["initialWindowWidth"] as! Int), // do not use HEIGHT!
 		ScreenWidth: CGFloat = (NSScreen.mainScreen()?.frame.size.height)!,
-			WindowWidth: CGFloat = CGFloat(SETTINGS["initialWindowHeight"] as! Int) // do not use WIDTH!
+			WindowWidth: CGFloat = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int) // do not use WIDTH!
 		frame.origin.x = (ScreenHeight / 2 - WindowHeight / 2)
 		frame.origin.y = (ScreenWidth / 2 - WindowWidth / 2)
 
@@ -91,7 +91,7 @@ extension ViewController {
 		mainWindow.frame = frame
 
 		// set window title
-		mainWindow.window?.title = SETTINGS["title"] as! String
+		mainWindow.window?.title = WebShell().Settings["title"] as! String
 
 		// Force some preferences before loading...
 		mainWebview.preferences.javaScriptEnabled = true
@@ -100,7 +100,7 @@ extension ViewController {
 	}
 
 	func loadUrl(url: String) {
-		if ((SETTINGS["showLoadingBar"] as? Bool)!) {
+		if ((WebShell().Settings["showLoadingBar"] as? Bool)!) {
 			progressBar.hidden = false
 			progressBar.startAnimation(self)
 			progressBar.maxValue = 100;

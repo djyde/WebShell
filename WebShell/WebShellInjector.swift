@@ -70,7 +70,7 @@ extension ViewController {
 		
 		// @wdg Hack URL's if settings is set.
 		// Issue: #5
-		if ((SETTINGS["openInNewScreen"] as? Bool) != false) {
+		if ((WebShell().Settings["openInNewScreen"] as? Bool) != false) {
 			// _blank to external
 			// JavaScript -> Select all <a href='...' target='_blank'>
 			jsContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openExternal(this.href);})}}")
@@ -90,7 +90,7 @@ extension ViewController {
 		
 		// Add console.log ;)
 		// Add Console.log (and console.error, and console.warn)
-		if (SETTINGS["consoleSupport"] as! Bool) {
+		if (WebShell().Settings["consoleSupport"] as! Bool) {
 			jsContext.evaluateScript("var console = {log: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},warn: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},error: function () {var message = '';for (var i = 0; i < arguments.length; i++){message += arguments[i] + ' '};console.print(message)}};")
 			let logFunction: @convention(block)(NSString!) -> Void = {(message: NSString!) in
 				print("JS: \(message)")

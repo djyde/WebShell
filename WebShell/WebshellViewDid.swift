@@ -13,42 +13,57 @@ import Darwin
 
 // See: #43
 extension ViewController {
-    override func viewDidAppear() {
-        if (firstAppear) {
-            initWindow()
-        }
-    }
-    
-    // @wdg Possible fix for Mavericks
-    // Issue: #18
-    override func awakeFromNib() {
-        if (!NSViewController().respondsToSelector(#selector(NSViewController.viewWillAppear))) {
-            // OS X 10.9
-            if (firstAppear) {
-                initWindow()
-            }
+	override func viewDidAppear() {
+		if (firstAppear) {
+			initWindow()
+		}
+	}
 
-            mainWebview.UIDelegate = self
-            mainWebview.resourceLoadDelegate = self
-            mainWebview.downloadDelegate = self
+	// @wdg Possible fix for Mavericks
+	// Issue: #18
+	override func awakeFromNib() {
+		// if (![self respondsToSelector:@selector(viewWillAppear)]) {
 
-            checkSettings()
-            addObservers()
-            initSettings()
-            goHome()
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        mainWebview.UIDelegate = self
-        mainWebview.resourceLoadDelegate = self
-        mainWebview.downloadDelegate = self
-        
-        checkSettings()
-        addObservers()
-        initSettings()
-        goHome()
-    }
+		if (!NSViewController().respondsToSelector(#selector(NSViewController.viewWillAppear))) {
+
+            let myPopup: NSAlert = NSAlert()
+            myPopup.messageText = "Hello!"
+            myPopup.informativeText = "You are running mavericks?"
+            myPopup.alertStyle = NSAlertStyle.InformationalAlertStyle
+            myPopup.addButtonWithTitle("Yes")
+            myPopup.addButtonWithTitle("No")
+            
+            let res = myPopup.runModal()
+            
+            
+			print("MAVERICKS \(res)")
+
+			// OS X 10.9
+			if (firstAppear) {
+				initWindow()
+			}
+
+			mainWebview.UIDelegate = self
+			mainWebview.resourceLoadDelegate = self
+			mainWebview.downloadDelegate = self
+
+			checkSettings()
+			addObservers()
+			initSettings()
+			goHome()
+		}
+	}
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+
+		mainWebview.UIDelegate = self
+		mainWebview.resourceLoadDelegate = self
+		mainWebview.downloadDelegate = self
+
+		checkSettings()
+		addObservers()
+		initSettings()
+		goHome()
+	}
 }

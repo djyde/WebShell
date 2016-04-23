@@ -380,7 +380,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <progressIndicator wantsLayer="YES" ambiguous="YES" misplaced="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="gaZ-Ka-5Vb">
+                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="gaZ-Ka-5Vb">
                                 <rect key="frame" x="-4" y="627" width="1007" height="20"/>
                             </progressIndicator>
                             <webView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmw-jr-NE4">
@@ -402,13 +402,15 @@
                             </webView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="hmw-jr-NE4" firstAttribute="centerX" secondItem="gaZ-Ka-5Vb" secondAttribute="centerX" id="36O-tq-hAN"/>
-                            <constraint firstItem="hmw-jr-NE4" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Eg3-cP-gnU"/>
-                            <constraint firstItem="hmw-jr-NE4" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="HsJ-6q-tdN"/>
-                            <constraint firstItem="hmw-jr-NE4" firstAttribute="centerX" secondItem="1wx-8i-Jol" secondAttribute="centerX" id="Ucg-fv-dHf"/>
-                            <constraint firstItem="hmw-jr-NE4" firstAttribute="centerY" secondItem="1wx-8i-Jol" secondAttribute="centerY" id="rpA-KB-3ns"/>
-                            <constraint firstAttribute="trailing" secondItem="hmw-jr-NE4" secondAttribute="trailing" id="rwI-zs-cjL"/>
-                            <constraint firstAttribute="bottom" secondItem="hmw-jr-NE4" secondAttribute="bottom" id="tZZ-qU-tM0"/>
+                            <constraint firstItem="gaZ-Ka-5Vb" firstAttribute="centerX" secondItem="hmw-jr-NE4" secondAttribute="centerX" id="2hL-FH-Wfj"/>
+                            <constraint firstItem="hmw-jr-NE4" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="92o-Jz-CSd"/>
+                            <constraint firstItem="gaZ-Ka-5Vb" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="-4" id="EES-MF-Sf3"/>
+                            <constraint firstItem="gaZ-Ka-5Vb" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="-6" id="cpS-2I-0k3"/>
+                            <constraint firstItem="hmw-jr-NE4" firstAttribute="centerY" secondItem="1wx-8i-Jol" secondAttribute="centerY" id="dhZ-8b-6UL"/>
+                            <constraint firstAttribute="trailing" secondItem="hmw-jr-NE4" secondAttribute="trailing" id="fTP-He-DVd"/>
+                            <constraint firstItem="1wx-8i-Jol" firstAttribute="centerX" secondItem="hmw-jr-NE4" secondAttribute="centerX" id="iSX-MF-GkG"/>
+                            <constraint firstItem="hmw-jr-NE4" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="seh-Ze-ETS"/>
+                            <constraint firstAttribute="bottom" secondItem="hmw-jr-NE4" secondAttribute="bottom" id="uH0-vb-1cq"/>
                         </constraints>
                         <shadow key="shadow">
                             <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

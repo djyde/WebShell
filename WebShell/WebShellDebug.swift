@@ -23,15 +23,15 @@ extension ViewController {
 //            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
 				if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
 					if ((String(Process.arguments[i + 1])) == "YES") {
-						SETTINGS["debugmode"] = true
-						SETTINGS["consoleSupport"] = true
+						WebShell().Settings["debugmode"] = true
+						WebShell().Settings["consoleSupport"] = true
 					}
 				}
 
 				if ((String(Process.arguments[i])).uppercaseString == "-DEBUG") {
 					if ((String(Process.arguments[i + 1])).uppercaseString == "YES" || (String(Process.arguments[i + 1])).uppercaseString == "true") {
-						SETTINGS["debugmode"] = true
-						SETTINGS["consoleSupport"] = true
+						WebShell().Settings["debugmode"] = true
+						WebShell().Settings["consoleSupport"] = true
 					}
 				}
 
@@ -40,15 +40,15 @@ extension ViewController {
 				}
 
 				if ((String(Process.arguments[i])) == "-url") {
-					SETTINGS["url"] = String(Process.arguments[i + 1])
+					WebShell().Settings["url"] = String(Process.arguments[i + 1])
 				}
 
 				if ((String(Process.arguments[i])) == "-height") {
-					SETTINGS["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
+					WebShell().Settings["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
 				}
 
 				if ((String(Process.arguments[i])) == "-width") {
-					SETTINGS["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
+					WebShell().Settings["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
 				}
 			}
 		}
@@ -79,7 +79,7 @@ extension ViewController {
 		}
 
 		var NewMenu: [AnyObject] = [AnyObject]()
-		let contextMenu = SETTINGS["Contextmenu"] as! [String: Bool]
+		let contextMenu = WebShell().Settings["Contextmenu"] as! [String: Bool]
 
 		// if can back
 		if (contextMenu["BackAndForward"]!) {
@@ -111,7 +111,7 @@ extension ViewController {
 
 		NewMenu.append(NSMenuItem.separatorItem())
 		// Add debug menu. (if enabled)
-		if (SETTINGS["debugmode"] as! Bool) {
+		if (WebShell().Settings["debugmode"] as! Bool) {
 			let debugMenu = NSMenu(title: "Debug")
 			debugMenu.addItem(IElement)
 			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))

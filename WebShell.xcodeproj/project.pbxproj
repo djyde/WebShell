@@ -24,6 +24,9 @@
 		6E6055711C5EA6DC0099AD18 /* WebshellViewDid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */; };
 		6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */; };
 		6EA8D1591C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */; };
+		6EE64A961CCBEAA000E9DA9B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE64A951CCBEAA000E9DA9B /* Settings.swift */; };
+		6EED81661CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED81641CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift */; };
+		6EED81671CC95FBD00FFB883 /* WebShellTrackpadGestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED81651CC95FBD00FFB883 /* WebShellTrackpadGestures.swift */; };
 		6EFEB6A21CC00FB1001CF349 /* WebShellCustomInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +51,9 @@
 		6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebshellViewDid.swift; sourceTree = "<group>"; };
 		6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		6EA8D1581C5C1240004534F9 /* navigator_geolocation_getCurrentPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = navigator_geolocation_getCurrentPosition.swift; sourceTree = "<group>"; };
+		6EE64A951CCBEAA000E9DA9B /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		6EED81641CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellMediaKeysSupport.swift; sourceTree = "<group>"; };
+		6EED81651CC95FBD00FFB883 /* WebShellTrackpadGestures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellTrackpadGestures.swift; sourceTree = "<group>"; };
 		6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebShellCustomInject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,7 +90,7 @@
 				6E6055631C5EA0FC0099AD18 /* WebShell Core */,
 				6E6055601C5EA04F0099AD18 /* HTML5 Support */,
 				25B2225A1C25328E00F848B7 /* AppDelegate.swift */,
-				25B2225C1C25328E00F848B7 /* ViewController.swift */,
+				6EE64A951CCBEAA000E9DA9B /* Settings.swift */,
 				6E2DD7DD1CC56209000FA61A /* Credits.rtf */,
 				25B2225E1C25328E00F848B7 /* Assets.xcassets */,
 				25B222601C25328E00F848B7 /* Main.storyboard */,
@@ -107,6 +113,8 @@
 		6E6055631C5EA0FC0099AD18 /* WebShell Core */ = {
 			isa = PBXGroup;
 			children = (
+				6EED81641CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift */,
+				6EED81651CC95FBD00FFB883 /* WebShellTrackpadGestures.swift */,
 				6E6055641C5EA1140099AD18 /* WebShellDebug.swift */,
 				6EA8D1561C5C0BCA004534F9 /* StringExtension.swift */,
 				6E6055661C5EA2050099AD18 /* WebShellFileHandler.swift */,
@@ -117,6 +125,7 @@
 				6E6055701C5EA6DC0099AD18 /* WebshellViewDid.swift */,
 				6EFEB6A11CC00FB1001CF349 /* WebShellCustomInject.swift */,
 				6E2DD7DF1CC56522000FA61A /* WebShelllDownloadManager.swift */,
+				25B2225C1C25328E00F848B7 /* ViewController.swift */,
 			);
 			name = "WebShell Core";
 			sourceTree = "<group>";
@@ -197,8 +206,11 @@
 				6E60556D1C5EA5D00099AD18 /* WebShellCore.swift in Sources */,
 				6EA8D1571C5C0BCA004534F9 /* StringExtension.swift in Sources */,
 				32FB8FB51C3460D7005B222F /* Battery.swift in Sources */,
+				6EE64A961CCBEAA000E9DA9B /* Settings.swift in Sources */,
 				6E2DD7E01CC56522000FA61A /* WebShelllDownloadManager.swift in Sources */,
 				6E6055651C5EA1140099AD18 /* WebShellDebug.swift in Sources */,
+				6EED81661CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift in Sources */,
+				6EED81671CC95FBD00FFB883 /* WebShellTrackpadGestures.swift in Sources */,
 				6E6055711C5EA6DC0099AD18 /* WebshellViewDid.swift in Sources */,
 				6E6055691C5EA2650099AD18 /* WebShellInjector.swift in Sources */,
 				6E60556F1C5EA6810099AD18 /* WebViewFunctions.swift in Sources */,
