@@ -58,13 +58,26 @@ extension ViewController {
 		return true
 	}
 
-	override func touchesBeganWithEvent(event: NSEvent) {
-		print("TUCH?!")
-	}
+    var userInteractionEnabled: Bool {
+        return true
+    }
+    
+    override func touchesBeganWithEvent(event: NSEvent) {
+        print("Touch \(event)")
+    }
 
-	override func touchesMovedWithEvent(event: NSEvent) {
-        print("SomeThingCool")
-	}
+    override func touchesMovedWithEvent(event: NSEvent) {
+        print("Moved \(event)")
+    }
+
+    override func touchesEndedWithEvent(event: NSEvent) {
+        print("Ended \(event)")
+    }
+
+    override func touchesCancelledWithEvent(event: NSEvent) {
+        print("Cancelled \(event)")
+    }
+
 }
 
 // TODO: Function 'swipeWithEvent' is not being called.
@@ -73,14 +86,30 @@ extension ViewController {
  This extension will support the swipe gestures
  */
 class x: WebView {
+    override var acceptsFirstResponder: Bool {
+        return true
+    }
+    
     var userInteractionEnabled: Bool {
         return true
     }
-
-    override var acceptsFirstResponder: Bool {
-		return true
-	}
-
+    
+    override func touchesBeganWithEvent(event: NSEvent) {
+        Swift.print("WV: Touch \(event)")
+    }
+    
+    override func touchesMovedWithEvent(event: NSEvent) {
+        Swift.print("WV: Moved \(event)")
+    }
+    
+    override func touchesEndedWithEvent(event: NSEvent) {
+        Swift.print("WV: Ended \(event)")
+    }
+    
+    override func touchesCancelledWithEvent(event: NSEvent) {
+        Swift.print("WV: Cancelled \(event)")
+    }
+    
 	override func swipeWithEvent(event: NSEvent) {
 		let deltaX = event.deltaX
 		if deltaX > 0 { // Left
