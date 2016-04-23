@@ -34,6 +34,6 @@
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>WebShell.WebShellMediaKeysSupport</string>
 </dict>
 </plist>

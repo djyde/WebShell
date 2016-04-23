@@ -11,7 +11,6 @@ import Cocoa
 import Foundation
 import NotificationCenter
 
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
 

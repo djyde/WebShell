@@ -10,8 +10,6 @@
 import AppKit
 import Cocoa
 
-// TODO: Function 'sendEvent' is not being called.
-
 /**
  Class WebShellMediaKeysSupport
  
@@ -48,11 +46,11 @@ class WebShellMediaKeysSupport: NSApplication {
                 print("Rewind!")
 				// F7 pressed
 				break
-			case NX_KEYTYPE_PREVIOUS:
+			case NX_KEYTYPE_PREVIOUS: // Not called?
                 print("Previous!")
 				// F7
 				break
-			case NX_KEYTYPE_NEXT:
+			case NX_KEYTYPE_NEXT: // Not called?
                 print("Next!")
 				// F9 pressed
 				break
