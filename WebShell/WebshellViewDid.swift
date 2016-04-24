@@ -51,6 +51,7 @@ extension ViewController {
 			addObservers()
 			initSettings()
 			goHome()
+            WSMediaLoop(self)
 		}
 	}
 
@@ -60,10 +61,12 @@ extension ViewController {
 		mainWebview.UIDelegate = self
 		mainWebview.resourceLoadDelegate = self
 		mainWebview.downloadDelegate = self
-
+        WebShell().Settings["WSMW"] = mainWebview;
+        
 		checkSettings()
 		addObservers()
 		initSettings()
 		goHome()
+        WSMediaLoop(self)
 	}
 }

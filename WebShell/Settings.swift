@@ -10,15 +10,14 @@ import Foundation
 
 /**
  WebShell Class
- 
+
  This class is the main class for WebShell.
  */
 class WebShell {
-    /**
-     The settings Dictionary
-     */
+	/**
+	 The settings Dictionary
+	 */
 	var Settings: [String: Any] = [
-
 		// Url to browse to.
 		"url": "https://www.google.com",
 
@@ -61,6 +60,14 @@ class WebShell {
 
 		// Please paste here the CSS you want to load on a website
 		"CSSInject": "",
+
+		"MediaKeys": [
+			// Enable "Back" & "Forward"
+			"BackAndForward": true,
+
+			// Media Player support (experimental)
+			"MediaPlayers": false
+		],
 
 		"Contextmenu": [
 			// Enable "Back" & "Forward"

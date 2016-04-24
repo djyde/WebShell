@@ -84,14 +84,14 @@ extension ViewController {
 		// if can back
 		if (contextMenu["BackAndForward"]!) {
 			if (mainWebview.canGoBack) {
-				NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController.goBack(_:)), keyEquivalent: ""))
+				NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController._goBack(_:)), keyEquivalent: ""))
 			}
 			if (mainWebview.canGoForward) {
-				NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController.goForward(_:)), keyEquivalent: ""))
+				NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController._goForward(_:)), keyEquivalent: ""))
 			}
 		}
 		if (contextMenu["Reload"]!) {
-			NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController.reloadPage(_:)), keyEquivalent: ""))
+			NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController._reloadPage(_:)), keyEquivalent: ""))
 		}
 
 		if (download) {
@@ -233,25 +233,29 @@ extension ViewController {
 		}
 	}
 
-	func goBack(Sender: AnyObject) -> Void {
-		mainWebview.goBack(Sender)
+	func _goBack(Sender: AnyObject) -> Void {
+		if (mainWebview.canGoBack) {
+			mainWebview.goBack(Sender)
+		}
 	}
 
-	func goForward(Sender: AnyObject) -> Void {
-		mainWebview.goForward(Sender)
+	func _goForward(Sender: AnyObject) -> Void {
+		if (mainWebview.canGoForward) {
+			mainWebview.goForward(Sender)
+		}
 	}
 
-	func reloadPage(Sender: AnyObject) -> Void {
+	func _reloadPage(Sender: AnyObject) -> Void {
 		mainWebview.reload(Sender)
 	}
-    
-    // Debug: Open new window
-    func createNewInstance(Sender: AnyObject) -> Void {
-        openNewWindow(url: "\(lastURL)", height: "0", width: "0")
-    }
-    
-    func downloadFileWithURL(Sender: AnyObject) -> Void {
-        let wsDM = WebShelllDownloadManager.init(url: lastURL)
-        wsDM.endDownloadTask()
-    }
+
+	// Debug: Open new window
+	func createNewInstance(Sender: AnyObject) -> Void {
+		openNewWindow(url: "\(lastURL)", height: "0", width: "0")
+	}
+
+	func downloadFileWithURL(Sender: AnyObject) -> Void {
+		let wsDM = WebShelllDownloadManager.init(url: lastURL)
+		wsDM.endDownloadTask()
+	}
 }

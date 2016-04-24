@@ -89,7 +89,6 @@
 			children = (
 				6E6055631C5EA0FC0099AD18 /* WebShell Core */,
 				6E6055601C5EA04F0099AD18 /* HTML5 Support */,
-				25B2225A1C25328E00F848B7 /* AppDelegate.swift */,
 				6EE64A951CCBEAA000E9DA9B /* Settings.swift */,
 				6E2DD7DD1CC56209000FA61A /* Credits.rtf */,
 				25B2225E1C25328E00F848B7 /* Assets.xcassets */,
@@ -113,6 +112,7 @@
 		6E6055631C5EA0FC0099AD18 /* WebShell Core */ = {
 			isa = PBXGroup;
 			children = (
+				25B2225A1C25328E00F848B7 /* AppDelegate.swift */,
 				6EED81641CC95FBD00FFB883 /* WebShellMediaKeysSupport.swift */,
 				6EED81651CC95FBD00FFB883 /* WebShellTrackpadGestures.swift */,
 				6E6055641C5EA1140099AD18 /* WebShellDebug.swift */,

@@ -9,18 +9,17 @@
 import Foundation
 import AppKit
 import WebKit
-
 // TODO: Function 'swipeWithEvent' is not being called.
 
 /**
  This extension will support the swipe gestures
-*/
+ */
 extension ViewController {
-    /**
-     SwipeWithEvent
-     
-     - Parameter event: NSEvent
-    */
+	/**
+	 SwipeWithEvent
+
+	 - Parameter event: NSEvent
+	 */
 	override func swipeWithEvent(event: NSEvent) {
 		let x: CGFloat = event.deltaX
 		let y: CGFloat = event.deltaY
@@ -58,26 +57,29 @@ extension ViewController {
 		return true
 	}
 
-    var userInteractionEnabled: Bool {
-        return true
-    }
-    
-    override func touchesBeganWithEvent(event: NSEvent) {
-        print("Touch \(event)")
-    }
+	var setAcceptsTouchEvents: Bool {
+		return true
+	}
 
-    override func touchesMovedWithEvent(event: NSEvent) {
-        print("Moved \(event)")
-    }
+	var userInteractionEnabled: Bool {
+		return true
+	}
 
-    override func touchesEndedWithEvent(event: NSEvent) {
-        print("Ended \(event)")
-    }
+	override func touchesBeganWithEvent(event: NSEvent) {
+		print("Touch \(event)")
+	}
 
-    override func touchesCancelledWithEvent(event: NSEvent) {
-        print("Cancelled \(event)")
-    }
+	override func touchesMovedWithEvent(event: NSEvent) {
+		print("Moved \(event)")
+	}
 
+	override func touchesEndedWithEvent(event: NSEvent) {
+		print("Ended \(event)")
+	}
+
+	override func touchesCancelledWithEvent(event: NSEvent) {
+		print("Cancelled \(event)")
+	}
 }
 
 // TODO: Function 'swipeWithEvent' is not being called.
@@ -86,30 +88,34 @@ extension ViewController {
  This extension will support the swipe gestures
  */
 class x: WebView {
-    override var acceptsFirstResponder: Bool {
-        return true
-    }
-    
-    var userInteractionEnabled: Bool {
-        return true
-    }
-    
-    override func touchesBeganWithEvent(event: NSEvent) {
-        Swift.print("WV: Touch \(event)")
-    }
-    
-    override func touchesMovedWithEvent(event: NSEvent) {
-        Swift.print("WV: Moved \(event)")
-    }
-    
-    override func touchesEndedWithEvent(event: NSEvent) {
-        Swift.print("WV: Ended \(event)")
-    }
-    
-    override func touchesCancelledWithEvent(event: NSEvent) {
-        Swift.print("WV: Cancelled \(event)")
-    }
-    
+	override var acceptsFirstResponder: Bool {
+		return true
+	}
+
+	var setAcceptsTouchEvents: Bool {
+		return true
+	}
+
+	var userInteractionEnabled: Bool {
+		return true
+	}
+
+	override func touchesBeganWithEvent(event: NSEvent) {
+		Swift.print("WV: Touch \(event)")
+	}
+
+	override func touchesMovedWithEvent(event: NSEvent) {
+		Swift.print("WV: Moved \(event)")
+	}
+
+	override func touchesEndedWithEvent(event: NSEvent) {
+		Swift.print("WV: Ended \(event)")
+	}
+
+	override func touchesCancelledWithEvent(event: NSEvent) {
+		Swift.print("WV: Cancelled \(event)")
+	}
+
 	override func swipeWithEvent(event: NSEvent) {
 		let deltaX = event.deltaX
 		if deltaX > 0 { // Left
