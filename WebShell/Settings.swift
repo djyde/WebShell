@@ -19,7 +19,7 @@ class WebShell {
 	 */
 	var Settings: [String: Any] = [
 		// Url to browse to.
-		"url": "https://www.google.com",
+		"url": "http://djyde.github.io/WebShell/WebShell/",
 
 		// set the app title
 		"title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
