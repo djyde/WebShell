@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebShell - Welcome</title>
+		<link rel="stylesheet" href="static/style.css">
+		<script type='text/javascript'>function ns(e){"undefined"!=typeof e&&(window.step=e),window.step<window.steps?(document.getElementById("hs_"+window.step).style.display="none",document.getElementById("hs_"+(window.step+1)).style.display="block",window.step=window.step+1,window.step===window.steps?(document.getElementById("hb").innerHTML="Again",document.getElementById("hb").onclick=function(){ih()},window.step=0):document.getElementById("hb").innerHTML="Next &gt;"):ih()}function ih(){for(var e=1;e<window.steps+1;e++)"undefined"!=typeof document.getElementById("hs_"+e)?document.getElementById("hs_"+e).style.display="none":console.log(typeof document.getElementById("hs_"+e));document.getElementById("hs_0").style.display="block",document.getElementById("hb").innerHTML="Next &gt;",document.getElementById("hb").onclick=function(){return ns(),!1}}window.steps=2/* Change this to the steps */,window.step=0,window.onload=function(){ih()};</script>
+	</head>
+	<body>
+		<div id="container">
+			<h1 class="title">WebShell</h1>
+			<div style='display:none' id='hs_0'>
+				<h5 class="sub-title">Bundle web app to OS X app without coding</h5>
+				<img src="http://7mnoy7.com1.z0.glb.clouddn.com/github/workflow-with-frame.png?imageView/2/w/640" height="221" width="640">
+			</div>
+			<div style='display:none' id='hs_1'>
+				<h5 class="sub-title">Make your development process easier</h5>
+				<img src="static/code1.png" height="221" width="1000">
+			</div>
+			<div style='display:none' id='hs_2'>
+				<h5 class="sub-title">Bundle web app to OS X app without coding</h5>
+				<img src="static/xcode.png" height="221" width="1000">
+			</div>
+			<div><a href="#" onclick="javascript:ns();return false;" id='hb' class="btn">Next</a></div>
+			<div id="footer"><br />
+				&copy; WebShell.
+			</div>
+		</div>
+	</body>
+</html>
