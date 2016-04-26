@@ -15,11 +15,44 @@ import NotificationCenter
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
 
 	var mainWindow: NSWindow!
+	let popover = NSPopover()
+	let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
+	var eventMonitor: EventMonitor?
 
 	func applicationDidFinishLaunching(aNotification: NSNotification) {
-		// Add Notification center to the app delegate.
-		NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
-		mainWindow = NSApplication.sharedApplication().windows[0]
+		if (WebShell().Settings["MenuBarApp"] as! Bool) {
+            
+            let myPopup: NSAlert = NSAlert()
+            myPopup.messageText = "Warning"
+            myPopup.informativeText = "Menubar App-mode is in beta right now!\n\nTo turn it off:\nChange\n    \"MenuBarApp\": true,\nto\n    \"MenuBarApp\": false,\nin Settings.swift (line: 65)"
+            myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
+            myPopup.addButtonWithTitle("Ok")
+            myPopup.addButtonWithTitle("Quit app")
+            let res = myPopup.runModal()
+            if res == NSAlertSecondButtonReturn {
+                exit(0)
+            }
+            
+			if let button = statusItem.button {
+				button.image = NSImage(named: "AppIcon") //StatusBarButtonImage
+				button.action = #selector(AppDelegate.togglePopover(_:))
+			}
+
+			popover.contentViewController = WebShellPopupViewController(nibName: "WebShellPopupViewController", bundle: nil)
+
+			initialPopupSize()
+
+			eventMonitor = EventMonitor(mask: [.LeftMouseDownMask, .RightMouseDownMask]) { [unowned self] event in
+				if self.popover.shown {
+					self.closePopover(event)
+				}
+			}
+			eventMonitor?.start()
+		} else {
+			// Add Notification center to the app delegate.
+			NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
+			mainWindow = NSApplication.sharedApplication().windows[0]
+		}
 	}
 
 	// @wdg close app if window closes
@@ -75,5 +108,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
 	@IBAction func copyUrl(sender: AnyObject) {
 		NSNotificationCenter.defaultCenter().postNotificationName("copyUrl", object: nil)
+	}
+
+	// Statut merge...
+	func initialPopupSize() {
+		popover.contentSize.width = CGFloat(WebShell().Settings["initialWindowWidth"] as! Int)
+		popover.contentSize.height = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int)
+	}
+
+	func applicationWillTerminate(aNotification: NSNotification) {
+		// Insert code here to tear down your application
+	}
+
+	func showPopover(sender: AnyObject?) {
+		if let button = statusItem.button {
+			popover.showRelativeToRect(button.bounds, ofView: button, preferredEdge: NSRectEdge.MinY)
+		}
+		eventMonitor?.start()
+	}
+
+	func closePopover(sender: AnyObject?) {
+		popover.performClose(sender)
+		eventMonitor?.stop()
+	}
+
+	func togglePopover(sender: AnyObject?) {
+		if (popover.shown) {
+			closePopover(sender)
+		} else {
+			showPopover(sender)
+		}
 	}
 }

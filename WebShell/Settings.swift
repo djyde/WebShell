@@ -61,6 +61,10 @@ class WebShell {
 		// Please paste here the CSS you want to load on a website
 		"CSSInject": "",
 
+		// Menubar app (right side next to clock)
+		"MenuBarApp": false,
+
+		// Media keys settings
 		"MediaKeys": [
 			// Enable "Back" & "Forward"
 			"BackAndForward": true,
@@ -69,6 +73,7 @@ class WebShell {
 			"MediaPlayers": false
 		],
 
+		// Contextmenu settings
 		"Contextmenu": [
 			// Enable "Back" & "Forward"
 			"BackAndForward": true,
