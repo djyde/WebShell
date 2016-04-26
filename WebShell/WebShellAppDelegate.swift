@@ -21,20 +21,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
 	func applicationDidFinishLaunching(aNotification: NSNotification) {
 		if (WebShell().Settings["MenuBarApp"] as! Bool) {
-            
-            let myPopup: NSAlert = NSAlert()
-            myPopup.messageText = "Warning"
-            myPopup.informativeText = "Menubar App-mode is in beta right now!\n\nTo turn it off:\nChange\n    \"MenuBarApp\": true,\nto\n    \"MenuBarApp\": false,\nin Settings.swift (line: 65)"
-            myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
-            myPopup.addButtonWithTitle("Ok")
-            myPopup.addButtonWithTitle("Quit app")
-            let res = myPopup.runModal()
-            if res == NSAlertSecondButtonReturn {
-                exit(0)
-            }
-            
+			// TODO: Kill main window...
+			let myPopup: NSAlert = NSAlert()
+			myPopup.messageText = "Warning"
+			myPopup.informativeText = "Menubar App-mode is in beta right now!\n\nTo turn it off:\nChange\n    \"MenuBarApp\": true,\nto\n    \"MenuBarApp\": false,\nin Settings.swift (line: 65)"
+			myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
+			myPopup.addButtonWithTitle("Ok")
+			myPopup.addButtonWithTitle("Quit app")
+			let res = myPopup.runModal()
+			if res == NSAlertSecondButtonReturn {
+				exit(0)
+			}
+
 			if let button = statusItem.button {
-				button.image = NSImage(named: "AppIcon") //StatusBarButtonImage
+				button.image = NSImage(named: "AppIcon") // StatusBarButtonImage
 				button.action = #selector(AppDelegate.togglePopover(_:))
 			}
 
@@ -58,12 +58,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	// @wdg close app if window closes
 	// Issue: #40
 	func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
-		return true
+		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+			return true
+		} else {
+			return false
+		}
 	}
 
 	func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
 		if (!flag) {
-			mainWindow!.makeKeyAndOrderFront(self)
+			if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+				mainWindow!.makeKeyAndOrderFront(self)
+			}
 		}
 
 		// clear badge
@@ -85,7 +91,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	// Issue: #26
 	func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
 		// Open window if user clicked on notification!
-		mainWindow!.makeKeyAndOrderFront(self)
+		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+			mainWindow!.makeKeyAndOrderFront(self)
+		}
 
 		// @wdg Clear badge
 		NSApplication.sharedApplication().dockTile.badgeLabel = ""
