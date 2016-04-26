@@ -30,4 +30,5 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
     var lastURL:NSURL = NSURL.init()
     var IElement: NSMenuItem = NSMenuItem.init()
 	let locationManager = CLLocationManager()
+    var MustCloseWindow = true
 }

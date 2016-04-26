@@ -8,6 +8,8 @@
 
 import Cocoa
 
+// @wdg Merge Statut with WebShell.
+// Issue: #56
 class EventMonitor {
     private var monitor: AnyObject?
     private let mask: NSEventMask

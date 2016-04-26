@@ -20,19 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	var eventMonitor: EventMonitor?
 
 	func applicationDidFinishLaunching(aNotification: NSNotification) {
+		// @wdg Merge Statut with WebShell.
+		// Issue: #56
 		if (WebShell().Settings["MenuBarApp"] as! Bool) {
-			// TODO: Kill main window...
-			let myPopup: NSAlert = NSAlert()
-			myPopup.messageText = "Warning"
-			myPopup.informativeText = "Menubar App-mode is in beta right now!\n\nTo turn it off:\nChange\n    \"MenuBarApp\": true,\nto\n    \"MenuBarApp\": false,\nin Settings.swift (line: 65)"
-			myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
-			myPopup.addButtonWithTitle("Ok")
-			myPopup.addButtonWithTitle("Quit app")
-			let res = myPopup.runModal()
-			if res == NSAlertSecondButtonReturn {
-				exit(0)
-			}
-
 			if let button = statusItem.button {
 				button.image = NSImage(named: "AppIcon") // StatusBarButtonImage
 				button.action = #selector(AppDelegate.togglePopover(_:))

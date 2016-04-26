@@ -66,8 +66,8 @@ class WebShellMediaKeysSupport: NSApplication {
 	}
 
 	/**
-     goBackIfPossible
-     
+	 goBackIfPossible
+
 	 Since we can't communicate with the ViewController.\
 	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
 	 */
@@ -76,23 +76,23 @@ class WebShellMediaKeysSupport: NSApplication {
 		NSUserDefaults.standardUserDefaults().synchronize()
 	}
 
-    /**
-     goForwardIfPossible
-     
-     Since we can't communicate with the ViewController.\
-     We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
-     */
+	/**
+	 goForwardIfPossible
+
+	 Since we can't communicate with the ViewController.\
+	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
+	 */
 	func goForwardIfPossible() {
 		NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WSGoForward")
 		NSUserDefaults.standardUserDefaults().synchronize()
 	}
 
-    /**
-     goReloadPage
-     
-     Since we can't communicate with the ViewController.\
-     We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
-     */
+	/**
+	 goReloadPage
+
+	 Since we can't communicate with the ViewController.\
+	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
+	 */
 	func goReloadPage() {
 		NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WSGoReload")
 		NSUserDefaults.standardUserDefaults().synchronize()
@@ -139,6 +139,17 @@ extension ViewController {
 			NSUserDefaults.standardUserDefaults().setBool(false, forKey: "WSGoReload")
 			NSUserDefaults.standardUserDefaults().synchronize()
 			self._reloadPage(self)
+		}
+
+		// @wdg Merge Statut with WebShell.
+		// Issue: #56
+		if (WebShell().Settings["MenuBarApp"] as! Bool) {
+			if ((NSApplication.sharedApplication().keyWindow) != nil) {
+				if (self.MustCloseWindow) {
+					NSApplication.sharedApplication().keyWindow?.close()
+					self.MustCloseWindow = false
+				}
+			}
 		}
 	}
 }
