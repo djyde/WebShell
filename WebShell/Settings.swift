@@ -25,7 +25,7 @@ class WebShell {
 		"title": NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String,
 
 		// if you want to use the default one then leave it default || default = title/version based on Safari/AppleWebKit (KHTML, like Gecko)
-		// otherwise change it to a useragent you want.
+		// otherwise change it to a useragent you want. (Default: "default")
 		"useragent": "default",
 
 		// Do you want to use the document title? (Default: true)
@@ -53,15 +53,18 @@ class WebShell {
 
 		// run the app in debug mode? (Default: false)
 		// will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
-		"debugmode": true,
+		"debugmode": false,
 
-		// Please paste here the JavaScript you want to load on a website
+		// Please paste here the JavaScript you want to load on a website (Default: "")
 		"JSInject": "",
 
-		// Please paste here the CSS you want to load on a website
+		// Please paste here the CSS you want to load on a website (Default: "")
 		"CSSInject": "",
 
-		// Menubar app (right side next to clock)
+		// Enable (inject) import (JS/CSS) Folder. (Default: true)
+        "EnableInjectImport": true,
+        
+		// Menubar app (right side next to clock) (Default: true)
 		"MenuBarApp": false,
 
 		// Media keys settings
@@ -75,20 +78,20 @@ class WebShell {
 
 		// Contextmenu settings
 		"Contextmenu": [
-			// Enable "Back" & "Forward"
+			// Enable "Back" & "Forward" (Default: true)
 			"BackAndForward": true,
 
-			// Enable "Download"
+			// Enable "Download" (Default: true)
 			"Download": true,
 
-			// Enable "Reload"
+			// Enable "Reload" (Default: true)
 			"Reload": true,
 
-			// Enable "Open in a new window"
+			// Enable "Open in a new window" (Default: true)
 			"newWindow": true
 		],
 
-		// Just a placeholder.
+		// Just a placeholder. (Default: true)
 		"fake": true
 	]
 }

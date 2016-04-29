@@ -44,8 +44,8 @@ extension ViewController {
 
 		// @wdg Add Custom useragent support
 		// Issue: #52
-		if (WebShell().Settings["useragent"] as! String == "default") {
-			var UA: String = WebShell().Settings["title"] as! String
+		if ((WebShell().Settings["useragent"] as! String).lowercaseString == "default") {
+			var UA: String = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as! String
 			UA = UA.stringByAppendingString("/")
 			UA = UA.stringByAppendingString(NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String)
 			UA = UA.stringByAppendingString(" based on Safari/AppleWebKit (KHTML, like Gecko)")
@@ -109,10 +109,6 @@ extension ViewController {
 		}
 		let URL = NSURL(string: url)
 		mainWebview.mainFrame.loadRequest(NSURLRequest(URL: URL!))
-
-		// Inject Webhooks
-//		self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
-//		self.loopThroughiFrames()
 	}
 
 	// @wdg Add Print Support
