@@ -95,16 +95,18 @@ extension ViewController {
 		}
 
 		if (download) {
-			lastURL = element["WebElementLinkURL"]! as! NSURL
+			if (element["WebElementLinkURL"] != nil) {
+				lastURL = element["WebElementLinkURL"]! as! NSURL
 
-			if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
-				NewMenu.append(NSMenuItem.separatorItem())
+				if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
+					NewMenu.append(NSMenuItem.separatorItem())
 
-				if (contextMenu["newWindow"]!) {
-					NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
-				}
-				if (contextMenu["Download"]!) {
-					NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
+					if (contextMenu["newWindow"]!) {
+						NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
+					}
+					if (contextMenu["Download"]!) {
+						NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
+					}
 				}
 			}
 		}

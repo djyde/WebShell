@@ -52,6 +52,7 @@ extension ViewController {
 			initSettings()
 			goHome()
             WSMediaLoop(self)
+            WSinitSwipeGestures()
 		}
 	}
 
@@ -68,5 +69,6 @@ extension ViewController {
 		initSettings()
 		goHome()
         WSMediaLoop(self)
+        WSinitSwipeGestures()
 	}
 }
