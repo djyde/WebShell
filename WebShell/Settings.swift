@@ -67,6 +67,9 @@ class WebShell {
 		// Menubar app (right side next to clock) (Default: true)
 		"MenuBarApp": false,
 
+		// Navigate trough trackpad (back/forward) (Default: true)
+        "navigateViaTrackpad": true,
+        
 		// Media keys settings
 		"MediaKeys": [
 			// Enable "Back" & "Forward"

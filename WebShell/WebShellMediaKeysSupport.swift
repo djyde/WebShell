@@ -143,7 +143,7 @@ extension ViewController {
 
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
-		if (WebShell().Settings["MenuBarApp"] as! Bool) {
+		if (WebShellSettings["MenuBarApp"] as! Bool) {
 			if ((NSApplication.sharedApplication().keyWindow) != nil) {
 				if (self.MustCloseWindow) {
 					NSApplication.sharedApplication().keyWindow?.close()

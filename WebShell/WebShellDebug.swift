@@ -23,15 +23,15 @@ extension ViewController {
 //            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
 				if ((String(Process.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
 					if ((String(Process.arguments[i + 1])) == "YES") {
-						WebShell().Settings["debugmode"] = true
-						WebShell().Settings["consoleSupport"] = true
+						WebShellSettings["debugmode"] = true
+						WebShellSettings["consoleSupport"] = true
 					}
 				}
 
 				if ((String(Process.arguments[i])).uppercaseString == "-DEBUG") {
 					if ((String(Process.arguments[i + 1])).uppercaseString == "YES" || (String(Process.arguments[i + 1])).uppercaseString == "true") {
-						WebShell().Settings["debugmode"] = true
-						WebShell().Settings["consoleSupport"] = true
+						WebShellSettings["debugmode"] = true
+						WebShellSettings["consoleSupport"] = true
 					}
 				}
 
@@ -40,15 +40,15 @@ extension ViewController {
 				}
 
 				if ((String(Process.arguments[i])) == "-url") {
-					WebShell().Settings["url"] = String(Process.arguments[i + 1])
+					WebShellSettings["url"] = String(Process.arguments[i + 1])
 				}
 
 				if ((String(Process.arguments[i])) == "-height") {
-					WebShell().Settings["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
+					WebShellSettings["initialWindowHeight"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
 				}
 
 				if ((String(Process.arguments[i])) == "-width") {
-					WebShell().Settings["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
+					WebShellSettings["initialWindowWidth"] = (Int(Process.arguments[i + 1]) > 250) ? Int(Process.arguments[i + 1]) : Int(250)
 				}
 			}
 		}
@@ -79,7 +79,7 @@ extension ViewController {
 		}
 
 		var NewMenu: [AnyObject] = [AnyObject]()
-		let contextMenu = WebShell().Settings["Contextmenu"] as! [String: Bool]
+		let contextMenu = WebShellSettings["Contextmenu"] as! [String: Bool]
 
 		// if can back
 		if (contextMenu["BackAndForward"]!) {
@@ -113,7 +113,7 @@ extension ViewController {
 
 		NewMenu.append(NSMenuItem.separatorItem())
 		// Add debug menu. (if enabled)
-		if (WebShell().Settings["debugmode"] as! Bool) {
+		if (WebShellSettings["debugmode"] as! Bool) {
 			let debugMenu = NSMenu(title: "Debug")
 			debugMenu.addItem(IElement)
 			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))

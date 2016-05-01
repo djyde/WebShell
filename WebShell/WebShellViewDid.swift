@@ -25,7 +25,8 @@ extension ViewController {
 		// if (![self respondsToSelector:@selector(viewWillAppear)]) {
 
 		if (!NSViewController().respondsToSelector(#selector(NSViewController.viewWillAppear))) {
-
+            checkSettings()
+            
             let myPopup: NSAlert = NSAlert()
             myPopup.messageText = "Hello!"
             myPopup.informativeText = "You are running mavericks?"
@@ -47,7 +48,6 @@ extension ViewController {
 			mainWebview.resourceLoadDelegate = self
 			mainWebview.downloadDelegate = self
 
-			checkSettings()
 			addObservers()
 			initSettings()
 			goHome()
@@ -57,12 +57,14 @@ extension ViewController {
 	}
 
 	override func viewDidLoad() {
+        checkSettings()
+        //self.view = goodView()
 		super.viewDidLoad()
 
 		mainWebview.UIDelegate = self
 		mainWebview.resourceLoadDelegate = self
 		mainWebview.downloadDelegate = self
-        WebShell().Settings["WSMW"] = mainWebview;
+        WebShellSettings["WSMW"] = mainWebview;
         
 		checkSettings()
 		addObservers()

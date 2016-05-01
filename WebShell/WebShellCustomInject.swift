@@ -21,8 +21,8 @@ extension ViewController {
 	 */
 	internal func _WSInjectJS(jsContext: JSContext!) {
 		// JSInject
-		if (WebShell().Settings["JSInject"] as! String != "") {
-			jsContext.evaluateScript(WebShell().Settings["JSInject"] as! String)
+		if (WebShellSettings["JSInject"] as! String != "") {
+			jsContext.evaluateScript(WebShellSettings["JSInject"] as! String)
 		}
 		_WSFindJS(jsContext)
 	}
@@ -38,8 +38,8 @@ extension ViewController {
 	 */
 	internal func _WSInjectCSS(jsContext: JSContext!) {
 		// CSSInject
-		if (WebShell().Settings["CSSInject"] as! String != "") {
-			let css: String = (WebShell().Settings["CSSInject"] as! String)
+		if (WebShellSettings["CSSInject"] as! String != "") {
+			let css: String = (WebShellSettings["CSSInject"] as! String)
 				.stringByReplacingOccurrencesOfString("\n", withString: "")
 				.stringByReplacingOccurrencesOfString("\r", withString: "")
 				.stringByReplacingOccurrencesOfString("'", withString: "\\'")
@@ -50,7 +50,7 @@ extension ViewController {
 	}
 
 	internal func _WSFindCSS(jsContext: JSContext!) {
-		if (WebShell().Settings["EnableInjectImport"] as! Bool) { // (EII)
+		if (WebShellSettings["EnableInjectImport"] as! Bool) { // (EII)
 
 			let Seperated = (Process.arguments[0]).componentsSeparatedByString("/")
 			var newPath = ""
@@ -90,7 +90,7 @@ extension ViewController {
 	}
 
 	internal func _WSFindJS(jsContext: JSContext!) {
-		if (WebShell().Settings["EnableInjectImport"] as! Bool) { // (EII)
+		if (WebShellSettings["EnableInjectImport"] as! Bool) { // (EII)
 
 			let Seperated = (Process.arguments[0]).componentsSeparatedByString("/")
 			var newPath = ""

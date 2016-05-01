@@ -22,7 +22,7 @@ extension ViewController {
     // webview settings
     func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
         // @wdg: Better progress indicator | Issue: #37
-        if ((WebShell().Settings["showLoadingBar"] as? Bool)!) {
+        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;
@@ -38,7 +38,7 @@ extension ViewController {
     // @wdg: Better progress indicator
     // Issue: #37
     func webView(sender: WebView!, willPerformClientRedirectToURL URL: NSURL!, delay seconds: NSTimeInterval, fireDate date: NSDate!, forFrame frame: WebFrame!) {
-        if ((WebShell().Settings["showLoadingBar"] as? Bool)!) {
+        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.hidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
@@ -50,7 +50,7 @@ extension ViewController {
     // @wdg: Better progress indicator
     // Issue: #37
     func webView(webView: WebView!, decidePolicyForMIMEType type: String!, request: NSURLRequest!, frame: WebFrame!, decisionListener listener: WebPolicyDecisionListener!) {
-        if ((WebShell().Settings["showLoadingBar"] as? Bool)!) {
+        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.hidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
@@ -85,7 +85,7 @@ extension ViewController {
         
         // @wdg Add location support
         // Issue: #41
-        if (WebShell().Settings["needLocation"] as! Bool) {
+        if (WebShellSettings["needLocation"] as! Bool) {
             self.websiteWantsLocation()
         } else {
             self.locationInjector(false) // Says i don't have a location!
@@ -93,7 +93,7 @@ extension ViewController {
     }
     
     func webView(sender: WebView!, didReceiveTitle title: String!, forFrame frame: WebFrame!) {
-        if (WebShell().Settings["useDocumentTitle"] as! Bool) {
+        if (WebShellSettings["useDocumentTitle"] as! Bool) {
             mainWindow.window?.title = title
         }
     }

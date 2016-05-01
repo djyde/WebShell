@@ -21,7 +21,7 @@ extension ViewController {
 		// Issue: #48
 		let ws = NSWorkspace.sharedWorkspace()
 		do {
-			if (WebShell().Settings["debugmode"] as! Bool) {
+			if (WebShellSettings["debugmode"] as! Bool) {
 				try ws.launchApplicationAtURL(NSURL(string: "file://\(Process.arguments[0])")!, options: .NewInstance, configuration: [NSWorkspaceLaunchConfigurationArguments: ["-NSDocumentRevisionsDebugMode", "YES", "-url", url, "-height", height, "-width", width]])
 			} else {
 				try ws.launchApplicationAtURL(NSURL(string: Process.arguments[0])!, options: .NewInstance, configuration: [NSWorkspaceLaunchConfigurationArguments: ["-url", url, "-height", height, "-width", width]])
