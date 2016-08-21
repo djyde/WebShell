@@ -11,72 +11,72 @@ import WebKit
 
 // See: #43
 extension ViewController {
-    func webView(sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedByFrame frame: WebFrame!) {
+    @objc(webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:) func webView(_ sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedBy frame: WebFrame!) {
         let alert = NSAlert.init()
-        alert.addButtonWithTitle("OK")
+        alert.addButton(withTitle: "OK")
         alert.messageText = "Message"
         alert.informativeText = message
         alert.runModal()
     }
     
     // webview settings
-    func webView(sender: WebView!, didStartProvisionalLoadForFrame frame: WebFrame!) {
+    @objc(webView:didStartProvisionalLoadForFrame:) func webView(_ sender: WebView!, didStartProvisionalLoadFor frame: WebFrame!) {
         // @wdg: Better progress indicator | Issue: #37
         if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;
-            progressBar.incrementBy(24)
+            progressBar.increment(by: 24)
         }
         
         if (!firstLoadingStarted) {
             firstLoadingStarted = true
-            launchingLabel.hidden = false
+            launchingLabel.isHidden = false
         }
     }
     
     // @wdg: Better progress indicator
     // Issue: #37
-    func webView(sender: WebView!, willPerformClientRedirectToURL URL: NSURL!, delay seconds: NSTimeInterval, fireDate date: NSDate!, forFrame frame: WebFrame!) {
+    @objc(webView:willPerformClientRedirectToURL:delay:fireDate:forFrame:) func webView(_ sender: WebView!, willPerformClientRedirectTo URL: URL!, delay seconds: TimeInterval, fire date: Date!, for frame: WebFrame!) {
         if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
-            progressBar.hidden = false
+            progressBar.isHidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;
-            progressBar.incrementBy(24)
+            progressBar.increment(by: 24)
         }
     }
     
     // @wdg: Better progress indicator
     // Issue: #37
-    func webView(webView: WebView!, decidePolicyForMIMEType type: String!, request: NSURLRequest!, frame: WebFrame!, decisionListener listener: WebPolicyDecisionListener!) {
+    func webView(_ webView: WebView!, decidePolicyForMIMEType type: String!, request: URLRequest!, frame: WebFrame!, decisionListener listener: WebPolicyDecisionListener!) {
         if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
-            progressBar.hidden = false
+            progressBar.isHidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;
-            progressBar.incrementBy(24)
+            progressBar.increment(by: 24)
         }
     }
     
     // @wdg: Better progress indicator
     // Issue: #37
-    func webView(webView: WebView!, didFailLoadWithError error: NSError) {
-        progressBar.incrementBy(50)
+    func webView(_ webView: WebView!, didFailLoadWithError error: NSError) {
+        progressBar.increment(by: 50)
         progressBar.stopAnimation(self)
-        progressBar.hidden = true
+        progressBar.isHidden = true
         progressBar.doubleValue = 1;
     }
     
     // @wdg: Better progress indicator
     // Issue: #37
-    func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
-        progressBar.incrementBy(50)
+    @objc(webView:didFinishLoadForFrame:) func webView(_ sender: WebView!, didFinishLoadFor frame: WebFrame!) {
+        progressBar.increment(by: 50)
         progressBar.stopAnimation(self)
-        progressBar.hidden = true // Hide after we're done.
+        progressBar.isHidden = true // Hide after we're done.
         progressBar.doubleValue = 1;
-        if (!launchingLabel.hidden) {
-            launchingLabel.hidden = true
+        if (!launchingLabel.isHidden) {
+            launchingLabel.isHidden = true
         }
         
         // Inject Webhooks
@@ -92,7 +92,7 @@ extension ViewController {
         }
     }
     
-    func webView(sender: WebView!, didReceiveTitle title: String!, forFrame frame: WebFrame!) {
+    @objc(webView:didReceiveTitle:forFrame:) func webView(_ sender: WebView!, didReceiveTitle title: String!, for frame: WebFrame!) {
         if (WebShellSettings["useDocumentTitle"] as! Bool) {
             mainWindow.window?.title = title
         }

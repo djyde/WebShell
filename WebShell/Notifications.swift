@@ -20,12 +20,12 @@ extension ViewController {
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func makeNotification(title: NSString, message: NSString, icon: NSString) -> Void {
+	func makeNotification(_ title: NSString, message: NSString, icon: NSString) -> Void {
 		let notification: NSUserNotification = NSUserNotification() // Set up Notification
 		
 		// If has no message (title = message)
-		if (message.isEqualToString("undefined")) {
-			notification.title = NSBundle.mainBundle().infoDictionary!["CFBundleName"] as? String // Use App name!
+		if (message.isEqual(to: "undefined")) {
+			notification.title = Bundle.main.infoDictionary!["CFBundleName"] as? String // Use App name!
 			notification.informativeText = title as String // Title   = string
 		} else {
 			notification.title = title as String // Title   = string
@@ -34,33 +34,35 @@ extension ViewController {
 		
 		
 		notification.soundName = NSUserNotificationDefaultSoundName // Default sound
-		notification.deliveryDate = NSDate(timeIntervalSinceNow: 0) // Now!
+		notification.deliveryDate = Date(timeIntervalSinceNow: 0) // Now!
 		notification.actionButtonTitle = "Close"
 		
 		// Notification has a icon, so add it!
-		if (!icon.isEqualToString("undefined")) {
-			notification.contentImage = NSImage(contentsOfURL: NSURL(string: icon as String)!) ;
+		if (!icon.isEqual(to: "undefined")) {
+			notification.contentImage = NSImage(contentsOf: URL(string: icon as String)!) ;
 		}
 		
-		let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.defaultUserNotificationCenter() // Notification centre
+		let notificationcenter: NSUserNotificationCenter? = NSUserNotificationCenter.default // Notification centre
 		notificationcenter?.scheduleNotification(notification) // Pushing to notification centre
 		
 		notificationCount += 1
 		
-		NSApplication.sharedApplication().dockTile.badgeLabel = String(notificationCount)
+		NSApplication.shared().dockTile.badgeLabel = String(notificationCount)
 	}
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func flashScreen(data: NSString) -> Void {
-		if ((Int(data as String)) != nil || data.isEqualToString("undefined")) {
+	func flashScreen(_ data: NSString) -> Void {
+		if ((Int(data as String)) != nil || data.isEqual(to: "undefined")) {
 			AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
 		} else {
-			let time: NSArray = (data as String).componentsSeparatedByString(",")
+			let time: [String] = (data as String).components(separatedBy: ",")
 			for i in 0 ..< time.count {
-				var timeAsInt = NSNumberFormatter().numberFromString(time[i] as! String)
-				timeAsInt = Int(timeAsInt!) / 100
-				NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(timeAsInt!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
+                let timeAsNumber = NumberFormatter().number(from: time[i])
+                let timeAsDecimal = timeAsNumber as! Decimal / 100
+                let timeAsInteger = Int("\(timeAsDecimal)") //DIRTY HACK
+                //TODO: Fix this mess above...
+				Timer.scheduledTimer(timeInterval: TimeInterval(timeAsInteger!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
 			}
 		}
 	}

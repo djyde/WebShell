@@ -45,7 +45,7 @@ extension ViewController {
 				// We don't check them for iframes, somewhere the fun must be ended.
 				for child in children.subviews {
 					// mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView.subviews[0] = WebClipView.subviews[0] = WebHTMLView.subviews[x] = WebFrameView (Finally) (name = child)
-					if (child.isKindOfClass(WebFrameView)) {
+					if (child.isKind(of: WebFrameView.self)) {
 						let frame: NSView = child
 						let context: JSContext = frame.webFrame.javaScriptContext
 						
@@ -65,7 +65,7 @@ extension ViewController {
 
 	 - Note: @wdg Fixes a lot (Issues #23, #5, #2, #35, #38, #39 & More.)
 	 */
-	func injectWebhooks(jsContext: JSContext!) {
+	func injectWebhooks(_ jsContext: JSContext!) {
 		// Injecting javascript (via jsContext)
 		
 		// @wdg Hack URL's if settings is set.
@@ -83,10 +83,10 @@ extension ViewController {
 		// @wdg Add Notification Support
 		// Issue: #2, #35, #38 (webkitNotification)
 		jsContext.evaluateScript("function Notification(myTitle, options){if(typeof options === 'object'){var body,icon,tag;if (typeof options['body'] !== 'undefined'){body=options['body']}if (typeof options['icon'] !== 'undefined'){Notification.note(myTitle, body, options['icon'])}else{Notification.note(myTitle, body)}}else{if(typeof options === 'string'){Notification.note(myTitle, options)}else{Notification.note(myTitle)}}}Notification.length=1;Notification.permission='granted';Notification.requestPermission=function(callback){if(typeof callback === 'function'){callback('granted');}else{return 'granted'}};window.Notification=Notification;window.webkitNotification=Notification;")
-		let myNofification: @convention(block)(NSString!, NSString?, NSString?) -> Void = {(title: NSString!, message: NSString?, icon: NSString?) in
-			self.makeNotification(title, message: message!, icon: icon!)
+		let myNofification: @convention(block)(NSString?, NSString?, NSString?) -> Void = {(title: NSString?, message: NSString?, icon: NSString?) in
+			self.makeNotification(title!, message: message!, icon: icon!)
 		}
-		jsContext.objectForKeyedSubscript("Notification").setObject(unsafeBitCast(myNofification, AnyObject.self), forKeyedSubscript: "note")
+		jsContext.objectForKeyedSubscript("Notification").setObject(unsafeBitCast(myNofification, to: AnyObject.self), forKeyedSubscript: "note" as (NSCopying & NSObjectProtocol)!)
 		
 		// Add console.log ;)
 		// Add Console.log (and console.error, and console.warn)
@@ -95,7 +95,7 @@ extension ViewController {
 			let logFunction: @convention(block)(NSString!) -> Void = {(message: NSString!) in
 				print("JS: \(message)")
 			}
-			jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, AnyObject.self), forKeyedSubscript: "print")
+			jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
 		}
 		
 		// @wdg Add support for target=_blank
@@ -105,7 +105,7 @@ extension ViewController {
 		
 		// _blank external
 		let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
-			NSWorkspace.sharedWorkspace().openURL(NSURL(string: (url as String))!)
+			NSWorkspace.shared().open(URL(string: (url as String))!)
 		}
 		
 		// _blank internal
@@ -113,19 +113,19 @@ extension ViewController {
 			self.loadUrl((url as String))
 		}
 		// _blank external
-		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, AnyObject.self), forKeyedSubscript: "openExternal")
+		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, to: AnyObject.self), forKeyedSubscript: "openExternal" as (NSCopying & NSObjectProtocol)!)
 		
 		// _blank internal
-		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, AnyObject.self), forKeyedSubscript: "openInternal")
+		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, to: AnyObject.self), forKeyedSubscript: "openInternal" as (NSCopying & NSObjectProtocol)!)
 		
 		// @wdg Add Print Support
 		// Issue: #39
 		// window.print()
-		let printMe: @convention(block)(NSString?) -> Void = {(url: NSString?) in self.printThisPage()}
-		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(printMe, AnyObject.self), forKeyedSubscript: "print")
+		let printMe: @convention(block)(NSString?) -> Void = {(url: NSString?) in self.printThisPage(self)}
+		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(printMe, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
 		
 		// navigator.getBattery()
-		jsContext.objectForKeyedSubscript("navigator").setObject(BatteryManager.self, forKeyedSubscript: "battery")
+		jsContext.objectForKeyedSubscript("navigator").setObject(BatteryManager.self, forKeyedSubscript: "battery" as (NSCopying & NSObjectProtocol)!)
 		
 		jsContext.evaluateScript("window.navigator.getBattery = window.navigator.battery.getBattery;")
 		
@@ -133,21 +133,21 @@ extension ViewController {
 		let vibrateNow: @convention(block)(NSString!) -> Void = {(data: NSString!) in
 			self.flashScreen(data)
 		}
-		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, AnyObject.self), forKeyedSubscript: "vibrate")
+		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, to: AnyObject.self), forKeyedSubscript: "vibrate" as (NSCopying & NSObjectProtocol)!)
 		
 		// @wdg Add localstorage Support
 		// Issue: #25
-		let saveToLocal: @convention(block)(NSString!, NSString!) -> Void = {(key: NSString!, value: NSString!) in
-			let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
+		let saveToLocal: @convention(block)(NSString?, NSString?) -> Void = {(key: NSString?, value: NSString?) in
+			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
 			let newKey = "WSLS:\(host):\(key)"
 			
-			NSUserDefaults.standardUserDefaults().setValue(value, forKey: newKey)
+			UserDefaults.standard.setValue(value, forKey: newKey)
 		}
 		
 		let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
-			let host: String = (self.mainWebview.mainFrame.dataSource?.request.URL?.host)!
+			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
 			let newKey = "WSLS:\(host):\(key)"
-			let val = NSUserDefaults.standardUserDefaults().valueForKey(newKey as String)
+			let val = UserDefaults.standard.value(forKey: newKey as String)
 			
 			if let myVal = val as? String {
 				return String(myVal)
@@ -157,20 +157,20 @@ extension ViewController {
 			}
 		}
 		
-		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, AnyObject.self), forKeyedSubscript: "setItem")
-		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, AnyObject.self), forKeyedSubscript: "getItem")
+		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, to: AnyObject.self), forKeyedSubscript: "setItem" as (NSCopying & NSObjectProtocol)!)
+		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, to: AnyObject.self), forKeyedSubscript: "getItem" as (NSCopying & NSObjectProtocol)!)
 		
 		// @wdg Support for window.open (popup)
 		// Issue: #21
         // openNewWindow(url: "THEURL", height: "0", width: "0")
 		// window.open(URL, name, specs, replace)
-        let windowOpen: @convention(block)(NSString!, NSString?, NSString?, NSString?) -> Void = {(url: NSString!, target: NSString?, specs: NSString?, replace: NSString?) in
+        let windowOpen: @convention(block)(NSString?, NSString?, NSString?, NSString?) -> Void = {(url: NSString?, target: NSString?, specs: NSString?, replace: NSString?) in
             self.parseWindowOpen(url! as String, options: specs as! String)
         }
-		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(windowOpen, AnyObject.self), forKeyedSubscript: "open")
+		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(windowOpen, to: AnyObject.self), forKeyedSubscript: "open" as (NSCopying & NSObjectProtocol)!)
         
 		// Get window.webshell
-		let nsObject: AnyObject? = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"]
+		let nsObject: Any? = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
 		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
         
         _WSInjectJS(jsContext)
@@ -179,22 +179,22 @@ extension ViewController {
 	
 	// @wdg Add Localstorage Support
 	// Issue: #25
-	func resetLocalStorage(Sender: AnyObject = "") -> Void {
-		NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
+	func resetLocalStorage(_ Sender: AnyObject?) -> Void {
+		UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
 	}
 	
 	// @wdg Support for window.open (popup)
 	// Issue: #25
-	func parseWindowOpen(url: String, options: String) -> Void {
+	func parseWindowOpen(_ url: String, options: String) -> Void {
 		// We ignore x and y. (initial position on the screen)
 		// Using specifications of W3Schools: http://www.w3schools.com/jsref/met_win_open.asp
 		// "Open a new window called "MsgWindow", and write some text into it" is not (yet) supported!
 		var width = "0"
 		var height = "0"
-		let options = Array(options.componentsSeparatedByString(","))
+		let options = Array(options.components(separatedBy: ","))
         
 		for i in 0 ..< options.count {
-			var tmp = Array(options[i].componentsSeparatedByString("="))
+			var tmp = Array(options[i].components(separatedBy: "="))
             
 			if (tmp[0] == "width" || tmp[0] == " width") {
 				width = tmp[1]

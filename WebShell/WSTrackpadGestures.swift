@@ -26,15 +26,15 @@ extension ViewController: NSGestureRecognizerDelegate {
 		mainWebview.acceptsTouchEvents = true
 		self.view.acceptsTouchEvents = true
 
-		let WSswipeGesture: NSGestureRecognizer = NSGestureRecognizer(target: self, action: #selector(ViewController.swipeWithEvent(_:)))
-		WSswipeGesture.enabled = true
+		let WSswipeGesture: NSGestureRecognizer = NSGestureRecognizer(target: self, action: #selector(ViewController.swipe(with:)))
+		WSswipeGesture.isEnabled = true
 		WSswipeGesture.target = self
-		WSswipeGesture.action = #selector(ViewController.swipeWithEvent(_:))
+		WSswipeGesture.action = #selector(ViewController.swipe(with:))
 		self.view.addGestureRecognizer(WSswipeGesture)
 		mainWebview.addGestureRecognizer(WSswipeGesture)
 
 		let WSpanGesture: NSPanGestureRecognizer = NSPanGestureRecognizer(target: self, action: #selector(ViewController.handlePan(_:)))
-		WSpanGesture.enabled = true
+		WSpanGesture.isEnabled = true
 		WSpanGesture.target = self
 		WSpanGesture.action = #selector(ViewController.handlePan(_:))
 		self.view.addGestureRecognizer(WSpanGesture)
@@ -52,7 +52,7 @@ extension ViewController: NSGestureRecognizerDelegate {
      
      @wdg #44: Support Trackpad gestures
      */
-	func handlePan(event: NSEvent) {
+	func handlePan(_ event: NSEvent) {
 		print("Pan = \(event)")
 	}
 
@@ -63,20 +63,20 @@ extension ViewController: NSGestureRecognizerDelegate {
      
      @wdg #44: Support Trackpad gestures
      */
-	override func swipeWithEvent(event: NSEvent) {
+	override func swipe(with event: NSEvent) {
 		var action = 0;
-		if (event.type == .EventTypeGesture) {
-			let touches: NSSet = event.touchesMatchingPhase(NSTouchPhase.Any, inView: self.view)
+		if (event.type == .gesture) {
+			let touches: Set<NSTouch> = event.touches(matching: NSTouchPhase.any, in: self.view)
 			if (touches.count == 2) {
 				for touch in touches {
-					if (touch.phase == NSTouchPhase.Began) {
+					if ((touch as AnyObject).phase == NSTouchPhase.began) {
 //						print("Began X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
-                        WSgestureLog = [touch.normalizedPosition.x, touch.normalizedPosition.y]
+                        WSgestureLog = [(touch as AnyObject).normalizedPosition.x, (touch as AnyObject).normalizedPosition.y]
 					}
-					if (touch.phase == NSTouchPhase.Ended) {
+					if ((touch as AnyObject).phase == NSTouchPhase.ended) {
 //						print("Ended  X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
 //                      print("Versus X:\(WSgestureLog[0]) Y:\(WSgestureLog[1])")
-                        if (touch.normalizedPosition.x < WSgestureLog[0]) {
+                        if ((touch as AnyObject).normalizedPosition.x < WSgestureLog[0]) {
                             action = -1
                         } else {
                             action = 1
@@ -94,7 +94,7 @@ extension ViewController: NSGestureRecognizerDelegate {
 			// ignore
 		} else if (action > 0) { // > Left
 			if (mainWebview.canGoBack) {
-				if (mainWebview.loading) {
+				if (mainWebview.isLoading) {
 					mainWebview.stopLoading(nil)
 				}
 				mainWebview.goBack(nil)
@@ -103,7 +103,7 @@ extension ViewController: NSGestureRecognizerDelegate {
 			}
 		} else if (action < 0) { // < Right
 			if (mainWebview.canGoForward) {
-				if (mainWebview.loading) {
+				if (mainWebview.isLoading) {
 					mainWebview.stopLoading(nil)
 				}
 				mainWebview.goForward(nil)
@@ -113,9 +113,9 @@ extension ViewController: NSGestureRecognizerDelegate {
 		}
 	}
 
-	override func touchesMovedWithEvent(event: NSEvent) {
-		if (event.type == .EventTypeGesture) {
-			swipeWithEvent(event)
+	override func touchesMoved(with event: NSEvent) {
+		if (event.type == .gesture) {
+			swipe(with: event)
 		}
 	}
 }
@@ -128,9 +128,9 @@ extension ViewController: NSGestureRecognizerDelegate {
  @wdg #44: Support Trackpad gestures
  */
 class x: WebView, NSGestureRecognizerDelegate {
-	func WSswipedDown(sender: AnyObject) {}
+	func WSswipedDown(_ sender: AnyObject) {}
 	
-    override func mouseDown(event: NSEvent) {}
+    override func mouseDown(with event: NSEvent) {}
     
 	override var acceptsFirstResponder: Bool {
 		return true

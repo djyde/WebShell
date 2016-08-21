@@ -31,8 +31,8 @@ extension ViewController {
      - Parameter manager: CLLocationManager
      - Parameter locations: AnyObject
      */
-	func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
-		let location: CLLocation = locations[0] as! CLLocation
+	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+		let location: CLLocation = locations[0] 
 		self.locationInjector(true, location)
 	}
 
@@ -42,7 +42,7 @@ extension ViewController {
      - Parameter manager: CLLocationManager
      - Parameter error: NSError
      */
-	func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 		self.locationInjector(false)
 	}
 	
@@ -52,9 +52,9 @@ extension ViewController {
      - Parameter haveLocation: (Bool) have the location?
      - Parameter location: (CLLocation) the location
      */
-	func locationInjector(haveLocation: Bool, _ location: CLLocation? = CLLocation()) {
+	func locationInjector(_ haveLocation: Bool, _ location: CLLocation? = CLLocation()) {
 		// Ok inject new java Thing! (Cool!)
-		let navigatorGeolocationGetCurrentPosition: @convention(block)(String!, String?, String?) -> String = {(correct: String!, invalid: String?, extra: String?) in
+		let navigatorGeolocationGetCurrentPosition: @convention(block)(String?, String?, String?) -> String = {(correct: String?, invalid: String?, extra: String?) in
 			// Checked with.
 			// navigator.geolocation.getCurrentPosition(function(position) {console.log(position);},function(position) {console.log(position);});
 			
@@ -63,18 +63,18 @@ extension ViewController {
 			// Safari Demo: [Log] 2
 			
 			if (haveLocation) {
-				let check_correct: String = correct.lowercaseString[0...8]
+				let check_correct: String = correct!.lowercased()[0...8]
 				let returnAs: String = "{coords: {coords: 'Coordinates', accuracy: 10, altitude: \(location!.altitude), altitudeAccuracy: 10, heading: '\(location!.course)', longitude: \(location!.coordinate.longitude), latitude: \(location!.coordinate.latitude), speed: \(location!.speed)}}"
 				
 				if (check_correct == "function") {
 					// Begin with function (all lowercase)
-					var newFunction = correct.lowercaseString[0...8]
+					var newFunction = correct!.lowercased()[0...8]
 					// Make the function named _WSLRD (WebShell Location Return Data)
-					newFunction = newFunction.stringByAppendingString(" _WSLRD")
+					newFunction = newFunction + " _WSLRD"
 					// Check if has space or not, otherwise begin 1 character later
-					newFunction = newFunction.stringByAppendingString(correct[(correct.lowercaseString[8] == " " ? 8 : 7)...(correct.characters.count)])
+					newFunction = newFunction + (correct?[(correct?.lowercased()[8] == " " ? 8 : 7)...(correct?.characters.count)!])!
 					// Call the function
-					newFunction = newFunction.stringByAppendingString("\n;_WSLRD(\(returnAs))") // Insert what to return
+					newFunction = newFunction + "\n;_WSLRD(\(returnAs))" // Insert what to return
 					
 					self.mainWebview.mainFrame.javaScriptContext.evaluateScript(newFunction) // Call & Done.
 				} else {
@@ -85,18 +85,18 @@ extension ViewController {
 				}
 			} else {
 				if (invalid != nil) {
-					let check_invalid: String = invalid!.lowercaseString[0...8]
+					let check_invalid: String = invalid!.lowercased()[0...8]
 					let returnAs: String = "{coords: {coords: null, accuracy: null, altitude: null, altitudeAccuracy: null, heading: null, longitude: null, latitude: null, speed: null}}"
 					
 					if (check_invalid == "function") {
 						// Begin with function (all lowercase)
-						var newFunction = invalid!.lowercaseString[0...8]
+						var newFunction = invalid!.lowercased()[0...8]
 						// Make the function named _WSLRD (WebShell Location Return Data)
-						newFunction = newFunction.stringByAppendingString(" _WSLRD")
+						newFunction = newFunction + " _WSLRD"
 						// Check if has space or not, otherwise begin 1 character later
-						newFunction = newFunction.stringByAppendingString(invalid![(invalid!.lowercaseString[8] == " " ? 8 : 7)...(invalid!.characters.count)])
+						newFunction = newFunction + invalid![(invalid!.lowercased()[8] == " " ? 8 : 7)...(invalid!.characters.count)]
 						// Call the function
-						newFunction = newFunction.stringByAppendingString("\n;_WSLRD(\(returnAs))") // Insert what to return
+						newFunction = newFunction + "\n;_WSLRD(\(returnAs))" // Insert what to return
 						
 						self.mainWebview.mainFrame.javaScriptContext.evaluateScript(newFunction) // Call & Done.
 					} else {
@@ -110,7 +110,7 @@ extension ViewController {
 			
 			return "undefined"
 		}
-		self.mainWebview.mainFrame.javaScriptContext.objectForKeyedSubscript("navigator").objectForKeyedSubscript("geolocation").setObject(unsafeBitCast(navigatorGeolocationGetCurrentPosition, AnyObject.self), forKeyedSubscript: "getCurrentPosition")
+		self.mainWebview.mainFrame.javaScriptContext.objectForKeyedSubscript("navigator").objectForKeyedSubscript("geolocation").setObject(unsafeBitCast(navigatorGeolocationGetCurrentPosition, to: AnyObject.self), forKeyedSubscript: "getCurrentPosition" as (NSCopying & NSObjectProtocol)!)
 	}
 }
 // TEST

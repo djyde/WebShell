@@ -28,7 +28,7 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0
-    var lastURL:NSURL = NSURL.init()
+    var lastURL:URL = URL(fileURLWithPath: "http://place.holder") //WTF Swift 3?
     var IElement: NSMenuItem = NSMenuItem.init()
 	let locationManager = CLLocationManager()
     var MustCloseWindow = true
