@@ -24,8 +24,7 @@ extension ViewController {
 	}
 
 	func reload() {
-		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
-		loadUrl(currentUrl)
+        mainWebview.mainFrame.reload() // Swift 3
 	}
 
 	func copyUrl() {

@@ -43,8 +43,8 @@ extension ViewController {
 		if (CommandLine.argc > 0) {
 			for i in stride(from: 1, to: Int(CommandLine.argc), by: 2) {
 //            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
-				if ((String(CommandLine.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
-					if ((String(CommandLine.arguments[i + 1])) == "YES") {
+                if ((String(describing: CommandLine.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
+					if ((String(describing: CommandLine.arguments[i + 1])) == "YES") {
 						WebShellSettings["debugmode"] = true
 						WebShellSettings["consoleSupport"] = true
 					}
@@ -57,19 +57,19 @@ extension ViewController {
 					}
 				}
 
-				if ((String(CommandLine.arguments[i])) == "-dump-args") {
+				if ((String(describing: CommandLine.arguments[i])) == "-dump-args") {
 					self._debugDumpArguments("" as AnyObject)
 				}
 
-				if ((String(CommandLine.arguments[i])) == "-url") {
+				if ((String(describing: CommandLine.arguments[i])) == "-url") {
 					WebShellSettings["url"] = String(CommandLine.arguments[i + 1])
 				}
 
-				if ((String(CommandLine.arguments[i])) == "-height") {
+				if ((String(describing: CommandLine.arguments[i])) == "-height") {
 					WebShellSettings["initialWindowHeight"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
 				}
 
-				if ((String(CommandLine.arguments[i])) == "-width") {
+				if ((String(describing: CommandLine.arguments[i])) == "-width") {
 					WebShellSettings["initialWindowWidth"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
 				}
 			}
@@ -79,7 +79,10 @@ extension ViewController {
 	}
 
 	// Edit contextmenu...
-	@nonobjc func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]! {
+    func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]! {
+        //TODO: CONTEXTMENU DOES NOT BEING CALLED.
+        // POSSIBLE SWIFT 3.0 BUG
+        
 		// @wdg Fix contextmenu (problem with the swift 2 update #50)
 		// Issue: #51
 		var download = false
@@ -136,7 +139,8 @@ extension ViewController {
 
 		NewMenu.append(NSMenuItem.separator())
 		// Add debug menu. (if enabled)
-		if (WebShellSettings["debugmode"] as! Bool) {
+
+        if (WebShellSettings["debugmode"] as! Bool) {
 			let debugMenu = NSMenu(title: "Debug")
 			debugMenu.addItem(IElement)
 			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))
@@ -154,7 +158,7 @@ extension ViewController {
 			NewMenu.append(item)
 			NewMenu.append(NSMenuItem.separator())
 		}
-
+        
 		NewMenu.append(NSMenuItem.init(title: "Quit", action: #selector(ViewController._quit(_:)), keyEquivalent: ""))
 
 		return NewMenu

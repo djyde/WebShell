@@ -18,7 +18,7 @@ import CoreLocation
 
 // @wdg Clean up code base
 // Issue: #43
-class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate, WebDownloadDelegate, NSURLDownloadDelegate {
+class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate, WebDownloadDelegate, NSURLDownloadDelegate, WebEditingDelegate {
     
 	@IBOutlet var mainWindow: NSView!
 	@IBOutlet weak var mainWebview: WebView!

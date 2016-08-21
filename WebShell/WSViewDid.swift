@@ -47,6 +47,7 @@ extension ViewController {
 			mainWebview.uiDelegate = self
 			mainWebview.resourceLoadDelegate = self
 			mainWebview.downloadDelegate = self
+            mainWebview.editingDelegate = self
 
 			addObservers()
 			initSettings()
@@ -64,6 +65,8 @@ extension ViewController {
 		mainWebview.uiDelegate = self
 		mainWebview.resourceLoadDelegate = self
 		mainWebview.downloadDelegate = self
+        mainWebview.editingDelegate = self
+
         WebShellSettings["WSMW"] = mainWebview;
         
 		checkSettings()
