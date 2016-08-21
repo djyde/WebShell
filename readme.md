@@ -13,8 +13,12 @@
   </a>
 </p>
 
+---
+
 # WARNING
-## This is a experimental build!
+This is a experimental build!
+
+---
 
 WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
 
