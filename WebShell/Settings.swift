@@ -19,7 +19,7 @@ class WebShell {
 	 */
 	var Settings: [String: Any] = [
 		// Url to browse to.
-		"url": "https://console.aws.amazon.com/dynamodb/", //http://djyde.github.io/WebShell/WebShell/",
+		"url": "http://djyde.github.io/WebShell/WebShell/",
 
 		// set the app title
 		"title": Bundle.main.infoDictionary!["CFBundleName"] as! String,
