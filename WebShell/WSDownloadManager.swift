@@ -47,29 +47,28 @@ class WebShelllDownloadManager {
 
         noop(session) // temporary we want no stupid "fix-it" warnings.
         
-//		let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: NSError?) -> Void in
-//			if (error == nil) {
-//				let statusCode = (response as! HTTPURLResponse).statusCode
-//				self.noop(statusCode) // For further use HTTP Status code.
-//
-//				let saveData = NSData.init(data: data!) as Data
-//				try? saveData.write(to: savePath!, options: [.atomic])
-//
-//				// Ask the question on the main queue.
-//				OperationQueue.main.addOperation({
-//					if (self.dialog("Download of \"\(self.Fname)\" complete", text: "Would you like to open the downloads folder?")) {
-//						NSWorkspace.shared().open(self.DFolder)
-//					}
-//				})
-//			}
-//			else {
-//				// Failure
-//				print("Faulure: %@", error!.localizedDescription);
-//			}
-//		})
-//
-//		task.resume()
-//TODO: FIX THIS ALSO
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+			if (error == nil) {
+				let statusCode = (response as! HTTPURLResponse).statusCode
+				self.noop(statusCode as AnyObject) // For further use HTTP Status code.
+
+				let saveData = NSData.init(data: data!) as Data
+				try? saveData.write(to: savePath!, options: [.atomic])
+
+				// Ask the question on the main queue.
+				OperationQueue.main.addOperation({
+					if (self.dialog("Download of \"\(self.Fname)\" complete", text: "Would you like to open the downloads folder?")) {
+						NSWorkspace.shared().open(self.DFolder)
+					}
+				})
+			}
+			else {
+				// Failure
+				print("Faulure: %@", error!.localizedDescription);
+			}
+		})
+
+		task.resume()
 	}
 
 	/**

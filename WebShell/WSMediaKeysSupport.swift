@@ -21,20 +21,18 @@ import Cocoa
 class WebShellMediaKeysSupport: NSApplication {
 	let MediaKeysSettings = WebShell().Settings["MediaKeys"] as! [String: Bool]
 
-    // Swift 3 hates this.
-//	override func send(event: NSEvent) {
-//		if event.type == .systemDefined && theEvent.subtype.rawValue == 8 {
-//			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
-//			let keyFlags = (event.data1 & 0x0000FFFF)
-//			// Get the key state. 0xA is KeyDown, OxB is KeyUp
-//			let keyState = (((keyFlags & 0xFF00) >> 8)) == 0xA
-//			let keyRepeat = (keyFlags & 0x1)
-//			mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(keyRepeat))
-//		}
-//
-//		super.sendEvent(event)
-//	}
-//TODO: FIX THIS.
+	/*override */func send(event: NSEvent) {
+		if event.type == .systemDefined && event.subtype.rawValue == 8 {
+			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
+			let keyFlags = (event.data1 & 0x0000FFFF)
+			// Get the key state. 0xA is KeyDown, OxB is KeyUp
+			let keyState = (((keyFlags & 0xFF00) >> 8)) == 0xA
+			let keyRepeat = NSNumber(value: (keyFlags & 0x1))
+			mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(keyRepeat))
+		}
+
+		super.sendEvent(event)
+	}
     
 	func mediaKeyEvent(_ key: Int32, state: Bool, keyRepeat: Bool) {
 		// Only send events on KeyDown. Without this check, these events will happen twice

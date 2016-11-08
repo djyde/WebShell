@@ -11,7 +11,7 @@ import WebKit
 
 // See: #43
 extension ViewController {
-    @objc(webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:) func webView(_ sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedBy frame: WebFrame!) {
+    func webView(_ sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedBy frame: WebFrame!) {
         let alert = NSAlert.init()
         alert.addButton(withTitle: "OK")
         alert.messageText = "Message"
@@ -20,7 +20,7 @@ extension ViewController {
     }
     
     // webview settings
-    @objc(webView:didStartProvisionalLoadForFrame:) func webView(_ sender: WebView!, didStartProvisionalLoadFor frame: WebFrame!) {
+    func webView(_ sender: WebView!, didStartProvisionalLoadFor frame: WebFrame!) {
         // @wdg: Better progress indicator | Issue: #37
         if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.startAnimation(self)
@@ -37,7 +37,7 @@ extension ViewController {
     
     // @wdg: Better progress indicator
     // Issue: #37
-    @objc(webView:willPerformClientRedirectToURL:delay:fireDate:forFrame:) func webView(_ sender: WebView!, willPerformClientRedirectTo URL: URL!, delay seconds: TimeInterval, fire date: Date!, for frame: WebFrame!) {
+    func webView(_ sender: WebView!, willPerformClientRedirectTo URL: URL!, delay seconds: TimeInterval, fire date: Date!, for frame: WebFrame!) {
         if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
             progressBar.isHidden = false
             progressBar.startAnimation(self)
@@ -70,7 +70,7 @@ extension ViewController {
     
     // @wdg: Better progress indicator
     // Issue: #37
-    @objc(webView:didFinishLoadForFrame:) func webView(_ sender: WebView!, didFinishLoadFor frame: WebFrame!) {
+    func webView(_ sender: WebView!, didFinishLoadFor frame: WebFrame!) {
         progressBar.increment(by: 50)
         progressBar.stopAnimation(self)
         progressBar.isHidden = true // Hide after we're done.
@@ -92,7 +92,7 @@ extension ViewController {
         }
     }
     
-    @objc(webView:didReceiveTitle:forFrame:) func webView(_ sender: WebView!, didReceiveTitle title: String!, for frame: WebFrame!) {
+    func webView(_ sender: WebView!, didReceiveTitle title: String!, for frame: WebFrame!) {
         if (WebShellSettings["useDocumentTitle"] as! Bool) {
             mainWindow.window?.title = title
         }

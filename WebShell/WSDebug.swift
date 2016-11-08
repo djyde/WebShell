@@ -79,9 +79,10 @@ extension ViewController {
 	}
 
 	// Edit contextmenu...
-    func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]! {
+    @nonobjc func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]! {
         //TODO: CONTEXTMENU DOES NOT BEING CALLED.
         // POSSIBLE SWIFT 3.0 BUG
+        print("CONTEXTMENU CALLED")
         
 		// @wdg Fix contextmenu (problem with the swift 2 update #50)
 		// Issue: #51
