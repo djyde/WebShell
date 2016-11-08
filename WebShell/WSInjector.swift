@@ -131,7 +131,6 @@ extension ViewController {
 		
 		// navigator.vibrate
 		let vibrateNow: @convention(block)(NSString!) -> Void = {(data: NSString!) in
-            print("VIBRATE")
 			self.flashScreen(data)
 		}
 		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, to: AnyObject.self), forKeyedSubscript: "vibrate" as (NSCopying & NSObjectProtocol)!)
