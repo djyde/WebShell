@@ -327,4 +327,15 @@ extension ViewController {
 		let wsDM = WebShelllDownloadManager.init(url: lastURL)
 		wsDM.endDownloadTask()
 	}
+    
+    func Dprint(_ S: Any) -> Void {
+        if (WebShellSettings["debugmode"] as! Bool) {
+            print(S)
+        }
+    }
+    func Ddump(_ S: Any) -> Void {
+        if (WebShellSettings["debugmode"] as! Bool) {
+            dump(S)
+        }
+    }
 }

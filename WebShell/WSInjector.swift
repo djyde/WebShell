@@ -44,11 +44,14 @@ extension ViewController {
 				// Finally. parsing those good old iframes
 				// We don't check them for iframes, somewhere the fun must be ended.
 				for child in children.subviews {
+                    Dprint("Found a Child...")
+                    Ddump(child)
 					// mainWebview.subviews[0] = WebFrameView.subviews[0] = WebDynamicScrollBarsView.subviews[0] = WebClipView.subviews[0] = WebHTMLView.subviews[x] = WebFrameView (Finally) (name = child)
 					if (child.isKind(of: WebFrameView.self)) {
 						let frame: NSView = child
 						let context: JSContext = frame.webFrame.javaScriptContext
 						
+                        Dprint("Injecting hooks!")
 						injectWebhooks(context)
 					}
 				}

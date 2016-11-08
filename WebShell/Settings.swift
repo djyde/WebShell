@@ -45,14 +45,14 @@ class WebShell {
 		"showLoadingBar": true,
 
 		// Add console.log support? (Default: false)
-		"consoleSupport": true,
+		"consoleSupport": false,
 
 		// Does the app needs Location support (Default: false)
 		// note: if true, then WebShell always uses location, whenever it is used or not
 		"needLocation": false,
 
 		// run the app in debug mode? (Default: false)
-		// will be overridden by xCode (runs with -NSDocumentRevisionsDebugMode YES)
+		// will be overridden by Xcode (runs with -NSDocumentRevisionsDebugMode YES)
 		"debugmode": false,
 
 		// Please paste here the JavaScript you want to load on a website (Default: "")
