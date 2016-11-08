@@ -79,10 +79,11 @@ extension ViewController {
 	}
 
 	// Edit contextmenu...
-    @nonobjc func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]! {
-        //TODO: CONTEXTMENU DOES NOT BEING CALLED.
-        // POSSIBLE SWIFT 3.0 BUG
-        print("CONTEXTMENU CALLED")
+    // @wdg Fix contextmenu (problem with the swift 3 update)
+    // Issue: #61
+    func webView(_ sender: WebView!, contextMenuItemsForElement element: [AnyHashable : Any]!, defaultMenuItems: [Any]!) -> [Any]! {
+        //Swift 2..
+        //func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]!
         
 		// @wdg Fix contextmenu (problem with the swift 2 update #50)
 		// Issue: #51
@@ -121,21 +122,20 @@ extension ViewController {
 		}
 
 		if (download) {
-//			if (element["WebElementLinkURL"] != nil) {
-//				lastURL = element["WebElementLinkURL"]! as! URL
+			if (element["WebElementLinkURL"] != nil) {
+				lastURL = element["WebElementLinkURL"]! as! URL
 
-//				if ((contextMenu as [String])["Download"]! || contextMenu["newWindow"]!) {
-//					NewMenu.append(NSMenuItem.separator())
+                if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
+					NewMenu.append(NSMenuItem.separator())
 
-//					if (contextMenu["newWindow"]!) {
-//						NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
-//					}
-//					if (contextMenu["Download"]!) {
-//						NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
-//					}
-//				}
-//			}
-            //TODO: FIX THIS ALSO
+					if (contextMenu["newWindow"]!) {
+						NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
+					}
+					if (contextMenu["Download"]!) {
+						NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
+					}
+				}
+			}
 		}
 
 		NewMenu.append(NSMenuItem.separator())
@@ -143,7 +143,9 @@ extension ViewController {
 
         if (WebShellSettings["debugmode"] as! Bool) {
 			let debugMenu = NSMenu(title: "Debug")
-			debugMenu.addItem(IElement)
+            if (IElement.title != "NSMenuItem") {
+                debugMenu.addItem(IElement) // <-- Inspect element...
+            }
 			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))
 			debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: #selector(ViewController._debugDumpArguments(_:)), keyEquivalent: ""))
 			debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: #selector(ViewController._openURL(_:)), keyEquivalent: ""))
