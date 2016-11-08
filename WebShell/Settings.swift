@@ -45,7 +45,7 @@ class WebShell {
 		"showLoadingBar": true,
 
 		// Add console.log support? (Default: false)
-		"consoleSupport": false,
+		"consoleSupport": true,
 
 		// Does the app needs Location support (Default: false)
 		// note: if true, then WebShell always uses location, whenever it is used or not

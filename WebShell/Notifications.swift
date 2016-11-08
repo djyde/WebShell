@@ -58,11 +58,10 @@ extension ViewController {
 		} else {
 			let time: [String] = (data as String).components(separatedBy: ",")
 			for i in 0 ..< time.count {
-                let timeAsNumber = NumberFormatter().number(from: time[i])
-                let timeAsDecimal = timeAsNumber as! Decimal / 100
-                let timeAsInteger = Int("\(timeAsDecimal)") //DIRTY HACK
-                //TODO: Fix this mess above...
-				Timer.scheduledTimer(timeInterval: TimeInterval(timeAsInteger!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
+                // @wdg Fix flashScreen(...)
+                // Issue: #66
+                let timeAsNumber = NumberFormatter().number(from: time[i])?.intValue
+				Timer.scheduledTimer(timeInterval: TimeInterval(timeAsNumber!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
 			}
 		}
 	}
