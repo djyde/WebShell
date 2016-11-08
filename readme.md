@@ -13,6 +13,13 @@
   </a>
 </p>
 
+---
+
+# WARNING
+This is a experimental build!
+
+---
+
 WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
 
 ![](http://7mnoy7.com1.z0.glb.clouddn.com/github/workflow-with-frame.png?imageView/2/w/1280)

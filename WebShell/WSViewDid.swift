@@ -24,15 +24,15 @@ extension ViewController {
 	override func awakeFromNib() {
 		// if (![self respondsToSelector:@selector(viewWillAppear)]) {
 
-		if (!NSViewController().respondsToSelector(#selector(NSViewController.viewWillAppear))) {
+		if (!NSViewController().responds(to: #selector(NSViewController.viewWillAppear))) {
             checkSettings()
             
             let myPopup: NSAlert = NSAlert()
             myPopup.messageText = "Hello!"
             myPopup.informativeText = "You are running mavericks?"
-            myPopup.alertStyle = NSAlertStyle.InformationalAlertStyle
-            myPopup.addButtonWithTitle("Yes")
-            myPopup.addButtonWithTitle("No")
+            myPopup.alertStyle = NSAlertStyle.informational
+            myPopup.addButton(withTitle: "Yes")
+            myPopup.addButton(withTitle: "No")
             
             let res = myPopup.runModal()
             
@@ -44,9 +44,12 @@ extension ViewController {
 				initWindow()
 			}
 
-			mainWebview.UIDelegate = self
+			mainWebview.uiDelegate = self
 			mainWebview.resourceLoadDelegate = self
 			mainWebview.downloadDelegate = self
+            mainWebview.editingDelegate = self
+            mainWebview.policyDelegate = self
+            //WebUIDelegate
 
 			addObservers()
 			initSettings()
@@ -61,9 +64,12 @@ extension ViewController {
         //self.view = goodView()
 		super.viewDidLoad()
 
-		mainWebview.UIDelegate = self
+		mainWebview.uiDelegate = self
 		mainWebview.resourceLoadDelegate = self
 		mainWebview.downloadDelegate = self
+        mainWebview.editingDelegate = self
+        mainWebview.policyDelegate = self
+        
         WebShellSettings["WSMW"] = mainWebview;
         
 		checkSettings()

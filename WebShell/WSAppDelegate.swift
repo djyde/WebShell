@@ -16,10 +16,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
 	var mainWindow: NSWindow!
 	let popover = NSPopover()
-	let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
+	let statusItem = NSStatusBar.system().statusItem(withLength: -2)
 	var eventMonitor: EventMonitor?
 
-	func applicationDidFinishLaunching(aNotification: NSNotification) {
+	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
 		if (WebShell().Settings["MenuBarApp"] as! Bool) {
@@ -32,22 +32,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
 			initialPopupSize()
 
-			eventMonitor = EventMonitor(mask: [.LeftMouseDownMask, .RightMouseDownMask]) { [unowned self] event in
-				if self.popover.shown {
+			eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) { [unowned self] event in
+				if self.popover.isShown {
 					self.closePopover(event)
 				}
 			}
 			eventMonitor?.start()
 		} else {
 			// Add Notification center to the app delegate.
-			NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
-			mainWindow = NSApplication.sharedApplication().windows[0]
+			NSUserNotificationCenter.default.delegate = self
+			mainWindow = NSApplication.shared().windows[0]
 		}
 	}
 
 	// @wdg close app if window closes
 	// Issue: #40
-	func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
 		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
 			return true
 		} else {
@@ -55,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		}
 	}
 
-	func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+	func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
 		if (!flag) {
 			if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
 				mainWindow!.makeKeyAndOrderFront(self)
@@ -63,49 +63,49 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		}
 
 		// clear badge
-		NSApplication.sharedApplication().dockTile.badgeLabel = ""
+		NSApplication.shared().dockTile.badgeLabel = ""
 		// @wdg Clear notification count
 		// Issue: #34
-		NSUserNotificationCenter.defaultUserNotificationCenter().removeAllDeliveredNotifications()
+		NSUserNotificationCenter.default.removeAllDeliveredNotifications()
 		return true
 	}
 
 	// @wdg Add Notification Support
 	// Issue: #2
-	func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+	func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
 		// We (i) want Notifications support
 		return true
 	}
 
 	// @wdg Add 'click' on notification support
 	// Issue: #26
-	func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
+	func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
 		// Open window if user clicked on notification!
 		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
 			mainWindow!.makeKeyAndOrderFront(self)
 		}
 
 		// @wdg Clear badge
-		NSApplication.sharedApplication().dockTile.badgeLabel = ""
+		NSApplication.shared().dockTile.badgeLabel = ""
 		// @wdg Clear notification count
 		// Issue: #34
-		NSUserNotificationCenter.defaultUserNotificationCenter().removeAllDeliveredNotifications()
+		NSUserNotificationCenter.default.removeAllDeliveredNotifications()
 	}
 
-	@IBAction func printThisPage(sender: AnyObject) {
-		NSNotificationCenter.defaultCenter().postNotificationName("printThisPage", object: nil)
+	@IBAction func printThisPage(_ sender: AnyObject) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: "printThisPage"), object: nil)
 	}
 
-	@IBAction func goHome(sender: AnyObject) {
-		NSNotificationCenter.defaultCenter().postNotificationName("goHome", object: nil)
+	@IBAction func goHome(_ sender: AnyObject) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: "goHome"), object: nil)
 	}
 
-	@IBAction func reload(sender: AnyObject) {
-		NSNotificationCenter.defaultCenter().postNotificationName("reload", object: nil)
+	@IBAction func reload(_ sender: AnyObject) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: "reload"), object: nil)
 	}
 
-	@IBAction func copyUrl(sender: AnyObject) {
-		NSNotificationCenter.defaultCenter().postNotificationName("copyUrl", object: nil)
+	@IBAction func copyUrl(_ sender: AnyObject) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: "copyUrl"), object: nil)
 	}
 
 	// Statut merge...
@@ -114,24 +114,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		popover.contentSize.height = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int)
 	}
 
-	func applicationWillTerminate(aNotification: NSNotification) {
+	func applicationWillTerminate(_ aNotification: Notification) {
 		// Insert code here to tear down your application
 	}
 
-	func showPopover(sender: AnyObject?) {
+	func showPopover(_ sender: AnyObject?) {
 		if let button = statusItem.button {
-			popover.showRelativeToRect(button.bounds, ofView: button, preferredEdge: NSRectEdge.MinY)
+			popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
 		}
 		eventMonitor?.start()
 	}
 
-	func closePopover(sender: AnyObject?) {
+	func closePopover(_ sender: AnyObject?) {
 		popover.performClose(sender)
 		eventMonitor?.stop()
 	}
 
-	func togglePopover(sender: AnyObject?) {
-		if (popover.shown) {
+	func togglePopover(_ sender: AnyObject?) {
+		if (popover.isShown) {
 			closePopover(sender)
 		} else {
 			showPopover(sender)

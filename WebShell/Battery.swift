@@ -11,18 +11,21 @@ import WebKit
 
 @objc protocol BatteryManagerJSExports : JSExport {
     var charging: Bool { get set }
-    var chargingTime: NSNumber { get set }
-    var dischargingTime:NSNumber { get set }
-    var level:NSNumber { get set }
+    var chargingTime: Int { get set }
+    var dischargingTime: Int { get set }
+    var level: Double { get set }
     
     static func getBattery() -> BatteryManager
 }
 
 @objc class BatteryManager : NSObject, BatteryManagerJSExports {
+    internal var level: Double
+    internal var chargingTime: Int
+
     dynamic var charging: Bool
-    dynamic var chargingTime: NSNumber
-    dynamic var dischargingTime: NSNumber
-    dynamic var level: NSNumber
+//    dynamic var chargingTime: Int
+    dynamic var dischargingTime: Int
+//    dynamic var level: Double
     
     override init() {
         self.charging = true
@@ -42,16 +45,16 @@ import WebKit
         if (sourceArray.count == 0) { // Could not retrieve battery information.
             return battery
         } else {
-            let batterySource = sourceArray.objectAtIndex(0) // just use first battery
-            let pSource = IOPSGetPowerSourceDescription(blob, batterySource).takeUnretainedValue()
+            let batterySource = sourceArray.object(at: 0) // just use first battery
+            let pSource = IOPSGetPowerSourceDescription(blob, batterySource as CFTypeRef!).takeUnretainedValue()
             
             let batteryDic:NSDictionary = pSource
             
-            let isCharge = batteryDic.objectForKey(kIOPSIsChargingKey) as! Int // 1 for charging, 0 for not
-            let curCapacity = batteryDic.objectForKey(kIOPSCurrentCapacityKey) as! Int // current capacity
-            let maxCapacity = batteryDic.objectForKey(kIOPSMaxCapacityKey) as! Int // max capacity
-            let chargingTime = batteryDic.objectForKey(kIOPSTimeToEmptyKey) as! Int // time to empty(not charging)
-            let dischargingTime = batteryDic.objectForKey(kIOPSTimeToFullChargeKey) as! Int // time to full(charging)
+            let isCharge = batteryDic.object(forKey: kIOPSIsChargingKey) as! Int // 1 for charging, 0 for not
+            let curCapacity = batteryDic.object(forKey: kIOPSCurrentCapacityKey) as! Int // current capacity
+            let maxCapacity = batteryDic.object(forKey: kIOPSMaxCapacityKey) as! Int // max capacity
+            let chargingTime = batteryDic.object(forKey: kIOPSTimeToEmptyKey) as! Int // time to empty(not charging)
+            let dischargingTime = batteryDic.object(forKey: kIOPSTimeToFullChargeKey) as! Int // time to full(charging)
             let level = Double(curCapacity) / Double(maxCapacity) // current level
             
             battery.charging = isCharge == 1 ? true : false

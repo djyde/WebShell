@@ -16,7 +16,7 @@ extension ViewController {
     
     // @wdg: Enable file uploads.
     // Issue: #29
-    func webView(sender: WebView!, runOpenPanelForFileButtonWithResultListener resultListener: WebOpenPanelResultListener!, allowMultipleFiles: Bool) {
+    @objc(webView:runOpenPanelForFileButtonWithResultListener:allowMultipleFiles:) func webView(_ sender: WebView!, runOpenPanelForFileButtonWith resultListener: WebOpenPanelResultListener!, allowMultipleFiles: Bool) {
         // Init panel with options
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = allowMultipleFiles
@@ -25,21 +25,21 @@ extension ViewController {
         panel.canChooseFiles = true
         
         // On clicked on ok then...
-        panel.beginWithCompletionHandler {(result) -> Void in
+        panel.begin {(result) -> Void in
             // User clicked OK
             if result == NSFileHandlingPanelOKButton {
                 
                 // make the upload qeue named 'uploadQeue'
                 let uploadQeue: NSMutableArray = NSMutableArray()
-                for i in 0 ..< panel.URLs.count
+                for i in 0 ..< panel.urls.count
                 {
                     // Add to upload qeue, needing relativePath.
-                    uploadQeue.addObject(panel.URLs[i].relativePath!)
+                    uploadQeue.add(panel.urls[i].relativePath)
                 }
                 
-                if (panel.URLs.count == 1) {
+                if (panel.urls.count == 1) {
                     // One file
-                    resultListener.chooseFilename(String(uploadQeue[0]))
+                    resultListener.chooseFilename(String(describing: uploadQeue[0]))
                 } else {
                     // Multiple files
                     resultListener.chooseFilenames(uploadQeue as [AnyObject])
@@ -49,7 +49,7 @@ extension ViewController {
         
     }
     
-    func downloadWindowForAuthenticationSheet(download: WebDownload!) -> NSWindow! {
+    func downloadWindow(forAuthenticationSheet download: WebDownload!) -> NSWindow! {
         print("I'd like to download something")
         print(download)
         
@@ -57,7 +57,7 @@ extension ViewController {
     }
     
     // Usefull for debugging..
-    func webView(sender: WebView!,mouseDidMoveOverElement elementInformation: [NSObject : AnyObject]!, modifierFlags: Int) {
+    @nonobjc func webView(_ sender: WebView!,mouseDidMoveOverElement elementInformation: [NSObject : Any]!, modifierFlags: Int) {
         //print("Sender=\(sender)\nEleInfo=\(elementInformation)\nModifier=\(modifierFlags)")
     }
 }

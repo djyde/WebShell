@@ -21,20 +21,20 @@ import Cocoa
 class WebShellMediaKeysSupport: NSApplication {
 	let MediaKeysSettings = WebShell().Settings["MediaKeys"] as! [String: Bool]
 
-	override func sendEvent(theEvent: NSEvent) {
-		if theEvent.type == .SystemDefined && theEvent.subtype.rawValue == 8 {
-			let keyCode = ((theEvent.data1 & 0xFFFF0000) >> 16)
-			let keyFlags = (theEvent.data1 & 0x0000FFFF)
+	/*override */func send(event: NSEvent) {
+		if event.type == .systemDefined && event.subtype.rawValue == 8 {
+			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
+			let keyFlags = (event.data1 & 0x0000FFFF)
 			// Get the key state. 0xA is KeyDown, OxB is KeyUp
 			let keyState = (((keyFlags & 0xFF00) >> 8)) == 0xA
-			let keyRepeat = (keyFlags & 0x1)
+			let keyRepeat = NSNumber(value: (keyFlags & 0x1))
 			mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(keyRepeat))
 		}
 
-		super.sendEvent(theEvent)
+		super.sendEvent(event)
 	}
-
-	func mediaKeyEvent(key: Int32, state: Bool, keyRepeat: Bool) {
+    
+	func mediaKeyEvent(_ key: Int32, state: Bool, keyRepeat: Bool) {
 		// Only send events on KeyDown. Without this check, these events will happen twice
 		if (state) {
 			switch (key) {
@@ -42,21 +42,21 @@ class WebShellMediaKeysSupport: NSApplication {
 				if (MediaKeysSettings["BackAndForward"] == true) {
 					self.goReloadPage()
 				} else {
-					self.playPausePressed()
+					let _ = self.playPausePressed()
 				}
 				break
 			case NX_KEYTYPE_FAST, NX_KEYTYPE_NEXT: // F9 / Forward
 				if (MediaKeysSettings["BackAndForward"] == true) {
 					self.goForwardIfPossible()
 				} else {
-					self.nextItem()
+					let _ = self.nextItem()
 				}
 				break
 			case NX_KEYTYPE_REWIND, NX_KEYTYPE_PREVIOUS: // F7 / Backward
 				if (MediaKeysSettings["BackAndForward"] == true) {
 					self.goBackIfPossible()
 				} else {
-					self.previousItem()
+					let _ = self.previousItem()
 				}
 				break
 			default:
@@ -72,8 +72,8 @@ class WebShellMediaKeysSupport: NSApplication {
 	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
 	 */
 	func goBackIfPossible() {
-		NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WSGoBack")
-		NSUserDefaults.standardUserDefaults().synchronize()
+		UserDefaults.standard.set(true, forKey: "WSGoBack")
+		UserDefaults.standard.synchronize()
 	}
 
 	/**
@@ -83,8 +83,8 @@ class WebShellMediaKeysSupport: NSApplication {
 	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
 	 */
 	func goForwardIfPossible() {
-		NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WSGoForward")
-		NSUserDefaults.standardUserDefaults().synchronize()
+		UserDefaults.standard.set(true, forKey: "WSGoForward")
+		UserDefaults.standard.synchronize()
 	}
 
 	/**
@@ -94,8 +94,8 @@ class WebShellMediaKeysSupport: NSApplication {
 	 We'll set a NSUserDefaults, and the `WSMediaLoop` does the Job for us.
 	 */
 	func goReloadPage() {
-		NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WSGoReload")
-		NSUserDefaults.standardUserDefaults().synchronize()
+		UserDefaults.standard.set(true, forKey: "WSGoReload")
+		UserDefaults.standard.synchronize()
 	}
 
 	func nextItem() -> Bool {
@@ -120,33 +120,33 @@ extension ViewController {
 
 	 - Parameter Sender: AnyObject (used for #selector use self)
 	 */
-	func WSMediaLoop(Sender: AnyObject) -> Void {
-		self.performSelector(#selector(ViewController.WSMediaLoop(_:)), withObject: nil, afterDelay: 0.5)
+	func WSMediaLoop(_ Sender: AnyObject) -> Void {
+		self.perform(#selector(ViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
 
-		if (NSUserDefaults.standardUserDefaults().boolForKey("WSGoBack")) {
-			NSUserDefaults.standardUserDefaults().setBool(false, forKey: "WSGoBack")
-			NSUserDefaults.standardUserDefaults().synchronize()
+		if (UserDefaults.standard.bool(forKey: "WSGoBack")) {
+			UserDefaults.standard.set(false, forKey: "WSGoBack")
+			UserDefaults.standard.synchronize()
 			self._goBack(self)
 		}
 
-		if (NSUserDefaults.standardUserDefaults().boolForKey("WSGoForward")) {
-			NSUserDefaults.standardUserDefaults().setBool(false, forKey: "WSGoForward")
-			NSUserDefaults.standardUserDefaults().synchronize()
+		if (UserDefaults.standard.bool(forKey: "WSGoForward")) {
+			UserDefaults.standard.set(false, forKey: "WSGoForward")
+			UserDefaults.standard.synchronize()
 			self._goForward(self)
 		}
 
-		if (NSUserDefaults.standardUserDefaults().boolForKey("WSGoReload")) {
-			NSUserDefaults.standardUserDefaults().setBool(false, forKey: "WSGoReload")
-			NSUserDefaults.standardUserDefaults().synchronize()
+		if (UserDefaults.standard.bool(forKey: "WSGoReload")) {
+			UserDefaults.standard.set(false, forKey: "WSGoReload")
+			UserDefaults.standard.synchronize()
 			self._reloadPage(self)
 		}
 
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
 		if (WebShellSettings["MenuBarApp"] as! Bool) {
-			if ((NSApplication.sharedApplication().keyWindow) != nil) {
+			if ((NSApplication.shared().keyWindow) != nil) {
 				if (self.MustCloseWindow) {
-					NSApplication.sharedApplication().keyWindow?.close()
+					NSApplication.shared().keyWindow?.close()
 					self.MustCloseWindow = false
 				}
 			}

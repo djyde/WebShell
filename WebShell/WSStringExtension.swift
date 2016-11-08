@@ -26,8 +26,8 @@ public extension String {
      - Parameter s: String to check
      - Returns: true/false
      */
-    public func contains(s: String) -> Bool {
-        return self.rangeOfString(s) != nil ? true : false
+    public func contains(_ s: String) -> Bool {
+        return self.range(of: s) != nil ? true : false
     }
     
     /**
@@ -36,8 +36,8 @@ public extension String {
      - Parameter withString: Replacement
      - Returns: Replaced string
      */
-    public func replace(target: String, withString: String) -> String {
-        return self.stringByReplacingOccurrencesOfString(target, withString: withString, options: NSStringCompareOptions.LiteralSearch, range: nil)
+    public func replace(_ target: String, withString: String) -> String {
+        return self.replacingOccurrences(of: target, with: withString, options: NSString.CompareOptions.literal, range: nil)
     }
     
     /**
@@ -45,7 +45,7 @@ public extension String {
      - Parameter index: The index
      - Returns Character
      */
-    func characterAtIndex(index: Int) -> Character! {
+    func characterAtIndex(_ index: Int) -> Character! {
         var cur = 0
         for char in self.characters {
             if cur == index {
@@ -61,7 +61,7 @@ public extension String {
      */
     public subscript(i: Int) -> Character {
         get {
-            let index = self.startIndex.advancedBy(i)
+            let index = self.characters.index(self.startIndex, offsetBy: i)
             return self[index]
         }
     }
@@ -70,8 +70,21 @@ public extension String {
      */
     public subscript(r: Range<Int>) -> String {
         get {
-            let startIndex = self.startIndex.advancedBy(r.startIndex)
-            let endIndex = self.startIndex.advancedBy(r.endIndex - 1)
+            let startIndex = self.characters.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.characters.index(self.startIndex, offsetBy: r.upperBound - 1)
+            
+            return self[startIndex..<endIndex]
+        }
+    }
+    
+    
+    /**
+     add subscript (swift 3)
+     */
+    public subscript(r: ClosedRange<Int>) -> String {
+        get {
+            let startIndex = self.characters.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.characters.index(self.startIndex, offsetBy: r.upperBound - 1)
             
             return self[startIndex..<endIndex]
         }
