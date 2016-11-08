@@ -15,6 +15,12 @@ class EventMonitor {
     fileprivate let mask: NSEventMask
     fileprivate let handler: (NSEvent?) -> ()
     
+    /**
+     Init monitoring for events
+     
+     - Parameter mask: under which mask?
+     - Parameter handler: with which handler?
+     */
     internal init(mask: NSEventMask, handler: @escaping (NSEvent?) -> ()) {
         self.mask = mask
         self.handler = handler
@@ -24,10 +30,16 @@ class EventMonitor {
         stop()
     }
     
+    /**
+     Starts monitoring for events
+     */
     internal func start() {
         monitor = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: handler)
     }
     
+    /**
+     Removes event monitor
+     */
     internal func stop() {
         if monitor != nil {
             NSEvent.removeMonitor(monitor!)

@@ -92,24 +92,46 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		NSUserNotificationCenter.default.removeAllDeliveredNotifications()
 	}
 
-	@IBAction func printThisPage(_ sender: AnyObject) {
+    /**
+     Print the current page
+     
+     - Parameter sender: the sender object
+     */
+	@IBAction func printThisPage(_ sender: AnyObject) -> Void {
 		NotificationCenter.default.post(name: Notification.Name(rawValue: "printThisPage"), object: nil)
 	}
 
-	@IBAction func goHome(_ sender: AnyObject) {
+    /**
+     Go to the given homepage as set in `Settings.swift`
+     
+     - Parameter sender: the sender object
+     */
+	@IBAction func goHome(_ sender: AnyObject) -> Void {
 		NotificationCenter.default.post(name: Notification.Name(rawValue: "goHome"), object: nil)
 	}
 
-	@IBAction func reload(_ sender: AnyObject) {
+    /**
+     Reload the current page
+     
+     - Parameter sender: the sender object
+     */
+	@IBAction func reload(_ sender: AnyObject) -> Void {
 		NotificationCenter.default.post(name: Notification.Name(rawValue: "reload"), object: nil)
 	}
 
-	@IBAction func copyUrl(_ sender: AnyObject) {
+    /**
+     Copy the url of the current page
+     
+     - Parameter sender: the sender object
+     */
+	@IBAction func copyUrl(_ sender: AnyObject) -> Void {
 		NotificationCenter.default.post(name: Notification.Name(rawValue: "copyUrl"), object: nil)
 	}
 
-	// Statut merge...
-	func initialPopupSize() {
+    /**
+     Popover initial popup size
+    */
+	func initialPopupSize() -> Void {
 		popover.contentSize.width = CGFloat(WebShell().Settings["initialWindowWidth"] as! Int)
 		popover.contentSize.height = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int)
 	}
@@ -118,6 +140,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		// Insert code here to tear down your application
 	}
 
+    /**
+     Show the popover screen
+     
+     - Parameter sender: the sender object
+     */
 	func showPopover(_ sender: AnyObject?) {
 		if let button = statusItem.button {
 			popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
@@ -125,11 +152,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		eventMonitor?.start()
 	}
 
+    /**
+     Close the popover screen
+     
+     - Parameter sender: the sender object
+     */
 	func closePopover(_ sender: AnyObject?) {
 		popover.performClose(sender)
 		eventMonitor?.stop()
 	}
 
+    /**
+     Toggle the popover screen
+     
+     - Parameter sender: the sender object
+     */
 	func togglePopover(_ sender: AnyObject?) {
 		if (popover.isShown) {
 			closePopover(sender)
