@@ -154,7 +154,15 @@ extension ViewController {
 			debugMenu.addItem(NSMenuItem.separator())
 			debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: #selector(ViewController.__sendNotifications(_:)), keyEquivalent: ""))
 			debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: #selector(ViewController.resetLocalStorage(_:)), keyEquivalent: ""))
-
+            
+            let WSdeveloperMenu = NSMenu(title: "WS Developer")
+                WSdeveloperMenu.addItem(NSMenuItem.init(title: "Inject Javascript", action: #selector(ViewController._injectJS(_:)), keyEquivalent: ""))
+                WSdeveloperMenu.addItem(NSMenuItem.init(title: "What the web can do", action: #selector(ViewController._WWCDT(_:)), keyEquivalent: ""))
+            
+            let WSDevMenu = NSMenuItem.init(title: "WebShell Developer", action: #selector(ViewController._doNothing(_:)), keyEquivalent: "")
+            WSDevMenu.submenu = WSdeveloperMenu
+            debugMenu.addItem(WSDevMenu)
+            
 			let item = NSMenuItem.init(title: "Debug", action: #selector(ViewController._doNothing(_:)), keyEquivalent: "")
 			item.submenu = debugMenu
 
@@ -233,6 +241,35 @@ extension ViewController {
 		}
 	}
 
+    func _WWCDT(_ Sender: AnyObject) -> Void {
+        self.loadUrl("https://whatwebcando.today")
+    }
+    
+    func _injectJS(_ Sender: AnyObject) -> Void {
+        let msg = NSAlert()
+        msg.addButton(withTitle: "OK") // 1st button
+        msg.addButton(withTitle: "Cancel") // 2nd button
+        msg.messageText = "Inject Javascript"
+        msg.informativeText = "Inject Javascript\nBe Carefull!"
+        
+        let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 400, height: 400))
+            txt.stringValue = ""
+            txt.translatesAutoresizingMaskIntoConstraints = true
+        
+        msg.accessoryView = txt
+        let response: NSModalResponse = msg.runModal()
+        
+        if (response == NSAlertFirstButtonReturn) {
+            let JSReturn: String = mainWebview.stringByEvaluatingJavaScript(from: txt.stringValue)
+            
+            let RetVal = NSAlert()
+                RetVal.addButton(withTitle: "OK")
+                RetVal.messageText = "Injected Javascript"
+                RetVal.informativeText = JSReturn != "" ? JSReturn : "Finished"
+                RetVal.runModal()
+        }
+    }
+    
 	func _reportThisPage(_ Sender: AnyObject) -> Void {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
 		let host: String = (mainWebview.mainFrame.dataSource?.request.url?.host)!
