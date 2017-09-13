@@ -27,7 +27,7 @@ extension ViewController {
         // On clicked on ok then...
         panel.begin {(result) -> Void in
             // User clicked OK
-            if result == NSFileHandlingPanelOKButton {
+            if result.rawValue == NSFileHandlingPanelOKButton {
                 
                 // make the upload qeue named 'uploadQeue'
                 let uploadQeue: NSMutableArray = NSMutableArray()

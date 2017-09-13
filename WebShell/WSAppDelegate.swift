@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 
 	var mainWindow: NSWindow!
 	let popover = NSPopover()
-	let statusItem = NSStatusBar.system().statusItem(withLength: -2)
+	let statusItem = NSStatusBar.system.statusItem(withLength: -2)
 	var eventMonitor: EventMonitor?
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -24,15 +24,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		// Issue: #56
 		if (WebShell().Settings["MenuBarApp"] as! Bool) {
 			if let button = statusItem.button {
-				button.image = NSImage(named: "AppIcon") // StatusBarButtonImage
+				button.image = NSImage(named: NSImage.Name(rawValue: "AppIcon")) // StatusBarButtonImage
 				button.action = #selector(AppDelegate.togglePopover(_:))
 			}
 
-			popover.contentViewController = WebShellPopupViewController(nibName: "WebShellPopupViewController", bundle: nil)
+			popover.contentViewController = WebShellPopupViewController(nibName: NSNib.Name(rawValue: "WebShellPopupViewController"), bundle: nil)
 
 			initialPopupSize()
 
-			eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) { [unowned self] event in
+			eventMonitor = EventMonitor(mask: [NSEvent.EventTypeMask.leftMouseDown, NSEvent.EventTypeMask.rightMouseDown]) { [unowned self] event in
 				if self.popover.isShown {
 					self.closePopover(event)
 				}
@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		} else {
 			// Add Notification center to the app delegate.
 			NSUserNotificationCenter.default.delegate = self
-			mainWindow = NSApplication.shared().windows[0]
+			mainWindow = NSApplication.shared.windows[0]
 		}
 	}
 
@@ -63,7 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		}
 
 		// clear badge
-		NSApplication.shared().dockTile.badgeLabel = ""
+		NSApplication.shared.dockTile.badgeLabel = ""
 		// @wdg Clear notification count
 		// Issue: #34
 		NSUserNotificationCenter.default.removeAllDeliveredNotifications()
@@ -86,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		}
 
 		// @wdg Clear badge
-		NSApplication.shared().dockTile.badgeLabel = ""
+		NSApplication.shared.dockTile.badgeLabel = ""
 		// @wdg Clear notification count
 		// Issue: #34
 		NSUserNotificationCenter.default.removeAllDeliveredNotifications()
@@ -167,7 +167,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
      
      - Parameter sender: the sender object
      */
-	func togglePopover(_ sender: AnyObject?) {
+	@objc func togglePopover(_ sender: AnyObject?) {
 		if (popover.isShown) {
 			closePopover(sender)
 		} else {

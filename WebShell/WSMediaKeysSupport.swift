@@ -28,7 +28,7 @@ class WebShellMediaKeysSupport: NSApplication {
 			// Get the key state. 0xA is KeyDown, OxB is KeyUp
 			let keyState = (((keyFlags & 0xFF00) >> 8)) == 0xA
 			let keyRepeat = NSNumber(value: (keyFlags & 0x1))
-			mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(keyRepeat))
+            mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(truncating: keyRepeat))
 		}
 
 		super.sendEvent(event)
@@ -120,7 +120,7 @@ extension ViewController {
 
 	 - Parameter Sender: AnyObject (used for #selector use self)
 	 */
-	func WSMediaLoop(_ Sender: AnyObject) -> Void {
+	@objc func WSMediaLoop(_ Sender: AnyObject) -> Void {
 		self.perform(#selector(ViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
 
 		if (UserDefaults.standard.bool(forKey: "WSGoBack")) {
@@ -144,9 +144,9 @@ extension ViewController {
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
 		if (WebShellSettings["MenuBarApp"] as! Bool) {
-			if ((NSApplication.shared().keyWindow) != nil) {
+			if ((NSApplication.shared.keyWindow) != nil) {
 				if (self.MustCloseWindow) {
-					NSApplication.shared().keyWindow?.close()
+					NSApplication.shared.keyWindow?.close()
 					self.MustCloseWindow = false
 				}
 			}

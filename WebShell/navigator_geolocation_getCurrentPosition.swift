@@ -80,7 +80,7 @@ extension ViewController {
 				} else {
 					// call something else if it is a function, otherwise throw a error.
 					
-					let checkAndRun: String = "if (typeof \(correct) === 'function'){\(correct)(\(returnAs))}else{console.error('\(correct) is not a function')}"
+                    let checkAndRun: String = String(describing: "if (typeof \(String(describing: correct)) === 'function'){\(String(describing: correct))(\(returnAs))}else{console.error('\(String(describing: correct)) is not a function')}")
 					self.mainWebview.mainFrame.javaScriptContext.evaluateScript(checkAndRun) // Call & Done.
 				}
 			} else {

@@ -58,7 +58,7 @@ class WebShelllDownloadManager {
 				// Ask the question on the main queue.
 				OperationQueue.main.addOperation({
 					if (self.dialog("Download of \"\(self.Fname)\" complete", text: "Would you like to open the downloads folder?")) {
-						NSWorkspace.shared().open(self.DFolder)
+						NSWorkspace.shared.open(self.DFolder)
 					}
 				})
 			}
@@ -83,13 +83,13 @@ class WebShelllDownloadManager {
 		let myPopup: NSAlert = NSAlert()
 		myPopup.messageText = question
 		myPopup.informativeText = text
-		myPopup.alertStyle = NSAlertStyle.informational
+		myPopup.alertStyle = NSAlert.Style.informational
 		myPopup.addButton(withTitle: "Yes")
 		myPopup.addButton(withTitle: "No")
 
 		let res = myPopup.runModal()
 
-		if res == NSAlertFirstButtonReturn {
+		if res == NSApplication.ModalResponse.alertFirstButtonReturn {
 			return true
 		}
 

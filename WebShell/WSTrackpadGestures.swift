@@ -52,7 +52,7 @@ extension ViewController: NSGestureRecognizerDelegate {
      
      @wdg #44: Support Trackpad gestures
      */
-	func handlePan(_ event: NSEvent) {
+	@objc func handlePan(_ event: NSEvent) {
 		print("Pan = \(event)")
 	}
 
@@ -66,14 +66,14 @@ extension ViewController: NSGestureRecognizerDelegate {
 	override func swipe(with event: NSEvent) {
 		var action = 0;
 		if (event.type == .gesture) {
-			let touches: Set<NSTouch> = event.touches(matching: NSTouchPhase.any, in: self.view)
+			let touches: Set<NSTouch> = event.touches(matching: NSTouch.Phase.any, in: self.view)
 			if (touches.count == 2) {
 				for touch in touches {
-					if ((touch as AnyObject).phase == NSTouchPhase.began) {
+					if ((touch as AnyObject).phase == NSTouch.Phase.began) {
 						Dprint("Began X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
                         WSgestureLog = [(touch as AnyObject).normalizedPosition.x, (touch as AnyObject).normalizedPosition.y]
 					}
-					if ((touch as AnyObject).phase == NSTouchPhase.ended) {
+					if ((touch as AnyObject).phase == NSTouch.Phase.ended) {
 						Dprint("Ended  X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
                         Dprint("Versus X:\(WSgestureLog[0]) Y:\(WSgestureLog[1])")
                         if ((touch as AnyObject).normalizedPosition.x < WSgestureLog[0]) {

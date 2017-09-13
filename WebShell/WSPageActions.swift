@@ -29,10 +29,10 @@ extension ViewController {
 
 	func copyUrl() {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
-		let clipboard: NSPasteboard = NSPasteboard.general()
+		let clipboard: NSPasteboard = NSPasteboard.general
 		clipboard.clearContents()
 
-		clipboard.setString(currentUrl, forType: NSStringPboardType)
+        clipboard.setString(currentUrl, forType: .string)
 	}
 
 	func initSettings() {
@@ -76,9 +76,9 @@ extension ViewController {
 		// @wdg Fixed screen position (now it centers)
 		// Issue: #19
 		// Note: do not use HEIGHT, WIDTH for some strange reason the window will be positioned 25px from bottom!
-		let ScreenHeight: CGFloat = (NSScreen.main()?.frame.size.width)!,
+		let ScreenHeight: CGFloat = (NSScreen.main?.frame.size.width)!,
 			WindowHeight: CGFloat = CGFloat(WebShellSettings["initialWindowWidth"] as! Int), // do not use HEIGHT!
-		ScreenWidth: CGFloat = (NSScreen.main()?.frame.size.height)!,
+		ScreenWidth: CGFloat = (NSScreen.main?.frame.size.height)!,
 			WindowWidth: CGFloat = CGFloat(WebShellSettings["initialWindowHeight"] as! Int) // do not use WIDTH!
 		frame.origin.x = (ScreenHeight / 2 - WindowHeight / 2)
 		frame.origin.y = (ScreenWidth / 2 - WindowWidth / 2)
@@ -119,7 +119,7 @@ extension ViewController {
 		operation.jobTitle = "Printing \(url!)"
 
 		// If want to print landscape
-		operation.printInfo.orientation = NSPaperOrientation.landscape
+		operation.printInfo.orientation = NSPrintInfo.PaperOrientation.landscape
 		operation.printInfo.scalingFactor = 0.7
 
 		if operation.run() {

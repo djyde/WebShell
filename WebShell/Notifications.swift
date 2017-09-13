@@ -47,7 +47,7 @@ extension ViewController {
 		
 		notificationCount += 1
 		
-		NSApplication.shared().dockTile.badgeLabel = String(notificationCount)
+		NSApplication.shared.dockTile.badgeLabel = String(notificationCount)
 	}
 	
 	// @wdg Add Notification Support
@@ -68,7 +68,7 @@ extension ViewController {
 	
 	// @wdg Add Notification Support
 	// Issue: #2
-	func flashScreenNow() -> Void {
+	@objc func flashScreenNow() -> Void {
 		AudioServicesPlaySystemSound(kSystemSoundID_FlashScreen) ;
 	}
 }

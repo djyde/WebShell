@@ -30,7 +30,7 @@ extension ViewController {
             let myPopup: NSAlert = NSAlert()
             myPopup.messageText = "Hello!"
             myPopup.informativeText = "You are running mavericks?"
-            myPopup.alertStyle = NSAlertStyle.informational
+            myPopup.alertStyle = NSAlert.Style.informational
             myPopup.addButton(withTitle: "Yes")
             myPopup.addButton(withTitle: "No")
             

@@ -19,12 +19,12 @@ extension ViewController {
 	func openNewWindow(url: String, height: String, width: String) -> Void {
 		// @wdg Replaced NSPipe for NSWorkspace
 		// Issue: #48
-		let ws = NSWorkspace.shared()
+		let ws = NSWorkspace.shared
 		do {
 			if (WebShellSettings["debugmode"] as! Bool) {
-				try ws.launchApplication(at: URL(string: "file://\(CommandLine.arguments[0])")!, options: .newInstance, configuration: [NSWorkspaceLaunchConfigurationArguments: ["-NSDocumentRevisionsDebugMode", "YES", "-url", url, "-height", height, "-width", width]])
+				try ws.launchApplication(at: URL(string: "file://\(CommandLine.arguments[0])")!, options: NSWorkspace.LaunchOptions.newInstance, configuration: [NSWorkspace.LaunchConfigurationKey.arguments: ["-NSDocumentRevisionsDebugMode", "YES", "-url", url, "-height", height, "-width", width]])
 			} else {
-				try ws.launchApplication(at: URL(string: CommandLine.arguments[0])!, options: .newInstance, configuration: [NSWorkspaceLaunchConfigurationArguments: ["-url", url, "-height", height, "-width", width]])
+				try ws.launchApplication(at: URL(string: CommandLine.arguments[0])!, options: NSWorkspace.LaunchOptions.newInstance, configuration: [NSWorkspace.LaunchConfigurationKey.arguments: ["-url", url, "-height", height, "-width", width]])
 			}
 		}
 		catch { /* we'll never get this. */ }

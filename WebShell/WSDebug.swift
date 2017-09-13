@@ -175,29 +175,29 @@ extension ViewController {
 		return NewMenu
 	}
 
-	func _quit(_ Sender: AnyObject) -> Void {
+	@objc func _quit(_ Sender: AnyObject) -> Void {
 		exit(0)
 	}
 
 	// Debug: doNothing
-	func _doNothing(_ Sender: AnyObject) -> Void {
+	@objc func _doNothing(_ Sender: AnyObject) -> Void {
 		// _doNothing
 	}
 
 	// Debug: Open new window
-	func _debugNewWindow(_ Sender: AnyObject) -> Void {
+	@objc func _debugNewWindow(_ Sender: AnyObject) -> Void {
 		openNewWindow(url: "https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
 	}
 
 	// Debug: Print arguments
-	func _debugDumpArguments(_ Sender: AnyObject) -> Void {
+	@objc func _debugDumpArguments(_ Sender: AnyObject) -> Void {
 		print(CommandLine.arguments)
 	}
 
 	// Debug: Send notifications (10)
-	func __sendNotifications(_ Sender: AnyObject) -> Void {
+	@objc func __sendNotifications(_ Sender: AnyObject) -> Void {
 		// Minimize app
-		NSApplication.shared().keyWindow?.miniaturize(self)
+		NSApplication.shared.keyWindow?.miniaturize(self)
 
 		// Fire 10 Notifications
 		Timer.scheduledTimer(timeInterval: TimeInterval(05), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
@@ -207,23 +207,23 @@ extension ViewController {
 		Timer.scheduledTimer(timeInterval: TimeInterval(45), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 		Timer.scheduledTimer(timeInterval: TimeInterval(55), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 		Timer.scheduledTimer(timeInterval: TimeInterval(65), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(75), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(75), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 		Timer.scheduledTimer(timeInterval: TimeInterval(85), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 		Timer.scheduledTimer(timeInterval: TimeInterval(95), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 	}
 
 	// Debug: Send notifications (10): Real sending.
-	func ___sendNotifications() -> Void {
+	@objc func ___sendNotifications() -> Void {
 		// Minimize app
-		if (NSApplication.shared().keyWindow?.isMiniaturized == false) {
-			NSApplication.shared().keyWindow?.miniaturize(self)
+		if (NSApplication.shared.keyWindow?.isMiniaturized == false) {
+			NSApplication.shared.keyWindow?.miniaturize(self)
 		}
 
 		// Send Actual notification.
 		makeNotification("Test Notification", message: "Hi!", icon: "https://camo.githubusercontent.com/ee999b2d8fa5413229fdc69e0b53144f02b7b840/687474703a2f2f376d6e6f79372e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f7765627368656c6c2f6c6f676f2e706e673f696d616765566965772f322f772f313238")
 	}
 
-	func _openURL(_ Sender: AnyObject) -> Void {
+	@objc func _openURL(_ Sender: AnyObject) -> Void {
 		let msg = NSAlert()
 		msg.addButton(withTitle: "OK") // 1st button
 		msg.addButton(withTitle: "Cancel") // 2nd button
@@ -234,18 +234,18 @@ extension ViewController {
 		txt.stringValue = "http://"
 
 		msg.accessoryView = txt
-		let response: NSModalResponse = msg.runModal()
+		let response: NSApplication.ModalResponse = msg.runModal()
 
-		if (response == NSAlertFirstButtonReturn) {
+		if (response == NSApplication.ModalResponse.alertFirstButtonReturn) {
 			self.loadUrl(txt.stringValue)
 		}
 	}
 
-    func _WWCDT(_ Sender: AnyObject) -> Void {
+    @objc func _WWCDT(_ Sender: AnyObject) -> Void {
         self.loadUrl("https://whatwebcando.today")
     }
     
-    func _injectJS(_ Sender: AnyObject) -> Void {
+    @objc func _injectJS(_ Sender: AnyObject) -> Void {
         let msg = NSAlert()
         msg.addButton(withTitle: "OK") // 1st button
         msg.addButton(withTitle: "Cancel") // 2nd button
@@ -257,9 +257,9 @@ extension ViewController {
             txt.translatesAutoresizingMaskIntoConstraints = true
         
         msg.accessoryView = txt
-        let response: NSModalResponse = msg.runModal()
+        let response: NSApplication.ModalResponse = msg.runModal()
         
-        if (response == NSAlertFirstButtonReturn) {
+        if (response == NSApplication.ModalResponse.alertFirstButtonReturn) {
             let JSReturn: String = mainWebview.stringByEvaluatingJavaScript(from: txt.stringValue)
             
             let RetVal = NSAlert()
@@ -270,7 +270,7 @@ extension ViewController {
         }
     }
     
-	func _reportThisPage(_ Sender: AnyObject) -> Void {
+	@objc func _reportThisPage(_ Sender: AnyObject) -> Void {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
 		let host: String = (mainWebview.mainFrame.dataSource?.request.url?.host)!
 
@@ -280,21 +280,21 @@ extension ViewController {
 
 		let url: String = "https://github.com/djyde/WebShell/issues/new?title=\(issue)&body=\(body)"
 
-		NSWorkspace.shared().open(URL(string: (url as String))!)
+		NSWorkspace.shared.open(URL(string: (url as String))!)
 	}
 
 	// Stupid swift 2.2 & 3 does not look in extensions.
 	// so we'll copy again...
 	// @wdg Add Print Support
 	// Issue: #39
-	func _printThisPage(_ Sender: AnyObject? = nil) -> Void {
+	@objc func _printThisPage(_ Sender: AnyObject? = nil) -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.url?.absoluteString
 
 		let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
 		operation.jobTitle = "Printing \(url!)"
 
 		// If want to print landscape
-		operation.printInfo.orientation = NSPaperOrientation.landscape
+		operation.printInfo.orientation = NSPrintInfo.PaperOrientation.landscape
 		operation.printInfo.scalingFactor = 0.7
 
 		if operation.run() {
@@ -302,28 +302,28 @@ extension ViewController {
 		}
 	}
 
-	func _goBack(_ Sender: AnyObject) -> Void {
+	@objc func _goBack(_ Sender: AnyObject) -> Void {
 		if (mainWebview.canGoBack) {
 			mainWebview.goBack(Sender)
 		}
 	}
 
-	func _goForward(_ Sender: AnyObject) -> Void {
+	@objc func _goForward(_ Sender: AnyObject) -> Void {
 		if (mainWebview.canGoForward) {
 			mainWebview.goForward(Sender)
 		}
 	}
 
-	func _reloadPage(_ Sender: AnyObject) -> Void {
+	@objc func _reloadPage(_ Sender: AnyObject) -> Void {
 		mainWebview.reload(Sender)
 	}
 
 	// Debug: Open new window
-	func createNewInstance(_ Sender: AnyObject) -> Void {
+	@objc func createNewInstance(_ Sender: AnyObject) -> Void {
 		openNewWindow(url: "\(lastURL)", height: "0", width: "0")
 	}
 
-	func downloadFileWithURL(_ Sender: AnyObject) -> Void {
+	@objc func downloadFileWithURL(_ Sender: AnyObject) -> Void {
 		let wsDM = WebShelllDownloadManager.init(url: lastURL)
 		wsDM.endDownloadTask()
 	}

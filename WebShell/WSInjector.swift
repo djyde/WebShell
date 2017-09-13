@@ -14,7 +14,7 @@ import WebKit
  This extension will catch up with the webhooks!
  - Note: @wdg: Iframes, Webhooks, and more. (Issue: #23, #5, #2, #35, #38, #39 & More)
  */
-extension ViewController {
+@objc extension ViewController {
 	/**
 	 Loop Trough iFrames
 
@@ -108,7 +108,7 @@ extension ViewController {
 		
 		// _blank external
 		let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
-			NSWorkspace.shared().open(URL(string: (url as String))!)
+			NSWorkspace.shared.open(URL(string: (url as String))!)
 		}
 		
 		// _blank internal
@@ -142,7 +142,7 @@ extension ViewController {
 		// Issue: #25
 		let saveToLocal: @convention(block)(NSString?, NSString?) -> Void = {(key: NSString?, value: NSString?) in
 			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
-			let newKey = "WSLS:\(host):\(key)"
+            let newKey = String(describing: "WSLS:\(host):\(key ?? "?")")
 			
 			UserDefaults.standard.setValue(value, forKey: newKey)
 		}
@@ -168,7 +168,7 @@ extension ViewController {
         // openNewWindow(url: "THEURL", height: "0", width: "0")
 		// window.open(URL, name, specs, replace)
         let windowOpen: @convention(block)(NSString?, NSString?, NSString?, NSString?) -> Void = {(url: NSString?, target: NSString?, specs: NSString?, replace: NSString?) in
-            self.parseWindowOpen(url! as String, options: specs as! String)
+            self.parseWindowOpen(url! as String, options: specs! as String)
         }
 		jsContext.objectForKeyedSubscript("window").setObject(unsafeBitCast(windowOpen, to: AnyObject.self), forKeyedSubscript: "open" as (NSCopying & NSObjectProtocol)!)
         

@@ -12,7 +12,7 @@ import Cocoa
 // Issue: #56
 class EventMonitor {
     fileprivate var monitor: Any?
-    fileprivate let mask: NSEventMask
+    fileprivate let mask: NSEvent.EventTypeMask
     fileprivate let handler: (NSEvent?) -> ()
     
     /**
@@ -21,7 +21,7 @@ class EventMonitor {
      - Parameter mask: under which mask?
      - Parameter handler: with which handler?
      */
-    internal init(mask: NSEventMask, handler: @escaping (NSEvent?) -> ()) {
+    internal init(mask: NSEvent.EventTypeMask, handler: @escaping (NSEvent?) -> ()) {
         self.mask = mask
         self.handler = handler
     }
