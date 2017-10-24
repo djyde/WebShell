@@ -49,6 +49,11 @@ extension ViewController {
         
     }
     
+    /**
+     Download window.
+     
+     - Parameter download: WebDownload!
+     */
     func downloadWindow(forAuthenticationSheet download: WebDownload!) -> NSWindow! {
         print("I'd like to download something")
         print(download)
