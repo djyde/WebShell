@@ -180,15 +180,26 @@ import WebKit
         _WSInjectJS(jsContext)
 	}
 	
-	// @wdg Add Localstorage Support
-	// Issue: #25
+    /**
+     Add Localstorage Support
+     
+     - Parameter Sender: AnyObject?
+     
+     - Note: @wdg #25
+     */
 	func resetLocalStorage(_ Sender: AnyObject?) -> Void {
 		UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
 	}
 	
-	// @wdg Support for window.open (popup)
-	// Issue: #25
-	func parseWindowOpen(_ url: String, options: String) -> Void {
+    /**
+     Support for window.open (popup)
+     
+     - Parameter url: Url to open
+     - Parameter options: Custom options, width, height
+     
+     - Note: @wdg #25
+     */
+    func parseWindowOpen(_ url: String, options: String) -> Void {
 		// We ignore x and y. (initial position on the screen)
 		// Using specifications of W3Schools: http://www.w3schools.com/jsref/met_win_open.asp
 		// "Open a new window called "MsgWindow", and write some text into it" is not (yet) supported!

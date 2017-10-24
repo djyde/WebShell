@@ -9,10 +9,16 @@
 import Foundation
 import AppKit
 
-// @wdg Add Download support
-// Issue: #31
-// This class will handle WebShell Downloads.
-// It's a basic download manager, so no progress, and nothing else, just download.
+
+/**
+ @wdg Add Download support
+ 
+ Issue: #31
+ 
+ This class will handle WebShell Downloads.
+ 
+ It's a basic download manager, so no progress, and nothing else, just download.
+ */
 class WebShelllDownloadManager {
 	var TURL: URL
 	var Fname: String = ""

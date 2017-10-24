@@ -10,12 +10,20 @@ import Foundation
 import Cocoa
 
 extension ViewController {
-	// Quit the app (there must be a better way)
+	/**
+     Quit the app (there must be a better way)
+     */
 	func Quit(_ sender: AnyObject) {
 		exit(0)
 	}
 
-	// Function to call for the window.open (popup)
+	/**
+     Function to call for the window.open (popup)
+     
+     - Parameter url: The url to open
+     - Parameter height: The height for the window
+     - Parameter width: The width for the window
+     */
 	func openNewWindow(url: String, height: String, width: String) -> Void {
 		// @wdg Replaced NSPipe for NSWorkspace
 		// Issue: #48
@@ -30,12 +38,28 @@ extension ViewController {
 		catch { /* we'll never get this. */ }
 	}
 
+    /**
+     Noop a.k.a. No operation.
+ 
+     - Parameter ob: Any ...
+     */
 	func noop(_ ob: Any ...) -> Void { }
 
+    /**
+     Delay a function
+     
+     - Parameter delay: Time to delay
+     - Parameter closure: Code to run (in a escaping block)
+     */
 	func delay(_ delay: Double, _ closure: @escaping () -> ()) {
 		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 	}
     
+    /**
+     Run on main thread.
+     
+     - Parameter run: Code to run (in a escaping block)
+     */
     func runOnMain(_ run: @escaping () -> ()) {
         DispatchQueue.main.async(execute: run)
     }

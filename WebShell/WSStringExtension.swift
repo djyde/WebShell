@@ -57,7 +57,9 @@ public extension String {
     }
     
     /**
-     add subscript
+     Add subscript
+     
+     - Parameter i: Index
      */
     public subscript(i: Int) -> Character {
         get {
@@ -66,7 +68,9 @@ public extension String {
         }
     }
     /**
-     add subscript
+     Add subscript
+     
+     - Parameter r: Range
      */
     public subscript(r: Range<Int>) -> String {
         get {
@@ -79,7 +83,9 @@ public extension String {
     
     
     /**
-     add subscript (swift 3)
+     Add subscript (swift 3)
+     
+     - Parameter r: ClosedRange
      */
     public subscript(r: ClosedRange<Int>) -> String {
         get {

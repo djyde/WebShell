@@ -49,6 +49,15 @@ extension ViewController {
 		_WSFindCSS(jsContext)
 	}
 
+    /**
+     _WSFindCSS
+     
+     Find CSS to inject
+     
+     - Parameter jsContext: JSContext!
+     
+     - Note: @wdg #36
+     */
 	internal func _WSFindCSS(_ jsContext: JSContext!) {
 		if (WebShellSettings["EnableInjectImport"] as! Bool) { // (EII)
 
@@ -89,6 +98,15 @@ extension ViewController {
 		}
 	}
 
+    /**
+     _WSFindJS
+     
+     Find JS to inject
+     
+     - Parameter jsContext: JSContext!
+     
+     - Note: @wdg #36
+     */
 	internal func _WSFindJS(_ jsContext: JSContext!) {
 		if (WebShellSettings["EnableInjectImport"] as! Bool) { // (EII)
 

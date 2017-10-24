@@ -10,6 +10,9 @@ import Foundation
 import AppKit
 
 extension ViewController {
+    /**
+     Add Observers for menu items
+     */
 	func addObservers() {
 		// add menu action observers
 		let observers = ["goHome", "reload", "copyUrl", "clearNotificationCount", "printThisPage"]
@@ -19,14 +22,23 @@ extension ViewController {
 		}
 	}
 
+    /**
+     Go to the home url
+     */
 	func goHome() {
 		loadUrl((WebShellSettings["url"] as? String)!)
 	}
 
+    /**
+     Reload the current webpage
+     */
 	func reload() {
-        mainWebview.mainFrame.reload() // Swift 3
+        mainWebview.mainFrame.reload()
 	}
 
+    /**
+     Copy the URL
+     */
 	func copyUrl() {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
 		let clipboard: NSPasteboard = NSPasteboard.general
@@ -35,6 +47,9 @@ extension ViewController {
         clipboard.setString(currentUrl, forType: .string)
 	}
 
+    /**
+     Initialize settings
+     */
 	func initSettings() {
 		// controll the progress bar
 		if (!(WebShellSettings["showLoadingBar"] as? Bool)!) {
@@ -61,6 +76,9 @@ extension ViewController {
 		launchingLabel.stringValue = (WebShellSettings["launchingText"] as? String)!
 	}
 
+    /**
+     Initialize window
+     */
 	func initWindow() {
 		firstAppear = false
 
@@ -86,6 +104,7 @@ extension ViewController {
 		// @froge-xyz Fixed initial window size
 		// Issue: #1, #45
 		mainWindow.window?.setFrame(frame, display: true)
+        
 		// defims Fixed the initial window size.
 		mainWindow.frame = frame
 
@@ -97,6 +116,12 @@ extension ViewController {
 		mainWebview.preferences.javaScriptCanOpenWindowsAutomatically = true
 		mainWebview.preferences.arePlugInsEnabled = true
 	}
+
+    /**
+     Load a specific URL
+     
+     - Parameter url: The url to load
+     */
 
 	func loadUrl(_ url: String) {
 		if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
@@ -110,8 +135,11 @@ extension ViewController {
 		mainWebview.mainFrame.load(URLRequest(url: URL!))
 	}
 
-	// @wdg Add Print Support
-	// Issue: #39
+    /**
+     Add Print Support (#39) [@wdg]
+     
+     - Parameter Sender: The sending object
+     */
 	func printThisPage(_ Sender: AnyObject?) -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.url?.absoluteString
 
