@@ -36,8 +36,11 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 // This extension will handle the Debugging options.
 extension ViewController {
 
-	// @wdg Override settings via commandline
-	// .... Used for popups, and debug options.
+	/**
+     Override settings via commandline
+ 
+     Used for popups, and debug options.
+     */
 	func checkSettings() -> Void {
 		// Need to overwrite settings?
 		if (CommandLine.argc > 0) {
@@ -78,9 +81,13 @@ extension ViewController {
 		initWindow()
 	}
 
-	// Edit contextmenu...
-    // @wdg Fix contextmenu (problem with the swift 3 update)
-    // Issue: #61
+    /**
+     Edit contextmenu...
+     
+     @wdg Fix contextmenu (problem with the swift 3 update)
+     
+     Issue: #61
+     */
     func webView(_ sender: WebView!, contextMenuItemsForElement element: [AnyHashable : Any]!, defaultMenuItems: [Any]!) -> [Any]! {
         //Swift 2..
         //func webView(_ sender: WebView!, contextMenuItemsForElement element: [NSObject: Any]!, defaultMenuItems: [Any]!) -> [Any]!
@@ -175,26 +182,48 @@ extension ViewController {
 		return NewMenu
 	}
 
+    /**
+     Debug: Quit WebShell
+     
+     - Parameter Sender: Anyobject
+     */
+
 	@objc func _quit(_ Sender: AnyObject) -> Void {
 		exit(0)
 	}
 
-	// Debug: doNothing
+    /**
+     Debug: doNothing
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _doNothing(_ Sender: AnyObject) -> Void {
 		// _doNothing
 	}
 
-	// Debug: Open new window
+    /**
+     Debug: Open new window
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _debugNewWindow(_ Sender: AnyObject) -> Void {
-		openNewWindow(url: "https://www.google.nl/search?client=safari&rls=en&q=new+window&ie=UTF-8&oe=UTF-8&gws_rd=cr&ei=_8eKVs2WFIbFPd7Sr_gN", height: "0", width: "0")
+		openNewWindow(url: "https://www.google.nl/search?client=WebShell&rls=en&q=new+window", height: "0", width: "0")
 	}
 
-	// Debug: Print arguments
+    /**
+     Debug: Print arguments
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _debugDumpArguments(_ Sender: AnyObject) -> Void {
 		print(CommandLine.arguments)
 	}
 
-	// Debug: Send notifications (10)
+    /**
+     Debug: Fire 10 notifications (Timer)
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func __sendNotifications(_ Sender: AnyObject) -> Void {
 		// Minimize app
 		NSApplication.shared.keyWindow?.miniaturize(self)
@@ -212,7 +241,11 @@ extension ViewController {
 		Timer.scheduledTimer(timeInterval: TimeInterval(95), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
 	}
 
-	// Debug: Send notifications (10): Real sending.
+    /**
+     Debug: Send 10 Notifications (real sending)
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func ___sendNotifications() -> Void {
 		// Minimize app
 		if (NSApplication.shared.keyWindow?.isMiniaturized == false) {
@@ -223,6 +256,11 @@ extension ViewController {
 		makeNotification("Test Notification", message: "Hi!", icon: "https://camo.githubusercontent.com/ee999b2d8fa5413229fdc69e0b53144f02b7b840/687474703a2f2f376d6e6f79372e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f7765627368656c6c2f6c6f676f2e706e673f696d616765566965772f322f772f313238")
 	}
 
+    /**
+     Debug: Open URL
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _openURL(_ Sender: AnyObject) -> Void {
 		let msg = NSAlert()
 		msg.addButton(withTitle: "OK") // 1st button
@@ -241,10 +279,20 @@ extension ViewController {
 		}
 	}
 
+    /**
+     Debug: WhatTheWebCanDo.Today
+     
+     - Parameter Sender: Anyobject
+     */
     @objc func _WWCDT(_ Sender: AnyObject) -> Void {
         self.loadUrl("https://whatwebcando.today")
     }
     
+    /**
+     Debug: Inject custom javascript
+     
+     - Parameter Sender: Anyobject
+     */
     @objc func _injectJS(_ Sender: AnyObject) -> Void {
         let msg = NSAlert()
         msg.addButton(withTitle: "OK") // 1st button
@@ -270,6 +318,11 @@ extension ViewController {
         }
     }
     
+    /**
+     Debug: Report this page, as containing an error.
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _reportThisPage(_ Sender: AnyObject) -> Void {
 		let currentUrl: String = (mainWebview.mainFrame.dataSource?.request.url?.absoluteString)!
 		let host: String = (mainWebview.mainFrame.dataSource?.request.url?.host)!
@@ -283,10 +336,16 @@ extension ViewController {
 		NSWorkspace.shared.open(URL(string: (url as String))!)
 	}
 
-	// Stupid swift 2.2 & 3 does not look in extensions.
-	// so we'll copy again...
-	// @wdg Add Print Support
-	// Issue: #39
+    /**
+     Print this page
+     
+     - Parameter Sender: Anyobject
+     
+     - Notes Stupid swift 2.2 & 3 does not look in extensions.
+     - Notes so we'll copy again...
+     - Notes @wdg Add Print Support
+     - Notes Issue: #39
+     */
 	@objc func _printThisPage(_ Sender: AnyObject? = nil) -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.url?.absoluteString
 
@@ -302,37 +361,72 @@ extension ViewController {
 		}
 	}
 
+    /**
+     Go Back
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _goBack(_ Sender: AnyObject) -> Void {
 		if (mainWebview.canGoBack) {
 			mainWebview.goBack(Sender)
 		}
 	}
 
+    /**
+     Go Forward
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _goForward(_ Sender: AnyObject) -> Void {
 		if (mainWebview.canGoForward) {
 			mainWebview.goForward(Sender)
 		}
 	}
 
+    /**
+     Reload page
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func _reloadPage(_ Sender: AnyObject) -> Void {
 		mainWebview.reload(Sender)
 	}
 
-	// Debug: Open new window
+    /**
+     Debug: Open in a new window
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func createNewInstance(_ Sender: AnyObject) -> Void {
 		openNewWindow(url: "\(lastURL)", height: "0", width: "0")
 	}
 
+    /**
+     Download file
+     
+     - Parameter Sender: Anyobject
+     */
 	@objc func downloadFileWithURL(_ Sender: AnyObject) -> Void {
 		let wsDM = WebShelllDownloadManager.init(url: lastURL)
 		wsDM.endDownloadTask()
 	}
     
+    /**
+     If in debugmode -> Print
+     
+     - Parameter S: Any
+     */
     func Dprint(_ S: Any) -> Void {
         if (WebShellSettings["debugmode"] as! Bool) {
             print(S)
         }
     }
+    
+    /**
+     If in debugmode -> Dump
+     
+     - Parameter S: Any
+     */
     func Ddump(_ S: Any) -> Void {
         if (WebShellSettings["debugmode"] as! Bool) {
             dump(S)
