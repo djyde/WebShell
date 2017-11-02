@@ -104,7 +104,7 @@ import WebKit
 		// @wdg Add support for target=_blank
 		// Issue: #5
 		// Fake window.app Library.
-		jsContext.evaluateScript("var app={};") ;
+		jsContext.evaluateScript("var WSApp={};") ;
 		
 		// _blank external
 		let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
@@ -116,10 +116,10 @@ import WebKit
 			self.loadUrl((url as String))
 		}
 		// _blank external
-		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openInBrowser, to: AnyObject.self), forKeyedSubscript: "openExternal" as (NSCopying & NSObjectProtocol)!)
+		jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openInBrowser, to: AnyObject.self), forKeyedSubscript: "openExternal" as (NSCopying & NSObjectProtocol)!)
 		
 		// _blank internal
-		jsContext.objectForKeyedSubscript("app").setObject(unsafeBitCast(openNow, to: AnyObject.self), forKeyedSubscript: "openInternal" as (NSCopying & NSObjectProtocol)!)
+		jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openNow, to: AnyObject.self), forKeyedSubscript: "openInternal" as (NSCopying & NSObjectProtocol)!)
 		
 		// @wdg Add Print Support
 		// Issue: #39
@@ -176,6 +176,19 @@ import WebKit
 		let nsObject: Any? = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
 		jsContext.evaluateScript("window.webshell={version:'\(nsObject as! String)'};webshell=window.webshell;")
 
+        // @wdg memorize credentials?
+        // Issue: #74
+        _injectPasswordFor(jsContext, website: jsContext.evaluateScript("window.location.host").toString())
+        _injectPasswordListener(jsContext, website: jsContext.evaluateScript("window.location.host").toString())
+        let savePassword: @convention(block)(NSString?, NSString?) -> Void = {(username: NSString!, password: NSString!) in
+            self._savePasswordFor(jsContext,
+                                  website: jsContext.evaluateScript("window.location.host").toString(),
+                                  username: (username as String),
+                                  password: (password as String)
+            )
+        }
+        jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(savePassword, to: AnyObject.self), forKeyedSubscript: "savePassword" as (NSCopying & NSObjectProtocol)!)
+        
         _WSInjectCSS(jsContext)
         _WSInjectJS(jsContext)
 	}

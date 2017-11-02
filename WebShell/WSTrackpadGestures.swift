@@ -70,12 +70,12 @@ extension ViewController: NSGestureRecognizerDelegate {
 			if (touches.count == 2) {
 				for touch in touches {
 					if ((touch as AnyObject).phase == NSTouch.Phase.began) {
-						Dprint("Began X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
+//                        Dprint("Began X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
                         WSgestureLog = [(touch as AnyObject).normalizedPosition.x, (touch as AnyObject).normalizedPosition.y]
 					}
 					if ((touch as AnyObject).phase == NSTouch.Phase.ended) {
-						Dprint("Ended  X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
-                        Dprint("Versus X:\(WSgestureLog[0]) Y:\(WSgestureLog[1])")
+//                        Dprint("Ended  X:\(touch.normalizedPosition.x) Y:\(touch.normalizedPosition.y)")
+//                        Dprint("Versus X:\(WSgestureLog[0]) Y:\(WSgestureLog[1])")
                         if ((touch as AnyObject).normalizedPosition.x < WSgestureLog[0]) {
                             action = -1
                         } else {
