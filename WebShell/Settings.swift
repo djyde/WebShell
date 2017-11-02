@@ -68,7 +68,7 @@ class WebShell {
 		"MenuBarApp": false,
 
 		// Navigate trough trackpad (back/forward) (Default: true)
-        "navigateViaTrackpad": false, //See: https://github.com/djyde/WebShell/issues/65
+        "navigateViaTrackpad": true,
         
 		// Media keys settings
 		"MediaKeys": [
