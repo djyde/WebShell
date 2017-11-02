@@ -69,6 +69,9 @@ class WebShell {
 
 		// Navigate trough trackpad (back/forward) (Default: true)
         "navigateViaTrackpad": true,
+
+        // Use a password manager (Default: true).
+        "passwordManager": true,
         
 		// Media keys settings
 		"MediaKeys": [

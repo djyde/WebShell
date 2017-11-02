@@ -45,7 +45,52 @@ extension ViewController {
      */
     internal func _injectPasswordListener(_ jsContext: JSContext!, website: String) -> Void {
         let database = UserDefaults.init(suiteName: website)
-        
+        let listener = """
+var WSPasswordManager = {
+  currentSite: document.location.host,
+
+  initialize: function (username, password) {
+    WSPasswordManager.checkForms()
+alert('INIT')
+  },
+
+  checkForms: function () {
+    var pst = document.getElementsByTagName('form')
+    for (var ii = 0, jj = pst.length; ii < jj; ii++) {
+      if (pst[ii].method.toLowerCase() === 'post') {
+alert('HOOKED')
+        pst[ii].setAttribute('onsubmit', 'event.preventDefault();return WSPasswordManager.validate(this);')
+      }
+    }
+  },
+
+  validate: function (form) {
+alert('VALIDATING')
+    var username = form.querySelectorAll("input[name='username']")
+    var password = form.querySelectorAll("input[name='password']")
+
+    if (username.length > 0 && password.length > 0) {
+      if (typeof WSApp !== 'undefined') {
+        WSApp.savePassword(username[0].value, password[0].value)
+      } else {
+        window.alert('Internal error\nPassword manager failed to initialize')
+      }
+    }
+
+    return false
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  WSPasswordManager.initialize()
+}, false)
+"""
+        if (WebShell().Settings["passwordManager"] as! Bool) {
+            Dprint("Injecting password manager")
+            jsContext.evaluateScript(listener)
+        } else {
+            Dprint("NOT Injecting password manager")
+        }
         database?.synchronize()
     }
     
@@ -60,6 +105,7 @@ extension ViewController {
      - Parameter password: String
      */
     internal func _savePasswordFor(_ jsContext: JSContext!, website: String, username: String, password: String) -> Void {
+        print("Saving password for \(website)")
         let database = UserDefaults.init(suiteName: website)
         database?.set(website, forKey: "website")
         database?.set(username, forKey: "username")

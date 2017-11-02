@@ -179,6 +179,7 @@ import WebKit
         // @wdg memorize credentials?
         // Issue: #74
         _injectPasswordFor(jsContext, website: jsContext.evaluateScript("window.location.host").toString())
+        _injectPasswordListener(jsContext, website: jsContext.evaluateScript("window.location.host").toString())
         let savePassword: @convention(block)(NSString?, NSString?) -> Void = {(username: NSString!, password: NSString!) in
             self._savePasswordFor(jsContext,
                                   website: jsContext.evaluateScript("window.location.host").toString(),
