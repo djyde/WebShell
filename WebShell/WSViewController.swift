@@ -24,14 +24,15 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	@IBOutlet weak var mainWebview: WebView!
 	@IBOutlet weak var launchingLabel: NSTextField!
 	@IBOutlet weak var progressBar: NSProgressIndicator!
+    
     var WebShellSettings = WebShell().Settings
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0
-    var lastURL:URL = URL(fileURLWithPath: "http://place.holder") //WTF Swift 3?
+    var lastURL: URL = URL(fileURLWithPath: "http://place.holder") //WTF Swift 3?
     var IElement: NSMenuItem = NSMenuItem.init()
 	let locationManager = CLLocationManager()
     var MustCloseWindow = true
-    var WSgestureLog:[CGFloat] = [0, 0]
-    var twoFingersTouches:[String:NSTouch]?
+    var WSgestureLog: [CGFloat] = [0, 0]
+    var twoFingersTouches: [String: NSTouch]?
 }
