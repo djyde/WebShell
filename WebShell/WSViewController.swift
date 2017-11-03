@@ -33,4 +33,5 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	let locationManager = CLLocationManager()
     var MustCloseWindow = true
     var WSgestureLog:[CGFloat] = [0, 0]
+    var twoFingersTouches:[String:NSTouch]?
 }
