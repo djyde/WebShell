@@ -25,7 +25,7 @@ class WSViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, W
 	@IBOutlet weak var launchingLabel: NSTextField!
 	@IBOutlet weak var progressBar: NSProgressIndicator!
     
-    var WebShellSettings = WebShell().Settings
+    var settings = Settings.shared
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0

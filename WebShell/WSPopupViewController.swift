@@ -18,7 +18,7 @@ class WebShellPopupViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        mainWebView.mainFrame.load(URLRequest(url: URL(string: WebShell().Settings["url"] as! String)!))
+        mainWebView.mainFrame.load(URLRequest(url: URL(string: Settings.shared.url)!))
     }
     
     override func viewDidAppear() {

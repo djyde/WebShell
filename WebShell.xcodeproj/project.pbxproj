@@ -31,6 +31,8 @@
 		6EED81661CC95FBD00FFB883 /* WSMediaKeysSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED81641CC95FBD00FFB883 /* WSMediaKeysSupport.swift */; };
 		6EED81671CC95FBD00FFB883 /* WSTrackpadGestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EED81651CC95FBD00FFB883 /* WSTrackpadGestures.swift */; };
 		6EFEB6A21CC00FB1001CF349 /* WSCustomInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEB6A11CC00FB1001CF349 /* WSCustomInject.swift */; };
+		DD4BE0D01FDC1DCE00EBCBBB /* WSBaseSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BE0CF1FDC1DCE00EBCBBB /* WSBaseSettings.swift */; };
+		DD4BE0D11FDC1DCE00EBCBBB /* WSBaseSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BE0CF1FDC1DCE00EBCBBB /* WSBaseSettings.swift */; };
 		DD593BAF1FDB7F4200C15D57 /* WSFileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055661C5EA2050099AD18 /* WSFileHandler.swift */; };
 		DD593BB01FDB7F4200C15D57 /* WSCustomInject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFEB6A11CC00FB1001CF349 /* WSCustomInject.swift */; };
 		DD593BB11FDB7F4200C15D57 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6055611C5EA0870099AD18 /* Notifications.swift */; };
@@ -87,6 +89,7 @@
 		6EED81641CC95FBD00FFB883 /* WSMediaKeysSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSMediaKeysSupport.swift; sourceTree = "<group>"; };
 		6EED81651CC95FBD00FFB883 /* WSTrackpadGestures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTrackpadGestures.swift; sourceTree = "<group>"; };
 		6EFEB6A11CC00FB1001CF349 /* WSCustomInject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSCustomInject.swift; sourceTree = "<group>"; };
+		DD4BE0CF1FDC1DCE00EBCBBB /* WSBaseSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSBaseSettings.swift; sourceTree = "<group>"; };
 		DD593BCD1FDB7F4200C15D57 /* Udemy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Udemy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD593BD51FDB80CB00C15D57 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		DD593BD61FDB80CB00C15D57 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 				DEDCBFDA1FABA90200F32CC4 /* WSPasswordManager.swift */,
 				6E2DD7DF1CC56522000FA61A /* WSDownloadManager.swift */,
 				25B2225C1C25328E00F848B7 /* WSViewController.swift */,
+				DD4BE0CF1FDC1DCE00EBCBBB /* WSBaseSettings.swift */,
 			);
 			name = "WebShell Core";
 			sourceTree = "<group>";
@@ -304,6 +308,7 @@
 				6EA8D1571C5C0BCA004534F9 /* WSStringExtension.swift in Sources */,
 				32FB8FB51C3460D7005B222F /* Battery.swift in Sources */,
 				6EE64A961CCBEAA000E9DA9B /* Settings.swift in Sources */,
+				DD4BE0D01FDC1DCE00EBCBBB /* WSBaseSettings.swift in Sources */,
 				6E2DD7E01CC56522000FA61A /* WSDownloadManager.swift in Sources */,
 				6E6055651C5EA1140099AD18 /* WSDebug.swift in Sources */,
 				6EED81661CC95FBD00FFB883 /* WSMediaKeysSupport.swift in Sources */,
@@ -332,6 +337,7 @@
 				DD593BB31FDB7F4200C15D57 /* WSStringExtension.swift in Sources */,
 				DD593BB41FDB7F4200C15D57 /* Battery.swift in Sources */,
 				DD593BB61FDB7F4200C15D57 /* WSDownloadManager.swift in Sources */,
+				DD4BE0D11FDC1DCE00EBCBBB /* WSBaseSettings.swift in Sources */,
 				DD593BB71FDB7F4200C15D57 /* WSDebug.swift in Sources */,
 				DD593BB81FDB7F4200C15D57 /* WSMediaKeysSupport.swift in Sources */,
 				DD593BB91FDB7F4200C15D57 /* WSTrackpadGestures.swift in Sources */,

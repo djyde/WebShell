@@ -48,15 +48,15 @@ extension WSViewController {
 //            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
                 if ((String(describing: CommandLine.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
 					if ((String(describing: CommandLine.arguments[i + 1])) == "YES") {
-						WebShellSettings["debugmode"] = true
-						WebShellSettings["consoleSupport"] = true
+						settings.debugmode = true
+						settings.consoleSupport = true
 					}
 				}
                 
 				if ((String(describing: Process().arguments?[i])).uppercased() == "-DEBUG") {
 					if ((String(describing: Process().arguments![i + 1])).uppercased() == "YES" || (String(describing: Process().arguments?[i + 1])).uppercased() == "true") {
-						WebShellSettings["debugmode"] = true
-						WebShellSettings["consoleSupport"] = true
+						settings.debugmode = true
+						settings.consoleSupport = true
 					}
 				}
 
@@ -65,15 +65,15 @@ extension WSViewController {
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-url") {
-					WebShellSettings["url"] = String(CommandLine.arguments[i + 1])
+					settings.url = String(CommandLine.arguments[i + 1])
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-height") {
-					WebShellSettings["initialWindowHeight"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
+					settings.initialWindowHeight = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1])! : 250
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-width") {
-					WebShellSettings["initialWindowWidth"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
+					settings.initialWindowWidth = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1])! : 250
 				}
 			}
 		}
@@ -113,10 +113,9 @@ extension WSViewController {
 		}
 
 		var NewMenu: [AnyObject] = [AnyObject]()
-		let contextMenu = WebShellSettings["Contextmenu"] as! [String: Bool]
 
 		// if can back
-		if (contextMenu["BackAndForward"]!) {
+		if settings.cmBackAndForward {
 			if (mainWebview.canGoBack) {
 				NewMenu.append(NSMenuItem(title: "Back", action: #selector(WSViewController._goBack(_:)), keyEquivalent: ""))
 			}
@@ -124,7 +123,7 @@ extension WSViewController {
 				NewMenu.append(NSMenuItem(title: "Forward", action: #selector(WSViewController._goForward(_:)), keyEquivalent: ""))
 			}
 		}
-		if (contextMenu["Reload"]!) {
+		if settings.cmReload {
 			NewMenu.append(NSMenuItem(title: "Reload", action: #selector(WSViewController._reloadPage(_:)), keyEquivalent: ""))
 		}
 
@@ -132,13 +131,13 @@ extension WSViewController {
 			if (element["WebElementLinkURL"] != nil) {
 				lastURL = element["WebElementLinkURL"]! as! URL
 
-                if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
+                if settings.cmDownload || settings.cmNewWindow {
 					NewMenu.append(NSMenuItem.separator())
 
-					if (contextMenu["newWindow"]!) {
+					if settings.cmNewWindow {
 						NewMenu.append(NSMenuItem(title: "Open Link in a new Window", action: #selector(WSViewController.createNewInstance(_:)), keyEquivalent: ""))
 					}
-					if (contextMenu["Download"]!) {
+					if settings.cmDownload {
 						NewMenu.append(NSMenuItem(title: "Download Linked File", action: #selector(WSViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
 					}
 				}
@@ -148,7 +147,7 @@ extension WSViewController {
 		NewMenu.append(NSMenuItem.separator())
 		// Add debug menu. (if enabled)
 
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
 			let debugMenu = NSMenu(title: "Debug")
             if (IElement.title != "NSMenuItem") {
                 debugMenu.addItem(IElement) // <-- Inspect element...
@@ -417,7 +416,7 @@ extension WSViewController {
      - Parameter S: Any
      */
     func Dprint(_ S: Any) -> Void {
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
             print(S)
         }
     }
@@ -428,7 +427,7 @@ extension WSViewController {
      - Parameter S: Any
      */
     func Ddump(_ S: Any) -> Void {
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
             dump(S)
         }
     }

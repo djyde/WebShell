@@ -26,7 +26,7 @@ extension WSViewController {
      Go to the home url
      */
 	func goHome() {
-		loadUrl((WebShellSettings["url"] as? String)!)
+		loadUrl(settings.url)
 	}
 
     /**
@@ -52,14 +52,14 @@ extension WSViewController {
      */
 	func initSettings() {
 		// controll the progress bar
-		if (!(WebShellSettings["showLoadingBar"] as? Bool)!) {
+		if !settings.showLoadingBar {
 			progressBar.isHidden = true // @wdg: Better progress indicator | Issue: #37
 		}
 
 		// @wdg Add Custom useragent support
 		// Issue: #52
-		if ((WebShellSettings["useragent"] as! String).lowercased() == "default") {
-			var UA: String = Bundle.main.infoDictionary!["CFBundleName"] as! String
+		if settings.useragent.lowercased() == "default" {
+			var UA = Bundle.main.infoDictionary!["CFBundleName"] as! String
 			UA = UA + "/"
 			UA = UA + (Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String)
 			UA = UA + " based on Safari/AppleWebKit (KHTML, like Gecko)"
@@ -67,13 +67,13 @@ extension WSViewController {
 			UserDefaults.standard.register(defaults: ["UserAgent": UA]) // For iOS
 			mainWebview.customUserAgent = UA // For Mac OS X
 		} else {
-			let UA: String = WebShellSettings["useragent"] as! String
+			let UA = settings.useragent
 			UserDefaults.standard.register(defaults: ["UserAgent": UA]) // For iOS
 			mainWebview.customUserAgent = UA // For Mac OS X
 		}
 
 		// set launching text
-		launchingLabel.stringValue = (WebShellSettings["launchingText"] as? String)!
+		launchingLabel.stringValue = settings.launchingText
 	}
 
     /**
@@ -82,7 +82,7 @@ extension WSViewController {
 	func initWindow() {
 		firstAppear = false
 		// set window title
-		mainWindow.window?.title = WebShellSettings["title"] as! String
+		mainWindow.window?.title = settings.title
 
 		// Force some preferences before loading...
 		mainWebview.preferences.isJavaScriptEnabled = true
@@ -97,7 +97,7 @@ extension WSViewController {
      */
 
 	func loadUrl(_ url: String) {
-		if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
+		if settings.showLoadingBar {
 			progressBar.isHidden = false
 			progressBar.startAnimation(self)
 			progressBar.maxValue = 100;

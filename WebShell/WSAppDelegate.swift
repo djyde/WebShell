@@ -22,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
-		if (WebShell().Settings["MenuBarApp"] as! Bool) {
+		if Settings.shared.menuBarApp {
 			if let button = statusItem.button {
 				button.image = NSImage(named: NSImage.Name(rawValue: "AppIcon")) // StatusBarButtonImage
 				button.action = #selector(AppDelegate.togglePopover(_:))
@@ -44,30 +44,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 			mainWindow = NSApplication.shared.windows[0]
 		}
 		// Change menus
-		if let title = WebShell().Settings["title"] as? String {
-			let app = NSApplication.shared
-			let mainMenu = app.mainMenu
-			if let items = mainMenu?.items {
-				// App menu
-				let itm0 = items[0]
-				itm0.title = title
-				// About
-				let itm1 = itm0.submenu!.items[0]
-				itm1.title = "About " + title
-				// Hide
-				let itm2 = itm0.submenu!.items[2]
-				itm2.title = "Hide " + title
-				// Quit
-				let itm3 = itm0.submenu!.items[8]
-				itm3.title = "Quit " + title
-			}
+		let title = Settings.shared.title
+		let app = NSApplication.shared
+		let mainMenu = app.mainMenu
+		if let items = mainMenu?.items {
+			// App menu
+			let itm0 = items[0]
+			itm0.title = title
+			// About
+			let itm1 = itm0.submenu!.items[0]
+			itm1.title = "About " + title
+			// Hide
+			let itm2 = itm0.submenu!.items[2]
+			itm2.title = "Hide " + title
+			// Quit
+			let itm3 = itm0.submenu!.items[8]
+			itm3.title = "Quit " + title
 		}
 	}
 
 	// @wdg close app if window closes
 	// Issue: #40
 	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+		if !Settings.shared.menuBarApp {
 			return true
 		} else {
 			return false
@@ -75,8 +74,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	}
 
 	func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-		if (!flag) {
-			if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+		if !flag {
+			if !Settings.shared.menuBarApp {
 				mainWindow!.makeKeyAndOrderFront(self)
 			}
 		}
@@ -100,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 	// Issue: #26
 	func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
 		// Open window if user clicked on notification!
-		if (!(WebShell().Settings["MenuBarApp"] as! Bool)) {
+		if !Settings.shared.menuBarApp {
 			mainWindow!.makeKeyAndOrderFront(self)
 		}
 
@@ -151,8 +150,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
      Popover initial popup size
     */
 	func initialPopupSize() -> Void {
-		popover.contentSize.width = CGFloat(WebShell().Settings["initialWindowWidth"] as! Int)
-		popover.contentSize.height = CGFloat(WebShell().Settings["initialWindowHeight"] as! Int)
+		popover.contentSize.width = CGFloat(Settings.shared.initialWindowWidth)
+		popover.contentSize.height = CGFloat(Settings.shared.initialWindowHeight)
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {

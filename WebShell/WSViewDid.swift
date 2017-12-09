@@ -70,8 +70,8 @@ extension WSViewController {
         mainWebview.editingDelegate = self
         mainWebview.policyDelegate = self
         
-        WebShellSettings["WSMW"] = mainWebview;
-        
+//        WebShellSettings["WSMW"] = mainWebview;
+		
 		checkSettings()
 		addObservers()
 		initSettings()

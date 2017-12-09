@@ -29,7 +29,7 @@ extension WSViewController {
 		// Issue: #48
 		let ws = NSWorkspace.shared
 		do {
-			if (WebShellSettings["debugmode"] as! Bool) {
+			if settings.debugmode {
 				try ws.launchApplication(at: URL(string: "file://\(CommandLine.arguments[0])")!, options: NSWorkspace.LaunchOptions.newInstance, configuration: [NSWorkspace.LaunchConfigurationKey.arguments: ["-NSDocumentRevisionsDebugMode", "YES", "-url", url, "-height", height, "-width", width]])
 			} else {
 				try ws.launchApplication(at: URL(string: CommandLine.arguments[0])!, options: NSWorkspace.LaunchOptions.newInstance, configuration: [NSWorkspace.LaunchConfigurationKey.arguments: ["-url", url, "-height", height, "-width", width]])

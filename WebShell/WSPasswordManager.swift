@@ -45,7 +45,7 @@ extension WSViewController {
     internal func _injectPasswordListener(_ jsContext: JSContext!, website: String) -> Void {
         let database = UserDefaults(suiteName: website)
         let listener = "var WSPasswordManager={currentSite:document.location.host,initialize:function(e,a){WSPasswordManager.checkForms()},checkForms:function(){for(var e=document.getElementsByTagName(\"form\"),a=0,t=e.length;t>a;a++)\"post\"===e[a].method.toLowerCase()&&e[a].setAttribute(\"onsubmit\",\"event.preventDefault();return WSPasswordManager.validate(this);\")},validate:function(e){var a=e.querySelectorAll(\"input[name='username']\"),t=e.querySelectorAll(\"input[name='password']\");return a.length>0&&t.length>0&&(\"undefined\"!=typeof WSApp?WSApp.savePassword(a[0].value,t[0].value):window.alert(\"Internal error\nPassword manager failed to initialize\")),!1}};WSPasswordManager.initialize();"
-        if (WebShell().Settings["passwordManager"] as! Bool) {
+        if settings.passwordManager {
             jsContext.evaluateScript(listener)
         }
         database?.synchronize()

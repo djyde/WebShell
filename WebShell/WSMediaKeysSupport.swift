@@ -19,8 +19,6 @@ import Cocoa
  The communication goes via NSUserDefaults.
  */
 class WebShellMediaKeysSupport: NSApplication {
-	let MediaKeysSettings = WebShell().Settings["MediaKeys"] as! [String: Bool]
-
 	/*override */func send(event: NSEvent) {
 		if event.type == .systemDefined && event.subtype.rawValue == 8 {
 			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
@@ -39,21 +37,21 @@ class WebShellMediaKeysSupport: NSApplication {
 		if (state) {
 			switch (key) {
 			case NX_KEYTYPE_PLAY: // F8 / Play
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goReloadPage()
 				} else {
 					let _ = self.playPausePressed()
 				}
 				break
 			case NX_KEYTYPE_FAST, NX_KEYTYPE_NEXT: // F9 / Forward
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goForwardIfPossible()
 				} else {
 					let _ = self.nextItem()
 				}
 				break
 			case NX_KEYTYPE_REWIND, NX_KEYTYPE_PREVIOUS: // F7 / Backward
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goBackIfPossible()
 				} else {
 					let _ = self.previousItem()
@@ -143,7 +141,7 @@ extension WSViewController {
 
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
-		if (WebShellSettings["MenuBarApp"] as! Bool) {
+		if settings.menuBarApp {
 			if ((NSApplication.shared.keyWindow) != nil) {
 				if (self.MustCloseWindow) {
 					NSApplication.shared.keyWindow?.close()
