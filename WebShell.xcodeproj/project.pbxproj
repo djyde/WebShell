@@ -502,7 +502,7 @@
 		DD593BCB1FDB7F4200C15D57 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Udemy;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WebShell/Sites/Udemy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -516,7 +516,7 @@
 		DD593BCC1FDB7F4200C15D57 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Udemy;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WebShell/Sites/Udemy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

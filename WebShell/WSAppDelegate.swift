@@ -43,6 +43,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 			NSUserNotificationCenter.default.delegate = self
 			mainWindow = NSApplication.shared.windows[0]
 		}
+		// Change menus
+		if let title = WebShell().Settings["title"] as? String {
+			let app = NSApplication.shared
+			let mainMenu = app.mainMenu
+			if let items = mainMenu?.items {
+				// App menu
+				let itm0 = items[0]
+				itm0.title = title
+				// About
+				let itm1 = itm0.submenu!.items[0]
+				itm1.title = "About " + title
+				// Hide
+				let itm2 = itm0.submenu!.items[2]
+				itm2.title = "Hide " + title
+				// Quit
+				let itm3 = itm0.submenu!.items[8]
+				itm3.title = "Quit " + title
+			}
+		}
 	}
 
 	// @wdg close app if window closes

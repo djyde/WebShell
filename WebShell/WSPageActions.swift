@@ -81,33 +81,6 @@ extension WSViewController {
      */
 	func initWindow() {
 		firstAppear = false
-
-		// set window size
-		var frame: NSRect = mainWindow.frame
-
-		let WIDTH: CGFloat = CGFloat(WebShellSettings["initialWindowWidth"] as! Int),
-			HEIGHT: CGFloat = CGFloat(WebShellSettings["initialWindowHeight"] as! Int)
-
-		frame.size.width = WIDTH
-		frame.size.height = HEIGHT
-
-		// @wdg Fixed screen position (now it centers)
-		// Issue: #19
-		// Note: do not use HEIGHT, WIDTH for some strange reason the window will be positioned 25px from bottom!
-		let ScreenHeight: CGFloat = (NSScreen.main?.frame.size.width)!,
-			WindowHeight: CGFloat = CGFloat(WebShellSettings["initialWindowWidth"] as! Int), // do not use HEIGHT!
-		ScreenWidth: CGFloat = (NSScreen.main?.frame.size.height)!,
-			WindowWidth: CGFloat = CGFloat(WebShellSettings["initialWindowHeight"] as! Int) // do not use WIDTH!
-		frame.origin.x = (ScreenHeight / 2 - WindowHeight / 2)
-		frame.origin.y = (ScreenWidth / 2 - WindowWidth / 2)
-
-		// @froge-xyz Fixed initial window size
-		// Issue: #1, #45
-		mainWindow.window?.setFrame(frame, display: true)
-        
-		// defims Fixed the initial window size.
-		mainWindow.frame = frame
-
 		// set window title
 		mainWindow.window?.title = WebShellSettings["title"] as! String
 
