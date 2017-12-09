@@ -13,7 +13,7 @@ import AudioToolbox
 // @wdg Add Notification Support
 // Issue: #2
 // This extension will handle the HTML5 Notification API.
-extension ViewController {
+extension WSViewController {
 	func clearNotificationCount() -> Void {
 		notificationCount = 0
 	}
@@ -61,7 +61,7 @@ extension ViewController {
                 // @wdg Fix flashScreen(...)
                 // Issue: #66
                 let timeAsNumber = NumberFormatter().number(from: time[i])?.intValue
-				Timer.scheduledTimer(timeInterval: TimeInterval(timeAsNumber!), target: self, selector: #selector(ViewController.flashScreenNow), userInfo: nil, repeats: false)
+				Timer.scheduledTimer(timeInterval: TimeInterval(timeAsNumber!), target: self, selector: #selector(WSViewController.flashScreenNow), userInfo: nil, repeats: false)
 			}
 		}
 	}

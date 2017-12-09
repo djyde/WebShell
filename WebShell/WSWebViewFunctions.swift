@@ -10,9 +10,9 @@ import Foundation
 import WebKit
 
 // See: #43
-extension ViewController {
+extension WSViewController {
     func webView(_ sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedBy frame: WebFrame!) {
-        let alert = NSAlert.init()
+        let alert = NSAlert()
         alert.addButton(withTitle: "OK")
         alert.messageText = "Message"
         alert.informativeText = message

@@ -12,7 +12,7 @@ import CoreLocation
 // @wdg Add location support
 // Issue: #41
 // This extension will handle all the location services.
-extension ViewController {
+extension WSViewController {
 	
     /**
      websiteWantsLocation
@@ -72,7 +72,7 @@ extension ViewController {
 					// Make the function named _WSLRD (WebShell Location Return Data)
 					newFunction = newFunction + " _WSLRD"
 					// Check if has space or not, otherwise begin 1 character later
-					newFunction = newFunction + (correct?[(correct?.lowercased()[8] == " " ? 8 : 7)...(correct?.characters.count)!])!
+					newFunction = newFunction + (correct?[(correct?.lowercased()[8] == " " ? 8 : 7)...(correct?.count)!])!
 					// Call the function
 					newFunction = newFunction + "\n;_WSLRD(\(returnAs))" // Insert what to return
 					
@@ -94,7 +94,7 @@ extension ViewController {
 						// Make the function named _WSLRD (WebShell Location Return Data)
 						newFunction = newFunction + " _WSLRD"
 						// Check if has space or not, otherwise begin 1 character later
-						newFunction = newFunction + invalid![(invalid!.lowercased()[8] == " " ? 8 : 7)...(invalid!.characters.count)]
+						newFunction = newFunction + invalid![(invalid!.lowercased()[8] == " " ? 8 : 7)...(invalid!.count)]
 						// Call the function
 						newFunction = newFunction + "\n;_WSLRD(\(returnAs))" // Insert what to return
 						

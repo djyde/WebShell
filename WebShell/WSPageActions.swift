@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 
-extension ViewController {
+extension WSViewController {
     /**
      Add Observers for menu items
      */
@@ -143,7 +143,7 @@ extension ViewController {
 	func printThisPage(_ Sender: AnyObject?) -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.url?.absoluteString
 
-		let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
+		let operation: NSPrintOperation = NSPrintOperation(view: mainWebview)
 		operation.jobTitle = "Printing \(url!)"
 
 		// If want to print landscape

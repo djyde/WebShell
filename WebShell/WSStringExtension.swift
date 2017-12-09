@@ -17,7 +17,7 @@ public extension String {
      */
     public var length: Int {
         get {
-            return self.characters.count
+            return self.count
         }
     }
     
@@ -47,7 +47,7 @@ public extension String {
      */
     func characterAtIndex(_ index: Int) -> Character! {
         var cur = 0
-        for char in self.characters {
+        for char in self {
             if cur == index {
                 return char
             }
@@ -63,7 +63,7 @@ public extension String {
      */
     public subscript(i: Int) -> Character {
         get {
-            let index = self.characters.index(self.startIndex, offsetBy: i)
+            let index = self.index(self.startIndex, offsetBy: i)
             return self[index]
         }
     }
@@ -74,8 +74,8 @@ public extension String {
      */
     public subscript(r: Range<Int>) -> String {
         get {
-            let startIndex = self.characters.index(self.startIndex, offsetBy: r.lowerBound)
-            let endIndex = self.characters.index(self.startIndex, offsetBy: r.upperBound - 1)
+            let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound - 1)
             
             return String(self[startIndex..<endIndex])
         }
@@ -89,8 +89,8 @@ public extension String {
      */
     public subscript(r: ClosedRange<Int>) -> String {
         get {
-            let startIndex = self.characters.index(self.startIndex, offsetBy: r.lowerBound)
-            let endIndex = self.characters.index(self.startIndex, offsetBy: r.upperBound - 1)
+            let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound - 1)
             
             return String(self[startIndex..<endIndex])
         }

@@ -12,7 +12,7 @@ import AppKit
 import Darwin
 
 // See: #43
-extension ViewController {
+extension WSViewController {
 	override func viewDidAppear() {
 		if (firstAppear) {
 			initWindow()

@@ -12,7 +12,7 @@ import WebKit
 // @wdg: Enable file uploads.
 // Issue: #29
 // This extension will handle up & downloads
-extension ViewController {
+extension WSViewController {
     
     // @wdg: Enable file uploads.
     // Issue: #29
@@ -58,7 +58,7 @@ extension ViewController {
         print("I'd like to download something")
         print(download)
         
-        return NSWindow.init()
+        return NSWindow()
     }
     
     // Usefull for debugging..

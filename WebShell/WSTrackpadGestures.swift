@@ -14,7 +14,7 @@ import WebKit
  @wdg: This extension will support the swipe gestures
  Issue: #44
  */
-extension ViewController: NSGestureRecognizerDelegate {
+extension WSViewController: NSGestureRecognizerDelegate {
     /**
      WSinitSwipeGestures
      

@@ -14,7 +14,7 @@ import WebKit
  This extension will catch up with the webhooks!
  - Note: @wdg: Iframes, Webhooks, and more. (Issue: #23, #5, #2, #35, #38, #39 & More)
  */
-@objc extension ViewController {
+@objc extension WSViewController {
 	/**
 	 Loop Trough iFrames
 

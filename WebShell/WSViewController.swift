@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  WSViewController.swift
 //  WebShell
 //
 //  Created by Randy on 15/12/19.
@@ -18,7 +18,7 @@ import CoreLocation
 
 // @wdg Clean up code base
 // Issue: #43
-class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate, WebDownloadDelegate, NSURLDownloadDelegate, WebEditingDelegate {
+class WSViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, WebResourceLoadDelegate, WebPolicyDelegate, CLLocationManagerDelegate, WebDownloadDelegate, NSURLDownloadDelegate, WebEditingDelegate {
     
 	@IBOutlet var mainWindow: NSView!
 	@IBOutlet weak var mainWebview: WebView!
@@ -29,8 +29,8 @@ class ViewController: NSViewController, WebFrameLoadDelegate, WebUIDelegate, Web
 	var firstLoadingStarted = false
 	var firstAppear = true
 	var notificationCount = 0
-    var lastURL: URL = URL(fileURLWithPath: "http://place.holder") //WTF Swift 3?
-    var IElement: NSMenuItem = NSMenuItem.init()
+	var lastURL:URL!
+    var IElement = NSMenuItem()
 	let locationManager = CLLocationManager()
     var MustCloseWindow = true
     var WSgestureLog: [CGFloat] = [0, 0]

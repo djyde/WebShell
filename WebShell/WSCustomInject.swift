@@ -9,7 +9,7 @@
 import Foundation
 import WebKit
 
-extension ViewController {
+extension WSViewController {
 	/**
 	 _WSInjectJS
 

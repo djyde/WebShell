@@ -114,14 +114,14 @@ class WebShellMediaKeysSupport: NSApplication {
 	}
 }
 
-extension ViewController {
+extension WSViewController {
 	/**
 	 Communication for the WebShellMediaKeysSupport class
 
 	 - Parameter Sender: AnyObject (used for #selector use self)
 	 */
 	@objc func WSMediaLoop(_ Sender: AnyObject) -> Void {
-		self.perform(#selector(ViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
+		self.perform(#selector(WSViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
 
 		if (UserDefaults.standard.bool(forKey: "WSGoBack")) {
 			UserDefaults.standard.set(false, forKey: "WSGoBack")

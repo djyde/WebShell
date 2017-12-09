@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 
-extension ViewController {
+extension WSViewController {
 	/**
      Quit the app (there must be a better way)
      */
