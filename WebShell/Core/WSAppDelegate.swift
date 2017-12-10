@@ -24,11 +24,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
 		// Issue: #56
 		if Settings.shared.menuBarApp {
 			if let button = statusItem.button {
-				button.image = NSImage(named: NSImage.Name(rawValue: "AppIcon")) // StatusBarButtonImage
+				button.image = NSImage(named: NSImage.Name(rawValue: "MenuIcon")) // StatusBarButtonImage
 				button.action = #selector(AppDelegate.togglePopover(_:))
 			}
-
-			popover.contentViewController = WebShellPopupViewController(nibName: NSNib.Name(rawValue: "WebShellPopupViewController"), bundle: nil)
+			
+			let sb = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main") , bundle: nil)
+			popover.contentViewController = sb.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "WSView")) as? NSViewController
 
 			initialPopupSize()
 

@@ -15,5 +15,6 @@ class Settings: WSBaseSettings {
 		super.init()
 		// Override default settings for this particular target
 		self.url = "http://djyde.github.io/WebShell/WebShell/"
+		self.menuBarApp = true
 	}
 }

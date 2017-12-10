@@ -373,7 +373,7 @@
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="WSViewController" customModule="Udemy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WSView" id="XfG-lQ-9wD" customClass="WSViewController" customModule="Udemy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -438,7 +438,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="101" y="991"/>
+            <point key="canvasLocation" x="24" y="1008"/>
         </scene>
     </scenes>
 </document>
