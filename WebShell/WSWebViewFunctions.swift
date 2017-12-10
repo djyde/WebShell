@@ -78,7 +78,11 @@ extension WSViewController {
         if (!launchingLabel.isHidden) {
             launchingLabel.isHidden = true
         }
-        
+        // Save URL for last navigated page
+		if let url = mainWebview.mainFrame.dataSource?.request.url?.absoluteString {
+			settings.lastURL = url
+		}
+		
         // Inject Webhooks
         self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
         self.loopThroughiFrames()

@@ -53,7 +53,7 @@ extension WSViewController {
 
 			addObservers()
 			initSettings()
-			goHome()
+			loadUrl(settings.startURL())
             WSMediaLoop(self)
             WSinitSwipeGestures()
 		}
@@ -75,7 +75,7 @@ extension WSViewController {
 		checkSettings()
 		addObservers()
 		initSettings()
-		goHome()
+		loadUrl(settings.startURL())
         WSMediaLoop(self)
         WSinitSwipeGestures()
 	}

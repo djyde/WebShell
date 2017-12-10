@@ -11,7 +11,23 @@ import Foundation
 class WSBaseSettings {
 	// URL to browse to
 	var url = "http://djyde.github.io/WebShell/WebShell/"
-		
+	
+	// The last URL the app was on
+	var lastURL: String {
+		set {
+			let def = UserDefaults.standard
+			def.set(newValue, forKey: title + "-LastURL")
+			def.synchronize()
+		}
+		get {
+			let def = UserDefaults.standard
+			if let url = def.value(forKey: title + "-LastURL") as? String {
+				return url
+			}
+			return ""
+		}
+	}
+	
 	// set the app title
 	var	title = Bundle.main.infoDictionary!["CFBundleName"] as! String
 		
@@ -84,4 +100,12 @@ class WSBaseSettings {
 	
 	// Just a placeholder. (Default: true)
 	var fake = true
+	
+	// The URL to start with - the last page you were on or the base URL
+	func startURL() -> String {
+		if lastURL.isEmpty {
+			return url
+		}
+		return lastURL
+	}
 }

@@ -13,8 +13,7 @@ class Settings: WSBaseSettings {
 	
 	override private init() {
 		super.init()
-		// Overridden settings for this target
+		// Override default settings for this particular target
 		self.url = "http://udemy.com"
-		
 	}
 }
