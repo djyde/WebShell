@@ -1,25 +1,25 @@
 //
-//  WebShellMediaKeysSupport.swift
+//  WSApplication.swift
 //  WebShell
 //
 //  Created by Wesley de Groot on 20-04-16.
 //  Copyright © 2016 RandyLu. All rights reserved.
 //
-// Issue: it doesn't bind to the system
 
 import AppKit
 import Cocoa
 
 /**
- Class WebShellMediaKeysSupport
+ Class WSApplication
 
- This class will support the WebShell media keys. \
+ This is an NSApplication sub-class to support the WebShell media keys. \
  \
  !important note, this class can not communicate with the ViewController.\
  The communication goes via NSUserDefaults.
  */
-class WebShellMediaKeysSupport: NSApplication {
-	/*override */func send(event: NSEvent) {
+@objc(WSApplication)
+class WSApplication: NSApplication {
+	override func sendEvent(_ event: NSEvent) {
 		if event.type == .systemDefined && event.subtype.rawValue == 8 {
 			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
 			let keyFlags = (event.data1 & 0x0000FFFF)
@@ -28,7 +28,6 @@ class WebShellMediaKeysSupport: NSApplication {
 			let keyRepeat = NSNumber(value: (keyFlags & 0x1))
             mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(truncating: keyRepeat))
 		}
-
 		super.sendEvent(event)
 	}
     
@@ -114,7 +113,7 @@ class WebShellMediaKeysSupport: NSApplication {
 
 extension WSViewController {
 	/**
-	 Communication for the WebShellMediaKeysSupport class
+	 Communication for the WSApplication class
 
 	 - Parameter Sender: AnyObject (used for #selector use self)
 	 */

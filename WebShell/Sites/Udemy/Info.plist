@@ -34,6 +34,6 @@
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
-	<string>Udemy.WebShellMediaKeysSupport</string>
+	<string>WSApplication</string>
 </dict>
 </plist>
