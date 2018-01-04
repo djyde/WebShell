@@ -10,9 +10,9 @@ import Foundation
 import WebKit
 
 // See: #43
-extension ViewController {
+extension WSViewController {
     func webView(_ sender: WebView!, runJavaScriptAlertPanelWithMessage message: String!, initiatedBy frame: WebFrame!) {
-        let alert = NSAlert.init()
+        let alert = NSAlert()
         alert.addButton(withTitle: "OK")
         alert.messageText = "Message"
         alert.informativeText = message
@@ -22,7 +22,7 @@ extension ViewController {
     // webview settings
     func webView(_ sender: WebView!, didStartProvisionalLoadFor frame: WebFrame!) {
         // @wdg: Better progress indicator | Issue: #37
-        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
+        if settings.showLoadingBar {
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;
@@ -38,7 +38,7 @@ extension ViewController {
     // @wdg: Better progress indicator
     // Issue: #37
     func webView(_ sender: WebView!, willPerformClientRedirectTo URL: URL!, delay seconds: TimeInterval, fire date: Date!, for frame: WebFrame!) {
-        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
+        if settings.showLoadingBar {
             progressBar.isHidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
@@ -50,7 +50,7 @@ extension ViewController {
     // @wdg: Better progress indicator
     // Issue: #37
     func webView(_ webView: WebView!, decidePolicyForMIMEType type: String!, request: URLRequest!, frame: WebFrame!, decisionListener listener: WebPolicyDecisionListener!) {
-        if ((WebShellSettings["showLoadingBar"] as? Bool)!) {
+        if settings.showLoadingBar {
             progressBar.isHidden = false
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
@@ -78,14 +78,18 @@ extension ViewController {
         if (!launchingLabel.isHidden) {
             launchingLabel.isHidden = true
         }
-        
+        // Save URL for last navigated page
+		if let url = mainWebview.mainFrame.dataSource?.request.url?.absoluteString {
+			settings.lastURL = url
+		}
+		
         // Inject Webhooks
         self.injectWebhooks(mainWebview.mainFrame.javaScriptContext)
         self.loopThroughiFrames()
         
         // @wdg Add location support
         // Issue: #41
-        if (WebShellSettings["needLocation"] as! Bool) {
+        if settings.needLocation {
             self.websiteWantsLocation()
         } else {
             self.locationInjector(false) // Says i don't have a location!
@@ -93,7 +97,7 @@ extension ViewController {
     }
     
     func webView(_ sender: WebView!, didReceiveTitle title: String!, for frame: WebFrame!) {
-        if (WebShellSettings["useDocumentTitle"] as! Bool) {
+        if settings.useDocumentTitle {
             mainWindow.window?.title = title
         }
     }

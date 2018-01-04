@@ -14,7 +14,7 @@ import WebKit
  @wdg: This extension will support the swipe gestures
  Issue: #44
  */
-extension ViewController: NSGestureRecognizerDelegate {
+extension WSViewController: NSGestureRecognizerDelegate {
     /**
      WSinitSwipeGestures
      
@@ -36,17 +36,17 @@ extension ViewController: NSGestureRecognizerDelegate {
     }
     
     override func touchesMoved(with event: NSEvent) {
-        let swipeType: SwipeType = (WebShellSettings["navigateViaTrackpad"] as! Bool) ? GestureUtils.swipe(mainWebview, event, twoFingersTouches) : .none
-        if (swipeType == .right) {
-            if (mainWebview.canGoForward) {
-                if (mainWebview.isLoading) {
+        let swipeType: SwipeType = settings.navigateViaTrackpad ? GestureUtils.swipe(mainWebview, event, twoFingersTouches) : .none
+        if swipeType == .right {
+            if mainWebview.canGoForward {
+                if mainWebview.isLoading {
                     mainWebview.stopLoading(nil)
                 }
                 mainWebview.goForward(nil)
             }
-        } else if(swipeType == .left) {
-            if (mainWebview.canGoBack) {
-                if (mainWebview.isLoading) {
+        } else if swipeType == .left {
+            if mainWebview.canGoBack {
+                if mainWebview.isLoading {
                     mainWebview.stopLoading(nil)
                 }
                 mainWebview.goBack(nil)

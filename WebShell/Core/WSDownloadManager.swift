@@ -58,7 +58,7 @@ class WebShelllDownloadManager {
 				let statusCode = (response as! HTTPURLResponse).statusCode
 				self.noop(statusCode as AnyObject) // For further use HTTP Status code.
 
-				let saveData = NSData.init(data: data!) as Data
+				let saveData = NSData(data: data!) as Data
 				try? saveData.write(to: savePath!, options: [.atomic])
 
 				// Ask the question on the main queue.

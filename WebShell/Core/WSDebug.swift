@@ -34,7 +34,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 // @wdg Add Debug support
 // Issue: None.
 // This extension will handle the Debugging options.
-extension ViewController {
+extension WSViewController {
 
 	/**
      Override settings via commandline
@@ -48,15 +48,15 @@ extension ViewController {
 //            for (var i = 1; i < Int(Process.argc) ; i = i + 2) {
                 if ((String(describing: CommandLine.arguments[i])) == "-NSDocumentRevisionsDebugMode") {
 					if ((String(describing: CommandLine.arguments[i + 1])) == "YES") {
-						WebShellSettings["debugmode"] = true
-						WebShellSettings["consoleSupport"] = true
+						settings.debugmode = true
+						settings.consoleSupport = true
 					}
 				}
                 
 				if ((String(describing: Process().arguments?[i])).uppercased() == "-DEBUG") {
 					if ((String(describing: Process().arguments![i + 1])).uppercased() == "YES" || (String(describing: Process().arguments?[i + 1])).uppercased() == "true") {
-						WebShellSettings["debugmode"] = true
-						WebShellSettings["consoleSupport"] = true
+						settings.debugmode = true
+						settings.consoleSupport = true
 					}
 				}
 
@@ -65,15 +65,15 @@ extension ViewController {
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-url") {
-					WebShellSettings["url"] = String(CommandLine.arguments[i + 1])
+					settings.url = String(CommandLine.arguments[i + 1])
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-height") {
-					WebShellSettings["initialWindowHeight"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
+					settings.initialWindowHeight = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1])! : 250
 				}
 
 				if ((String(describing: CommandLine.arguments[i])) == "-width") {
-					WebShellSettings["initialWindowWidth"] = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1]) : Int(250)
+					settings.initialWindowWidth = (Int(CommandLine.arguments[i + 1]) > 250) ? Int(CommandLine.arguments[i + 1])! : 250
 				}
 			}
 		}
@@ -113,33 +113,32 @@ extension ViewController {
 		}
 
 		var NewMenu: [AnyObject] = [AnyObject]()
-		let contextMenu = WebShellSettings["Contextmenu"] as! [String: Bool]
 
 		// if can back
-		if (contextMenu["BackAndForward"]!) {
+		if settings.cmBackAndForward {
 			if (mainWebview.canGoBack) {
-				NewMenu.append(NSMenuItem.init(title: "Back", action: #selector(ViewController._goBack(_:)), keyEquivalent: ""))
+				NewMenu.append(NSMenuItem(title: "Back", action: #selector(WSViewController._goBack(_:)), keyEquivalent: ""))
 			}
 			if (mainWebview.canGoForward) {
-				NewMenu.append(NSMenuItem.init(title: "Forward", action: #selector(ViewController._goForward(_:)), keyEquivalent: ""))
+				NewMenu.append(NSMenuItem(title: "Forward", action: #selector(WSViewController._goForward(_:)), keyEquivalent: ""))
 			}
 		}
-		if (contextMenu["Reload"]!) {
-			NewMenu.append(NSMenuItem.init(title: "Reload", action: #selector(ViewController._reloadPage(_:)), keyEquivalent: ""))
+		if settings.cmReload {
+			NewMenu.append(NSMenuItem(title: "Reload", action: #selector(WSViewController._reloadPage(_:)), keyEquivalent: ""))
 		}
 
 		if (download) {
 			if (element["WebElementLinkURL"] != nil) {
 				lastURL = element["WebElementLinkURL"]! as! URL
 
-                if (contextMenu["Download"]! || contextMenu["newWindow"]!) {
+                if settings.cmDownload || settings.cmNewWindow {
 					NewMenu.append(NSMenuItem.separator())
 
-					if (contextMenu["newWindow"]!) {
-						NewMenu.append(NSMenuItem.init(title: "Open Link in a new Window", action: #selector(ViewController.createNewInstance(_:)), keyEquivalent: ""))
+					if settings.cmNewWindow {
+						NewMenu.append(NSMenuItem(title: "Open Link in a new Window", action: #selector(WSViewController.createNewInstance(_:)), keyEquivalent: ""))
 					}
-					if (contextMenu["Download"]!) {
-						NewMenu.append(NSMenuItem.init(title: "Download Linked File", action: #selector(ViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
+					if settings.cmDownload {
+						NewMenu.append(NSMenuItem(title: "Download Linked File", action: #selector(WSViewController.downloadFileWithURL(_:)), keyEquivalent: ""))
 					}
 				}
 			}
@@ -148,36 +147,36 @@ extension ViewController {
 		NewMenu.append(NSMenuItem.separator())
 		// Add debug menu. (if enabled)
 
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
 			let debugMenu = NSMenu(title: "Debug")
             if (IElement.title != "NSMenuItem") {
                 debugMenu.addItem(IElement) // <-- Inspect element...
             }
-			debugMenu.addItem(NSMenuItem.init(title: "Open New window", action: #selector(ViewController._debugNewWindow(_:)), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Print arguments", action: #selector(ViewController._debugDumpArguments(_:)), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Open URL", action: #selector(ViewController._openURL(_:)), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Report an issue on this page", action: #selector(ViewController._reportThisPage(_:)), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Print this page", action: #selector(ViewController._printThisPage(_:)), keyEquivalent: "")) // Stupid swift 2.2 does not look in extensions.
+			debugMenu.addItem(NSMenuItem(title: "Open New window", action: #selector(WSViewController._debugNewWindow(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Print arguments", action: #selector(WSViewController._debugDumpArguments(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Open URL", action: #selector(WSViewController._openURL(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Report an issue on this page", action: #selector(WSViewController._reportThisPage(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Print this page", action: #selector(WSViewController._printThisPage(_:)), keyEquivalent: "")) // Stupid swift 2.2 does not look in extensions.
 			debugMenu.addItem(NSMenuItem.separator())
-			debugMenu.addItem(NSMenuItem.init(title: "Fire some random Notifications", action: #selector(ViewController.__sendNotifications(_:)), keyEquivalent: ""))
-			debugMenu.addItem(NSMenuItem.init(title: "Reset localstorage", action: #selector(ViewController.resetLocalStorage(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Fire some random Notifications", action: #selector(WSViewController.__sendNotifications(_:)), keyEquivalent: ""))
+			debugMenu.addItem(NSMenuItem(title: "Reset localstorage", action: #selector(WSViewController.resetLocalStorage(_:)), keyEquivalent: ""))
             
             let WSdeveloperMenu = NSMenu(title: "WS Developer")
-                WSdeveloperMenu.addItem(NSMenuItem.init(title: "Inject Javascript", action: #selector(ViewController._injectJS(_:)), keyEquivalent: ""))
-                WSdeveloperMenu.addItem(NSMenuItem.init(title: "What the web can do", action: #selector(ViewController._WWCDT(_:)), keyEquivalent: ""))
+                WSdeveloperMenu.addItem(NSMenuItem(title: "Inject Javascript", action: #selector(WSViewController._injectJS(_:)), keyEquivalent: ""))
+                WSdeveloperMenu.addItem(NSMenuItem(title: "What the web can do", action: #selector(WSViewController._WWCDT(_:)), keyEquivalent: ""))
             
-            let WSDevMenu = NSMenuItem.init(title: "WebShell Developer", action: #selector(ViewController._doNothing(_:)), keyEquivalent: "")
+            let WSDevMenu = NSMenuItem(title: "WebShell Developer", action: #selector(WSViewController._doNothing(_:)), keyEquivalent: "")
             WSDevMenu.submenu = WSdeveloperMenu
             debugMenu.addItem(WSDevMenu)
             
-			let item = NSMenuItem.init(title: "Debug", action: #selector(ViewController._doNothing(_:)), keyEquivalent: "")
+			let item = NSMenuItem(title: "Debug", action: #selector(WSViewController._doNothing(_:)), keyEquivalent: "")
 			item.submenu = debugMenu
 
 			NewMenu.append(item)
 			NewMenu.append(NSMenuItem.separator())
 		}
         
-		NewMenu.append(NSMenuItem.init(title: "Quit", action: #selector(ViewController._quit(_:)), keyEquivalent: ""))
+		NewMenu.append(NSMenuItem(title: "Quit", action: #selector(WSViewController._quit(_:)), keyEquivalent: ""))
 
 		return NewMenu
 	}
@@ -229,16 +228,16 @@ extension ViewController {
 		NSApplication.shared.keyWindow?.miniaturize(self)
 
 		// Fire 10 Notifications
-		Timer.scheduledTimer(timeInterval: TimeInterval(05), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(15), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(25), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(35), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(45), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(55), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(65), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-        Timer.scheduledTimer(timeInterval: TimeInterval(75), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(85), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
-		Timer.scheduledTimer(timeInterval: TimeInterval(95), target: self, selector: #selector(ViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(05), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(15), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(25), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(35), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(45), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(55), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(65), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(75), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(85), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
+		Timer.scheduledTimer(timeInterval: TimeInterval(95), target: self, selector: #selector(WSViewController.___sendNotifications), userInfo: nil, repeats: false)
 	}
 
     /**
@@ -349,7 +348,7 @@ extension ViewController {
 	@objc func _printThisPage(_ Sender: AnyObject? = nil) -> Void {
 		let url = mainWebview.mainFrame.dataSource?.request?.url?.absoluteString
 
-		let operation: NSPrintOperation = NSPrintOperation.init(view: mainWebview)
+		let operation: NSPrintOperation = NSPrintOperation(view: mainWebview)
 		operation.jobTitle = "Printing \(url!)"
 
 		// If want to print landscape
@@ -407,7 +406,7 @@ extension ViewController {
      - Parameter Sender: Anyobject
      */
 	@objc func downloadFileWithURL(_ Sender: AnyObject) -> Void {
-		let wsDM = WebShelllDownloadManager.init(url: lastURL)
+		let wsDM = WebShelllDownloadManager(url: lastURL)
 		wsDM.endDownloadTask()
 	}
     
@@ -417,7 +416,7 @@ extension ViewController {
      - Parameter S: Any
      */
     func Dprint(_ S: Any) -> Void {
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
             print(S)
         }
     }
@@ -428,7 +427,7 @@ extension ViewController {
      - Parameter S: Any
      */
     func Ddump(_ S: Any) -> Void {
-        if (WebShellSettings["debugmode"] as! Bool) {
+        if settings.debugmode {
             dump(S)
         }
     }

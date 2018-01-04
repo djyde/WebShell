@@ -1,27 +1,25 @@
 //
-//  WebShellMediaKeysSupport.swift
+//  WSApplication.swift
 //  WebShell
 //
 //  Created by Wesley de Groot on 20-04-16.
 //  Copyright © 2016 RandyLu. All rights reserved.
 //
-// Issue: it doesn't bind to the system
 
 import AppKit
 import Cocoa
 
 /**
- Class WebShellMediaKeysSupport
+ Class WSApplication
 
- This class will support the WebShell media keys. \
+ This is an NSApplication sub-class to support the WebShell media keys. \
  \
  !important note, this class can not communicate with the ViewController.\
  The communication goes via NSUserDefaults.
  */
-class WebShellMediaKeysSupport: NSApplication {
-	let MediaKeysSettings = WebShell().Settings["MediaKeys"] as! [String: Bool]
-
-	/*override */func send(event: NSEvent) {
+@objc(WSApplication)
+class WSApplication: NSApplication {
+	override func sendEvent(_ event: NSEvent) {
 		if event.type == .systemDefined && event.subtype.rawValue == 8 {
 			let keyCode = ((event.data1 & 0xFFFF0000) >> 16)
 			let keyFlags = (event.data1 & 0x0000FFFF)
@@ -30,7 +28,6 @@ class WebShellMediaKeysSupport: NSApplication {
 			let keyRepeat = NSNumber(value: (keyFlags & 0x1))
             mediaKeyEvent(Int32(keyCode), state: keyState, keyRepeat: Bool(truncating: keyRepeat))
 		}
-
 		super.sendEvent(event)
 	}
     
@@ -39,21 +36,21 @@ class WebShellMediaKeysSupport: NSApplication {
 		if (state) {
 			switch (key) {
 			case NX_KEYTYPE_PLAY: // F8 / Play
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goReloadPage()
 				} else {
 					let _ = self.playPausePressed()
 				}
 				break
 			case NX_KEYTYPE_FAST, NX_KEYTYPE_NEXT: // F9 / Forward
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goForwardIfPossible()
 				} else {
 					let _ = self.nextItem()
 				}
 				break
 			case NX_KEYTYPE_REWIND, NX_KEYTYPE_PREVIOUS: // F7 / Backward
-				if (MediaKeysSettings["BackAndForward"] == true) {
+				if Settings.shared.mkBackAndForward {
 					self.goBackIfPossible()
 				} else {
 					let _ = self.previousItem()
@@ -114,14 +111,14 @@ class WebShellMediaKeysSupport: NSApplication {
 	}
 }
 
-extension ViewController {
+extension WSViewController {
 	/**
-	 Communication for the WebShellMediaKeysSupport class
+	 Communication for the WSApplication class
 
 	 - Parameter Sender: AnyObject (used for #selector use self)
 	 */
 	@objc func WSMediaLoop(_ Sender: AnyObject) -> Void {
-		self.perform(#selector(ViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
+		self.perform(#selector(WSViewController.WSMediaLoop(_:)), with: nil, afterDelay: 0.5)
 
 		if (UserDefaults.standard.bool(forKey: "WSGoBack")) {
 			UserDefaults.standard.set(false, forKey: "WSGoBack")
@@ -143,7 +140,7 @@ extension ViewController {
 
 		// @wdg Merge Statut with WebShell.
 		// Issue: #56
-		if (WebShellSettings["MenuBarApp"] as! Bool) {
+		if settings.menuBarApp {
 			if ((NSApplication.shared.keyWindow) != nil) {
 				if (self.MustCloseWindow) {
 					NSApplication.shared.keyWindow?.close()
