@@ -15,5 +15,8 @@ class Settings: WSBaseSettings {
 		super.init()
 		// Override default settings for this particular target
 		self.url = "http://udemy.com"
+        
+        // Save last URL
+        self.openLastUrl = true
 	}
 }

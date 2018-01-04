@@ -71,7 +71,7 @@ class WSBaseSettings {
 	// Enable (inject) import (JS/CSS) Folder. (Default: true)
 	var enableInjectImport = true
 	
-	// Menubar app (right side next to clock) (Default: true)
+	// Menubar app (right side next to clock) (Default: false)
 	var menuBarApp = false
 	
 	// Navigate trough trackpad (back/forward) (Default: true)
@@ -98,14 +98,14 @@ class WSBaseSettings {
 	// Enable "Open in a new window" (Default: true)
 	var cmNewWindow = true
 	
-	// Just a placeholder. (Default: true)
-	var fake = true
+    // open with last url? (Default: false)
+	var openLastUrl = false
 	
 	// The URL to start with - the last page you were on or the base URL
 	func startURL() -> String {
 		if lastURL.isEmpty {
 			return url
 		}
-		return lastURL
+        return openLastUrl ? lastURL : url
 	}
 }

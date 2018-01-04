@@ -252,12 +252,12 @@
 				TargetAttributes = {
 					25B222561C25328E00F848B7 = {
 						CreatedOnToolsVersion = 7.0.1;
-						DevelopmentTeam = QX3779KV49;
+						DevelopmentTeam = 4V2D72S45C;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					DD593BAD1FDB7F4200C15D57 = {
-						DevelopmentTeam = QX3779KV49;
+						DevelopmentTeam = 4V2D72S45C;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -480,7 +480,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QX3779KV49;
+				DEVELOPMENT_TEAM = 4V2D72S45C;
 				INFOPLIST_FILE = "WebShell/WebShell-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.djyde.WebShell;
@@ -498,7 +498,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QX3779KV49;
+				DEVELOPMENT_TEAM = 4V2D72S45C;
 				INFOPLIST_FILE = "WebShell/WebShell-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.djyde.WebShell;
@@ -516,7 +516,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QX3779KV49;
+				DEVELOPMENT_TEAM = 4V2D72S45C;
 				INFOPLIST_FILE = "WebShell/Udemy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.djyde.WebShell;
@@ -534,7 +534,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QX3779KV49;
+				DEVELOPMENT_TEAM = 4V2D72S45C;
 				INFOPLIST_FILE = "WebShell/Udemy-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.djyde.WebShell;
