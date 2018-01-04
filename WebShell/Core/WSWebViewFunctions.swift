@@ -23,6 +23,7 @@ extension WSViewController {
     func webView(_ sender: WebView!, didStartProvisionalLoadFor frame: WebFrame!) {
         // @wdg: Better progress indicator | Issue: #37
         if settings.showLoadingBar {
+            print("Started loading animation")
             progressBar.startAnimation(self)
             progressBar.maxValue = 100;
             progressBar.minValue = 1;

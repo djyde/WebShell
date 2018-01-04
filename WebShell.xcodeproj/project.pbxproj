@@ -53,6 +53,8 @@
 		DD593BC71FDB7F4200C15D57 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6E2DD7DD1CC56209000FA61A /* Credits.rtf */; };
 		DD593BC81FDB7F4200C15D57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25B222601C25328E00F848B7 /* Main.storyboard */; };
 		DD593BD91FDB80DC00C15D57 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD593BD51FDB80CB00C15D57 /* Settings.swift */; };
+		DEC374881FFEBE4000A8B04E /* WSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC374871FFEBE4000A8B04E /* WSWindow.swift */; };
+		DEC374891FFEBE4000A8B04E /* WSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC374871FFEBE4000A8B04E /* WSWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +87,7 @@
 		DD0D716B1FDCF7C1002F50D1 /* WebShell-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WebShell-Info.plist"; sourceTree = "<group>"; };
 		DD593BCD1FDB7F4200C15D57 /* Udemy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Udemy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD593BD51FDB80CB00C15D57 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		DEC374871FFEBE4000A8B04E /* WSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,7 @@
 				DD0D71161FDCF595002F50D1 /* WSTrackpadGestures.swift */,
 				DD0D71101FDCF595002F50D1 /* WSViewController.swift */,
 				DD0D710B1FDCF595002F50D1 /* WSWebViewFunctions.swift */,
+				DEC374871FFEBE4000A8B04E /* WSWindow.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -321,6 +325,7 @@
 				6EE64A961CCBEAA000E9DA9B /* Settings.swift in Sources */,
 				DD0D71221FDCF595002F50D1 /* WSViewController.swift in Sources */,
 				DD0D71231FDCF595002F50D1 /* WSCore.swift in Sources */,
+				DEC374881FFEBE4000A8B04E /* WSWindow.swift in Sources */,
 				DD0D711C1FDCF595002F50D1 /* WSInjector.swift in Sources */,
 				DD0D71431FDCF5FD002F50D1 /* Notifications.swift in Sources */,
 				DD0D71271FDCF595002F50D1 /* WSPageActions.swift in Sources */,
@@ -348,6 +353,7 @@
 				DD0D712D1FDCF5B6002F50D1 /* WSApplication.swift in Sources */,
 				DD0D71311FDCF5B6002F50D1 /* WSDebug.swift in Sources */,
 				DD0D712E1FDCF5B6002F50D1 /* WSBaseSettings.swift in Sources */,
+				DEC374891FFEBE4000A8B04E /* WSWindow.swift in Sources */,
 				DD0D71371FDCF5B6002F50D1 /* WSPasswordManager.swift in Sources */,
 				DD0D71461FDCF610002F50D1 /* Notifications.swift in Sources */,
 				DD0D71331FDCF5B6002F50D1 /* WSEventMonitor.swift in Sources */,

@@ -351,7 +351,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="WebShell" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="WebShellMainWindow" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="WebShell" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="WebShellMainWindow" animationBehavior="default" id="IQv-IB-iLA" customClass="WSNSWindow" customModule="Udemy" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" transient="YES"/>
                         <rect key="contentRect" x="196" y="240" width="1000" height="640"/>
@@ -378,16 +378,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1wx-8i-Jol">
-                                <rect key="frame" x="408" y="300" width="185" height="41"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Launching..." id="y40-R0-LYw">
-                                    <font key="font" metaFont="system" size="34"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="gaZ-Ka-5Vb">
-                                <rect key="frame" x="-4" y="627" width="1007" height="20"/>
-                            </progressIndicator>
                             <webView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmw-jr-NE4">
                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="640"/>
                                 <backgroundFilters>
@@ -405,6 +395,16 @@
                                     <outlet property="frameLoadDelegate" destination="XfG-lQ-9wD" id="qU6-JS-OJO"/>
                                 </connections>
                             </webView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1wx-8i-Jol">
+                                <rect key="frame" x="408" y="300" width="185" height="41"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Launching..." id="y40-R0-LYw">
+                                    <font key="font" metaFont="system" size="34"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="gaZ-Ka-5Vb">
+                                <rect key="frame" x="-4" y="627" width="1007" height="20"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstItem="gaZ-Ka-5Vb" firstAttribute="centerX" secondItem="hmw-jr-NE4" secondAttribute="centerX" id="2hL-FH-Wfj"/>
