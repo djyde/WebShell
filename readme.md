@@ -31,16 +31,8 @@ $ cd APP_NAME && open WebShell.xcodeproj
 
 ```
 
-Edit `WebShell/ViewController.swift` and change the url whatever you like:
+Edit `Sites/WebShell/Settings.swiftt` and change the url whatever you like.
 
-```swift
-let SETTINGS: [String: Any]  = [
-
-  "url": "http://jsbin.com",
-
-  // ... other options
-]
-```
 
 Finally click the `run` button to run the app.
 
