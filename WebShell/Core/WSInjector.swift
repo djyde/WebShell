@@ -58,6 +58,40 @@ import WebKit
 			}
 		}
 	}
+    
+    func injectLocalStorage (jsContext: JSContext!) {
+        Dprint("Injecting localStorage hooks!")
+        
+        // @wdg Add localstorage Support
+        // Issue: #25
+        let saveToLocal: @convention(block)(NSString?, NSString?) -> Void = {(key: NSString?, value: NSString?) in
+            let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
+            let newKey = String(describing: "WSLS:\(host):\(key ?? "?")")
+            
+            UserDefaults.standard.setValue(value, forKey: newKey)
+        }
+        
+        let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
+            let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
+            if let LSvalue = key {
+                let newKey = "WSLS:\(host):\(LSvalue)"
+                
+                let val = UserDefaults.standard.value(forKey: newKey as String)
+                
+                if let myVal = val as? String {
+                    return String(myVal)
+                }
+                else {
+                    return "null"
+                }
+            } else {
+                return "null"
+            }
+        }
+        
+        jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, to: AnyObject.self), forKeyedSubscript: "setItem" as (NSCopying & NSObjectProtocol)!)
+        jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, to: AnyObject.self), forKeyedSubscript: "getItem" as (NSCopying & NSObjectProtocol)!)
+    }
 	
 	/**
 	 InjectWebhooks
@@ -137,32 +171,9 @@ import WebKit
 			self.flashScreen(data)
 		}
 		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, to: AnyObject.self), forKeyedSubscript: "vibrate" as (NSCopying & NSObjectProtocol)!)
+		
+        self.injectLocalStorage(jsContext: jsContext)
         
-		// @wdg Add localstorage Support
-		// Issue: #25
-		let saveToLocal: @convention(block)(NSString?, NSString?) -> Void = {(key: NSString?, value: NSString?) in
-			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
-            let newKey = String(describing: "WSLS:\(host):\(key ?? "?")")
-			
-			UserDefaults.standard.setValue(value, forKey: newKey)
-		}
-		
-		let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
-			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
-			let newKey = "WSLS:\(host):\(key)"
-			let val = UserDefaults.standard.value(forKey: newKey as String)
-			
-			if let myVal = val as? String {
-				return String(myVal)
-			}
-			else {
-				return "null"
-			}
-		}
-		
-		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, to: AnyObject.self), forKeyedSubscript: "setItem" as (NSCopying & NSObjectProtocol)!)
-		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(getFromLocal, to: AnyObject.self), forKeyedSubscript: "getItem" as (NSCopying & NSObjectProtocol)!)
-		
 		// @wdg Support for window.open (popup)
 		// Issue: #21
         // openNewWindow(url: "THEURL", height: "0", width: "0")
