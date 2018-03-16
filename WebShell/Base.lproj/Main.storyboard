@@ -353,7 +353,7 @@
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="WebShell" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="WebShellMainWindow" animationBehavior="default" id="IQv-IB-iLA" customClass="WSNSWindow" customModule="Udemy" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowCollectionBehavior key="collectionBehavior" transient="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" managed="YES" participatesInCycle="YES"/>
                         <rect key="contentRect" x="196" y="240" width="1000" height="640"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="1000" height="640"/>
