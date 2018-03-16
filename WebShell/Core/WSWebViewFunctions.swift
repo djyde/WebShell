@@ -101,5 +101,7 @@ extension WSViewController {
         if settings.useDocumentTitle {
             mainWindow.window?.title = title
         }
+        
+        self.injectLocalStorage(jsContext: frame.javaScriptContext)
     }
 }
