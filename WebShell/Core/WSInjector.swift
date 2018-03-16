@@ -110,13 +110,33 @@ import WebKit
 		if settings.openInNewScreen {
 			// _blank to external
 			// JavaScript -> Select all <a href='...' target='_blank'>
-			jsContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openExternal(this.href);})}}")
+            jsContext.evaluateScript("document.querySelector('body').addEventListener('click', function(evt) { if ( evt.target.target==='_blank') { WSApp.openExternal(evt.target.href); }}, true);")
 		} else {
 			// _blank to internal
 			// JavaScript -> Select all <a href='...' target='_blank'>
-			jsContext.evaluateScript("var links=document.querySelectorAll('a');for(var i=0;i<links.length;i++){if(links[i].target==='_blank'){links[i].addEventListener('click',function () {app.openInternal(this.href);})}}")
+            jsContext.evaluateScript("document.querySelector('body').addEventListener('click', function(evt) { if ( evt.target.target==='_blank') { WSApp.openInternal(evt.target.href); }}, true);")
 		}
-		
+        
+        // @wdg Add support for target=_blank
+        // Issue: #5
+        // Fake window.app Library.
+        jsContext.evaluateScript("var WSApp={};") ;
+        
+        // _blank external
+        let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
+            NSWorkspace.shared.open(URL(string: (url as String))!)
+        }
+        
+        // _blank internal
+        let openNow: @convention(block)(NSString!) -> Void = {(url: NSString!) in
+            self.loadUrl((url as String))
+        }
+        // _blank external
+        jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openInBrowser, to: AnyObject.self), forKeyedSubscript: "openExternal" as (NSCopying & NSObjectProtocol)!)
+        
+        // _blank internal
+        jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openNow, to: AnyObject.self), forKeyedSubscript: "openInternal" as (NSCopying & NSObjectProtocol)!)
+        
 		// @wdg Add Notification Support
 		// Issue: #2, #35, #38 (webkitNotification)
 		jsContext.evaluateScript("function Notification(myTitle, options){if(typeof options === 'object'){var body,icon,tag;if (typeof options['body'] !== 'undefined'){body=options['body']}if (typeof options['icon'] !== 'undefined'){Notification.note(myTitle, body, options['icon'])}else{Notification.note(myTitle, body)}}else{if(typeof options === 'string'){Notification.note(myTitle, options)}else{Notification.note(myTitle)}}}Notification.length=1;Notification.permission='granted';Notification.requestPermission=function(callback){if(typeof callback === 'function'){callback('granted');}else{return 'granted'}};window.Notification=Notification;window.webkitNotification=Notification;")
@@ -134,26 +154,6 @@ import WebKit
 			}
 			jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
 		}
-		
-		// @wdg Add support for target=_blank
-		// Issue: #5
-		// Fake window.app Library.
-		jsContext.evaluateScript("var WSApp={};") ;
-		
-		// _blank external
-		let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
-			NSWorkspace.shared.open(URL(string: (url as String))!)
-		}
-		
-		// _blank internal
-		let openNow: @convention(block)(NSString!) -> Void = {(url: NSString!) in
-			self.loadUrl((url as String))
-		}
-		// _blank external
-		jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openInBrowser, to: AnyObject.self), forKeyedSubscript: "openExternal" as (NSCopying & NSObjectProtocol)!)
-		
-		// _blank internal
-		jsContext.objectForKeyedSubscript("WSApp").setObject(unsafeBitCast(openNow, to: AnyObject.self), forKeyedSubscript: "openInternal" as (NSCopying & NSObjectProtocol)!)
 		
 		// @wdg Add Print Support
 		// Issue: #39
