@@ -149,15 +149,20 @@ import WebKit
 		
 		let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
 			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
-			let newKey = "WSLS:\(host):\(key)"
-			let val = UserDefaults.standard.value(forKey: newKey as String)
-			
-			if let myVal = val as? String {
-				return String(myVal)
-			}
-			else {
-				return "null"
-			}
+            if let LSvalue = key {
+                let newKey = "WSLS:\(host):\(LSvalue)"
+                
+                let val = UserDefaults.standard.value(forKey: newKey as String)
+                
+                if let myVal = val as? String {
+                    return String(myVal)
+                }
+                else {
+                    return "null"
+                }
+            } else {
+                return "null"
+            }
 		}
 		
 		jsContext.objectForKeyedSubscript("localStorage").setObject(unsafeBitCast(saveToLocal, to: AnyObject.self), forKeyedSubscript: "setItem" as (NSCopying & NSObjectProtocol)!)
