@@ -149,7 +149,7 @@ import WebKit
 		
 		let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
 			let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
-			let newKey = "WSLS:\(host):\(key)"
+			let newKey = "WSLS:\(host):\(key!)"
 			let val = UserDefaults.standard.value(forKey: newKey as String)
 			
 			if let myVal = val as? String {
