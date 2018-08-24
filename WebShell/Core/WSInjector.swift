@@ -71,7 +71,7 @@ import WebKit
             UserDefaults.standard.setValue(value, forKey: newKey)
         }
         
-        let getFromLocal: @convention(block)(NSString!) -> String = {(key: NSString!) in
+        let getFromLocal: @convention(block)(NSString?) -> String = {(key: NSString!) in
             let host: String = (self.mainWebview.mainFrame.dataSource?.request.url?.host)!
             if let LSvalue = key {
                 let newKey = "WSLS:\(host):\(LSvalue)"
@@ -123,12 +123,12 @@ import WebKit
         jsContext.evaluateScript("var WSApp={};") ;
         
         // _blank external
-        let openInBrowser: @convention(block)(NSString!) -> Void = {(url: NSString!) in
+        let openInBrowser: @convention(block)(NSString?) -> Void = {(url: NSString!) in
             NSWorkspace.shared.open(URL(string: (url as String))!)
         }
         
         // _blank internal
-        let openNow: @convention(block)(NSString!) -> Void = {(url: NSString!) in
+        let openNow: @convention(block)(NSString?) -> Void = {(url: NSString!) in
             self.loadUrl((url as String))
         }
         // _blank external
@@ -149,7 +149,7 @@ import WebKit
 		// Add Console.log (and console.error, and console.warn)
 		if settings.consoleSupport {
 			jsContext.evaluateScript("var console = {log: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},warn: function () {var message = '';for (var i = 0; i < arguments.length; i++) {message += arguments[i] + ' '};console.print(message)},error: function () {var message = '';for (var i = 0; i < arguments.length; i++){message += arguments[i] + ' '};console.print(message)}};")
-			let logFunction: @convention(block)(NSString!) -> Void = {(message: NSString!) in
+			let logFunction: @convention(block)(NSString?) -> Void = {(message: NSString!) in
 				print("JS: \(message)")
 			}
 			jsContext.objectForKeyedSubscript("console").setObject(unsafeBitCast(logFunction, to: AnyObject.self), forKeyedSubscript: "print" as (NSCopying & NSObjectProtocol)!)
@@ -167,7 +167,7 @@ import WebKit
 		jsContext.evaluateScript("window.navigator.getBattery = window.navigator.battery.getBattery;")
 		
 		// navigator.vibrate
-		let vibrateNow: @convention(block)(NSString!) -> Void = {(data: NSString!) in
+		let vibrateNow: @convention(block)(NSString?) -> Void = {(data: NSString!) in
 			self.flashScreen(data)
 		}
 		jsContext.objectForKeyedSubscript("navigator").setObject(unsafeBitCast(vibrateNow, to: AnyObject.self), forKeyedSubscript: "vibrate" as (NSCopying & NSObjectProtocol)!)
