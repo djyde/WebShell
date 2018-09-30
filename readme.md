@@ -1,19 +1,8 @@
-<p align="center">
-  <img src="http://7mnoy7.com1.z0.glb.clouddn.com/webshell/logo.png?imageView/2/w/128" />
-</p>
-<p align="center">
-  <a href="https://github.com/djyde/WebShell/pulls">
-    <img src="http://issuestats.com/github/djyde/WebShell/badge/pr?style=flat-square" />
-  </a>
-  <a href="https://github.com/djyde/WebShell/issues">
-    <img src="http://issuestats.com/github/djyde/WebShell/badge/issue?style=flat-square" />
-  </a>
-  <a href="https://gitter.im/djyde/WebShell">
-    <img src="https://badges.gitter.im/djyde/WebShell.svg" />
-  </a>
-</p>
+# WebShell
 
 WebShell is an OS X WebView shell, which help you easily bundle the Web Apps to native OS X app without coding.
+
+![](https://badges.gitter.im/djyde/WebShell.svg)
 
 ![](http://7mnoy7.com1.z0.glb.clouddn.com/github/workflow-with-frame.png?imageView/2/w/1280)
 
